@@ -1,4 +1,4 @@
-package com.wall.student_crm.http
+package com.wall.student_crm.http.course
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
