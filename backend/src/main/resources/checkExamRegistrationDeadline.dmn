@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="Definitions_1i26f6d" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0">
+  <decision id="Decision_10vtkcq" name="Check registration deadline">
+    <decisionTable id="DecisionTable_05fldvo">
+      <input id="Input_1" label="currentMonthDay" biodi:width="192">
+        <inputExpression id="InputExpression_1" typeRef="string">
+          <text>format(date(now()), "MM-dd")</text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="registrationAllowed" typeRef="boolean" biodi:width="192" />
+      <rule id="DecisionRule_1mh2dqb">
+        <inputEntry id="UnaryTests_1hf7vy9">
+          <text>&gt;= "03-01" &amp;&amp; &lt;= "04-10"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0xh3odc">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_1gza8jo">
+        <inputEntry id="UnaryTests_1ie97xn">
+          <text>&gt;= "09-01" &amp;&amp; &lt;= "10-10"</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1v9q2vg">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0t2frcy">
+        <inputEntry id="UnaryTests_0gf45v6">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_036u96e">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_10vtkcq">
+        <dc:Bounds height="80" width="180" x="160" y="100" />
+      </dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
