@@ -31,11 +31,4 @@ class StudentController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete")
     fun deleteStudents(studentIDs: List<Long>) = studentService.deleteStudents(studentIDs)
-
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/{id}/assignCourses")
-    fun assignCourses(
-        @PathParam("id") id: Long,
-        courses: List<Long>,
-    ) = studentService.assignCourses(id, courses)
 }

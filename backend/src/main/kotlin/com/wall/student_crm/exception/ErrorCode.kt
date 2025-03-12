@@ -12,6 +12,8 @@ enum class ErrorCode(val code: Int, val message: String) {
         fun fromException(exception: ServiceException): ErrorCode =
             when (exception) {
                 is ServiceException.StudentNotFoundException -> STUDENT_NOT_FOUND
+                is ServiceException.StudentEmailNotFoundException -> STUDENT_NOT_FOUND
+                is ServiceException.CourseNameNotFoundException -> COURSE_NOT_FOUND
                 is ServiceException.CourseNotFoundException -> COURSE_NOT_FOUND
                 is ServiceException.DuplicateStudentException -> DUPLICATE_STUDENT
                 is ServiceException.DuplicateCourseException -> DUPLICATE_COURSE

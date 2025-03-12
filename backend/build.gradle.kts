@@ -28,8 +28,8 @@ dependencies {
 	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-	implementation("org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:7.22.0")
-	implementation("org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:7.22.0")
+	implementation("org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:7.21.0")
+	implementation("org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:7.21.0")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
