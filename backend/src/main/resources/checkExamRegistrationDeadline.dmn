@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="Definitions_1suv54s" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
-  <decision id="Decision_0di1bk5" name="Check registration deadline" camunda:historyTimeToLive="30">
-    <decisionTable id="DecisionTable_1c9oi36">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="checkRegistrationDeadlineDMN" name="checkRegistrationDeadlineDMN" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <decision id="checkExamRegistrationDeadline" name="checkExamRegistrationDeadline" camunda:historyTimeToLive="30">
+    <decisionTable id="DecisionTable_0facc17" hitPolicy="FIRST">
       <input id="Input_1" label="currentMonthDay">
         <inputExpression id="InputExpression_1" typeRef="string">
-          <text>format(date(now()), "MM-dd")</text>
+          <text>month of year(now())</text>
         </inputExpression>
       </input>
-      <output id="Output_1" label="registrationAllowed" typeRef="boolean" />
-      <rule id="DecisionRule_176sv8b">
-        <inputEntry id="UnaryTests_0kzrxsh">
-          <text>&gt;= "03-01" &amp;&amp; &lt;= "04-10"</text>
+      <output id="Output_1" name="registrationAllowed" typeRef="boolean" />
+      <rule id="DecisionRule_1m7js5j">
+        <inputEntry id="UnaryTests_1iwuz8o">
+          <text>April</text>
         </inputEntry>
-        <outputEntry id="LiteralExpression_1i0u0a8">
+        <outputEntry id="LiteralExpression_0eb9yhv">
           <text>true</text>
         </outputEntry>
       </rule>
-      <rule id="DecisionRule_0yxbfgo">
-        <inputEntry id="UnaryTests_1vpifxp">
-          <text>&gt;= "09-01" &amp;&amp; &lt;= "10-10"</text>
+      <rule id="DecisionRule_1p9rddv">
+        <inputEntry id="UnaryTests_1enkpyk">
+          <text>September</text>
         </inputEntry>
-        <outputEntry id="LiteralExpression_1a2jf93">
+        <outputEntry id="LiteralExpression_18ex4dj">
           <text>true</text>
         </outputEntry>
       </rule>
-      <rule id="DecisionRule_1o7untq">
-        <inputEntry id="UnaryTests_0c9w3dm">
+      <rule id="DecisionRule_0p2zatz">
+        <inputEntry id="UnaryTests_0n1yeg3">
           <text></text>
         </inputEntry>
-        <outputEntry id="LiteralExpression_1345fv1">
+        <outputEntry id="LiteralExpression_0sf3co0">
           <text>false</text>
         </outputEntry>
       </rule>
@@ -36,7 +36,7 @@
   </decision>
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
-      <dmndi:DMNShape dmnElementRef="Decision_0di1bk5">
+      <dmndi:DMNShape dmnElementRef="checkExamRegistrationDeadline">
         <dc:Bounds height="80" width="180" x="160" y="100" />
       </dmndi:DMNShape>
     </dmndi:DMNDiagram>
