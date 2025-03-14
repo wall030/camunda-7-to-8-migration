@@ -31,7 +31,7 @@ class CourseService(
             val courses = courseRepository.findAllById(courseIDs)
             val fetchedCourseIds = courses.map { it.id }
             val missingCourses = courseIDs - fetchedCourseIds.toSet()
-            if (missingCourses.isNotEmpty()) throw ServiceException.StudentNotFoundException(missingCourses)
+            if (missingCourses.isNotEmpty()) throw ServiceException.CourseNotFoundException(missingCourses)
             courseRepository.deleteAllById(courseIDs)
             return true
         }
@@ -41,7 +41,7 @@ class CourseService(
     @Transactional
     fun assignStudents(
         id: Long,
-        students: List<Long>,
+        students: List<String>,
     ): List<StudentDTO> {
         val course =
             courseRepository.findById(id)

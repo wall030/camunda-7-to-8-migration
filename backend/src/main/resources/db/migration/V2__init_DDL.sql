@@ -22,12 +22,12 @@ VALUES ('examination_office', 'examination_office', 'WORKFLOW');
 
 
 -- student
-INSERT INTO act_id_user (ID_, FIRST_ , LAST_, EMAIL_)
-VALUES ('cassian_andor', 'Cassian', 'Andor', 'cassian@mail.com');
+INSERT INTO act_id_user (ID_, REV_, PWD_, SALT_, FIRST_, LAST_, EMAIL_)
+VALUES ('ca', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==','Cassian', 'Andor', 'cassian@mail.com');
 
 -- examination office
-INSERT INTO act_id_user (ID_, FIRST_ , LAST_, EMAIL_)
-VALUES ('bail_organa', 'Bail', 'Organa', 'bail@mail.com');
+INSERT INTO act_id_user (ID_, REV_, PWD_, SALT_, FIRST_ , LAST_, EMAIL_)
+VALUES ('ba', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Bail', 'Organa', 'bail@mail.com');
 
 -- course
 INSERT INTO course (name)
@@ -35,8 +35,8 @@ VALUES ('Physics');
 
 -- Assign Cassian to 'students' group
 INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('cassian_andor', 'students');
+VALUES ('ca', 'students');
 
 -- Assign Bail to 'examination_office' group
 INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('bail_organa', 'examination_office');
+VALUES ('ba', 'examination_office');

@@ -30,5 +30,5 @@ class StudentController(
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete")
-    fun deleteStudents(studentIDs: List<Long>) = studentService.deleteStudents(studentIDs)
+    fun deleteStudents(studentIDs: List<String>) = studentService.deleteStudents(studentIDs)
 }

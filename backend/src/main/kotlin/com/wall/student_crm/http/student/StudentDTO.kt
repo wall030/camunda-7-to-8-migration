@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank
 
 data class StudentDTO(
     @field:NotBlank(message = "ID is required")
-    val id: Long,
+    val id: String,
     val firstName: String,
     val lastName: String,
     @field:Email(message = "Invalid email format")

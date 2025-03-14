@@ -2,17 +2,16 @@ package com.wall.student_crm.exception
 
 sealed class ServiceException(message: String) : RuntimeException(message) {
 
-    class StudentNotFoundException(studentIds: List<Long>) :
-        ServiceException(formatMessage("Student", studentIds)) {
-        constructor(studentId: Long) : this(listOf(studentId))
+    class StudentNotFoundException(studentIds: List<String>) :
+        ServiceException("Student not found with IDs: ${studentIds.joinToString(", ")}") {
+        constructor(studentId: String) : this(listOf(studentId))
     }
 
     class StudentEmailNotFoundException(email: String) :
-        ServiceException("Student with email $email does not exist") {
-    }
+        ServiceException("Student with email $email does not exist")
 
     class CourseNotFoundException(courseIds: List<Long>) :
-        ServiceException(formatMessage("Course", courseIds)) {
+        ServiceException("Course not found with IDs: ${courseIds.joinToString(", ")}") {
         constructor(courseId: Long) : this(listOf(courseId))
     }
 
@@ -24,11 +23,4 @@ sealed class ServiceException(message: String) : RuntimeException(message) {
 
     class DuplicateCourseException(name: String) :
         ServiceException("Course titled $name already exists")
-
-    companion object {
-        private fun formatMessage(entity: String, ids: List<Long>): String {
-            return "${entity}${if (ids.size > 1) "s" else ""} not found with ID${if (ids.size > 1) "s" else ""}: ${
-                ids.joinToString(", ")}"
-        }
-    }
 }

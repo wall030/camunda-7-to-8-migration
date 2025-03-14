@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="checkRegistrationDeadlineDMN" name="checkRegistrationDeadlineDMN" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="checkRegistrationDeadlineDMN" name="checkRegistrationDeadlineDMN" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
   <decision id="checkExamRegistrationDeadline" name="checkExamRegistrationDeadline" camunda:historyTimeToLive="30">
     <decisionTable id="DecisionTable_0facc17" hitPolicy="FIRST">
       <input id="Input_1" label="currentMonthDay">
@@ -10,7 +10,7 @@
       <output id="Output_1" name="registrationAllowed" typeRef="boolean" />
       <rule id="DecisionRule_1m7js5j">
         <inputEntry id="UnaryTests_1iwuz8o">
-          <text>April</text>
+          <text>"March"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0eb9yhv">
           <text>true</text>
@@ -18,7 +18,7 @@
       </rule>
       <rule id="DecisionRule_1p9rddv">
         <inputEntry id="UnaryTests_1enkpyk">
-          <text>September</text>
+          <text>"September"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_18ex4dj">
           <text>true</text>

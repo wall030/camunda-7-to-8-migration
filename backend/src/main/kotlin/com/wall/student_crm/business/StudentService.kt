@@ -32,7 +32,7 @@ class StudentService(
     }
 
     @Transactional
-    fun deleteStudents(studentIDs: List<Long>): Boolean {
+    fun deleteStudents(studentIDs: List<String>): Boolean {
         if (studentIDs.isEmpty()) return false
         val students = studentRepository.findAllById(studentIDs)
         val fetchedStudentsIDs = students.map { it.id }

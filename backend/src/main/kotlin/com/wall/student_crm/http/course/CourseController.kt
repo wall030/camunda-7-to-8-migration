@@ -35,6 +35,6 @@ class CourseResource(
     @PutMapping("/{id}/assignStudents")
     fun assignStudents(
         @PathParam("id") id: Long,
-        students: List<Long>,
+        students: List<String>,
     ) = courseService.assignStudents(id, students)
 }
