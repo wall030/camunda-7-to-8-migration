@@ -1,4 +1,4 @@
-package com.wall.student_crm
+package com.wall.student_crm.delegates
 
 import com.wall.student_crm.persistence.course.CourseRepository
 import com.wall.student_crm.persistence.student.StudentRepository

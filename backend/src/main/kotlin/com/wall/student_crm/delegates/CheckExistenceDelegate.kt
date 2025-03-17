@@ -1,4 +1,4 @@
-package com.wall.student_crm
+package com.wall.student_crm.delegates
 
 import com.wall.student_crm.exception.ServiceException
 import com.wall.student_crm.persistence.course.CourseRepository
@@ -21,13 +21,9 @@ class CheckExistenceDelegate(
         val course = courseRepository.findByName(courseName)
             ?: throw ServiceException.CourseNameNotFoundException(courseName)
 
-        println(student.firstName)
-        println(student.courses)
         if (!student.courses.contains(course)) {
-            println("Trueeee")
             execution.setVariable("approved", true)
         } else {
-            println("Falseee")
             execution.setVariable("approved", false)
         }
     }
