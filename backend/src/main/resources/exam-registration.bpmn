@@ -119,12 +119,12 @@
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1i5riaz" sourceRef="checkRegistrationDeadlineDMN" targetRef="Gateway_1lu1mxj" />
     <bpmn:sequenceFlow id="Flow_1ciszzg" sourceRef="Activity_07syfwe" targetRef="Event_07k6i3d" />
-    <bpmn:sendTask id="Activity_07syfwe" name="Send confirmation">
+    <bpmn:sendTask id="Activity_07syfwe" name="Send confirmation" camunda:expression="${mailService.sendConfirmation(execution)}">
       <bpmn:incoming>Flow_1m5i8g9</bpmn:incoming>
       <bpmn:outgoing>Flow_1ciszzg</bpmn:outgoing>
     </bpmn:sendTask>
     <bpmn:sequenceFlow id="Flow_071akt7" sourceRef="Activity_16506k6" targetRef="Event_1vnxayh" />
-    <bpmn:sendTask id="Activity_16506k6" name="Send rejection">
+    <bpmn:sendTask id="Activity_16506k6" name="Send rejection" camunda:expression="${mailService.sendRejection(execution)}">
       <bpmn:incoming>Flow_16khaca</bpmn:incoming>
       <bpmn:outgoing>Flow_071akt7</bpmn:outgoing>
     </bpmn:sendTask>
@@ -304,10 +304,6 @@
         <di:waypoint x="660" y="500" />
         <di:waypoint x="755" y="500" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_09mglk5_di" bpmnElement="Association_09mglk5">
-        <di:waypoint x="359" y="267" />
-        <di:waypoint x="404" y="170" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ciszzg_di" bpmnElement="Flow_1ciszzg">
         <di:waypoint x="1450" y="780" />
         <di:waypoint x="1532" y="780" />
@@ -316,6 +312,10 @@
         <di:waypoint x="1450" y="630" />
         <di:waypoint x="1550" y="630" />
         <di:waypoint x="1550" y="518" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_09mglk5_di" bpmnElement="Association_09mglk5">
+        <di:waypoint x="359" y="267" />
+        <di:waypoint x="404" y="170" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
