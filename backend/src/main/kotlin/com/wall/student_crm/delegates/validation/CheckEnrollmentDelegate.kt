@@ -20,10 +20,13 @@ class CheckEnrollmentDelegate(
         val courseName = execution.getVariable("courseName").toString()
         val course = courseRepository.findByName(courseName)
 
-        if (student!!.courses.contains(course)) throw BpmnError(
-            "ALREADY_ENROLLED",
-            "Student is already enrolled in this course."
-        )
+        if (student!!.courses.contains(course)) {
+            execution.setVariable("error", true)
+            throw BpmnError(
+                "ALREADY_ENROLLED",
+                "Student is already enrolled in this course."
+            )
+        }
         execution.setVariable("approved", true)
     }
 }

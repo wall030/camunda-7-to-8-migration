@@ -10,7 +10,7 @@
       <output id="Output_1" name="registrationAllowed" typeRef="boolean" />
       <rule id="DecisionRule_1m7js5j">
         <inputEntry id="UnaryTests_1iwuz8o">
-          <text>"March"</text>
+          <text>"April"</text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0eb9yhv">
           <text>true</text>

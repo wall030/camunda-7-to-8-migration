@@ -13,8 +13,12 @@ class CheckCourseExistsDelegate(
 
     override fun execute(execution: DelegateExecution) {
         val courseName = execution.getVariable("courseName").toString()
-        courseRepository.findByName(courseName)
-            ?: throw BpmnError("COURSE_NOT_FOUND")
+        val student = courseRepository.findByName(courseName)
+
+        if (student == null) {
+            execution.setVariable("error", true)
+            throw BpmnError("COURSE_NOT_FOUND")
+        }
         execution.setVariable("courseExists", true)
     }
 }
