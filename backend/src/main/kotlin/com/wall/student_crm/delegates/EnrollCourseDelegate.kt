@@ -16,7 +16,7 @@ class EnrollCourseDelegate(
     override fun execute(execution: DelegateExecution) {
         try {
             val studentEmail = execution.getVariable("studentEmail").toString()
-            val courseName = execution.getVariable("courseName").toString()
+            val courseName = execution.getVariable("course").toString()
             val student = studentRepository.findByEmail(studentEmail)!!
             val fetchedCourse = courseRepository.findByName(courseName)
             student.courses.add(fetchedCourse!!)

@@ -31,7 +31,8 @@ VALUES ('ba', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3G
 
 -- course
 INSERT INTO course (name)
-VALUES ('Physics');
+VALUES ('Course A'),
+        ('Course B');
 
 -- Assign Cassian to 'students' group
 INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)

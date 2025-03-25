@@ -12,7 +12,7 @@ class CheckCourseExistsDelegate(
 ) : JavaDelegate {
 
     override fun execute(execution: DelegateExecution) {
-        val courseName = execution.getVariable("courseName").toString()
+        val courseName = execution.getVariable("course").toString()
         val student = courseRepository.findByName(courseName)
 
         if (student == null) {

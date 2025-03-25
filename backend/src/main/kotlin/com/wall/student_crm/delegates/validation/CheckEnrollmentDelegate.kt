@@ -17,7 +17,7 @@ class CheckEnrollmentDelegate(
         val studentEmail = execution.getVariable("studentEmail").toString()
         val student = studentRepository.findByEmail(studentEmail)
 
-        val courseName = execution.getVariable("courseName").toString()
+        val courseName = execution.getVariable("course").toString()
         val course = courseRepository.findByName(courseName)
 
         if (student!!.courses.contains(course)) {
