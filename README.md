@@ -34,7 +34,8 @@ Your application should now be running and accessible at: http://localhost:8080
 | **Role**               | **Username** | **Group**             | **Password** |
 |------------------------|--------------|-----------------------|--------------|
 | Student                | ca           | students              | demo         |
-| Examination Office    | ba           | examination_office    | demo         |
+| Examination Office    | ba           | examOffice    | demo         |
+| Technical Service     | rt           | technicalService    | demo         |
 | Admin                  | demo         | -                     | demo         |
 
 
@@ -45,14 +46,14 @@ Currently there is only the "Exam Registration" available.
 1. Log in to Camunda Tasklist as the student (ca):
    - Go to the Camunda web interface at: http://localhost:8080/camunda](http://localhost:8080/camunda/app/tasklist
    - Start the process "exam-registration" in start process tab
-   - use Email "cassian@mail.com" and course "Physics" and hit start
+   - use Email "cassian@mail.com" and select courses you want to enroll and hit start (Course C does not exist, you can select it to test other sequence flows)
    - If you are past the deadline the process will stop. You will get a User Task where you can decide to cancel or justify 
 
-2. Log in to Tasklist as examination office member (ba)
-   - You will get a user task where you can decide to accept or decline the justification
-   - accepting results in successfuly assigning the course "Physics" to student "ca"
+2. Log in to Tasklist as examination office member (ba) or technical service (rt)
+   - You will get a user task where you can decide to accept or decline the justification (depends on justification type, technical or personal reason)
+   - accepting results in successfuly assigning the courses to student "ca"
   
-3. You can check the assignment in the DB in table "student_course"
+3. You can check the assignment in the DB in table "student_course" and get an confirmation email, if you start the process with an course that is already enrolled or doesnt exist the process will stop and you get a information mail.
 
 ## 4. Database
 
