@@ -1,4 +1,4 @@
-package com.wall.student_crm.enums
+package com.wall.student_crm.shared.enums
 
 enum class Status {
     CHECKING,

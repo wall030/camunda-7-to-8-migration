@@ -1,6 +1,6 @@
-package com.wall.student_crm.business.mail
+package com.wall.student_crm.shared.mail
 
-import com.wall.student_crm.enums.MailMessageTemplate
+import com.wall.student_crm.shared.enums.MailMessageTemplate
 import jakarta.mail.MessagingException
 import jakarta.mail.internet.MimeMessage
 import org.springframework.mail.MailException

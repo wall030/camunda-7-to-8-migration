@@ -1,4 +1,4 @@
-package com.wall.student_crm.listeners
+package com.wall.student_crm.camunda.listeners
 
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.ExecutionListener

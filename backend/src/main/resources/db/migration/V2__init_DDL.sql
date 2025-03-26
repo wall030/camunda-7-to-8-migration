@@ -12,13 +12,25 @@ CREATE TABLE IF NOT EXISTS student_course (
     CONSTRAINT fk_student_course_course FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
 );
 
+CREATE TABLE justifications (
+    id UUID PRIMARY KEY,
+    student_id VARCHAR(64) NOT NULL,
+    justification TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES act_id_user(id_) ON DELETE CASCADE
+);
+
 -- Add 'students' group
 INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
 VALUES ('students', 'students', 'WORKFLOW');
 
--- Add 'examination_office' group
+-- Add 'examOffice' group
 INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
-VALUES ('examination_office', 'examination_office', 'WORKFLOW');
+VALUES ('examOffice', 'examOffice', 'WORKFLOW');
+
+-- Add 'technicalService' group
+INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
+VALUES ('technicalService', 'technicalService', 'WORKFLOW');
 
 
 -- student
@@ -28,6 +40,12 @@ VALUES ('ca', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3G
 -- examination office
 INSERT INTO act_id_user (ID_, REV_, PWD_, SALT_, FIRST_ , LAST_, EMAIL_)
 VALUES ('ba', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Bail', 'Organa', 'bail@mail.com');
+
+
+-- techinal service
+INSERT INTO act_id_user (ID_, REV_, PWD_, SALT_, FIRST_ , LAST_, EMAIL_)
+VALUES ('rt', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Rick', 'Tecer', 'rick@mail.com');
+
 
 -- course
 INSERT INTO course (name)
@@ -40,4 +58,8 @@ VALUES ('ca', 'students');
 
 -- Assign Bail to 'examination_office' group
 INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('ba', 'examination_office');
+VALUES ('ba', 'examOffice');
+
+-- Assign Rick to 'technicalService' group
+INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
+VALUES ('rt', 'technicalService');

@@ -1,4 +1,4 @@
-package com.wall.student_crm.enums
+package com.wall.student_crm.shared.enums
 
 enum class MailMessageTemplate(val subject: String, val content: String) {
     EXAM_REJECTION_MESSAGE("Exam Rejection", "Exam registration rejected!"),

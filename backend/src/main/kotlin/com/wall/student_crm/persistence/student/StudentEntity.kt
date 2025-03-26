@@ -1,8 +1,6 @@
 package com.wall.student_crm.persistence.student
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.wall.student_crm.http.course.CourseDTO
-import com.wall.student_crm.http.student.StudentDTO
 import com.wall.student_crm.persistence.course.CourseEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -43,13 +41,5 @@ class StudentEntity(
         this.firstName = firstName
         this.lastName = lastName
         this.email = email
-    }
-
-    fun toStudentDTO(): StudentDTO {
-        val coursesDTOs =
-            this.courses.map { course ->
-                CourseDTO(course.id, course.name, emptyList())
-            }
-        return StudentDTO(this.id, this.firstName, this.lastName, this.email, coursesDTOs)
     }
 }

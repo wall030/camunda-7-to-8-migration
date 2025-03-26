@@ -1,4 +1,4 @@
-package com.wall.student_crm.delegates.validation
+package com.wall.student_crm.camunda.delegates.validation
 
 import org.camunda.bpm.engine.delegate.BpmnError
 import org.camunda.bpm.engine.delegate.DelegateExecution

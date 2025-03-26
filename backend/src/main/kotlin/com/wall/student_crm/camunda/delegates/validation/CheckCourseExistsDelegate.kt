@@ -1,4 +1,4 @@
-package com.wall.student_crm.delegates.validation
+package com.wall.student_crm.camunda.delegates.validation
 
 import com.wall.student_crm.persistence.course.CourseRepository
 import org.camunda.bpm.engine.delegate.BpmnError
