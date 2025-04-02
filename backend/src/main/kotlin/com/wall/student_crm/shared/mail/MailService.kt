@@ -15,7 +15,25 @@ class MailService(
 ) {
 
     fun sendConfirmation(execution: DelegateExecution) {
-        client.sendEmail(email(execution), EXAM_CONFIRMATION_MESSAGE)
+        val qrCodeUrl = execution.getVariable("qrCodeUrl") as String
+        val courseName = execution.getVariable("course") as String
+        val qrCode = """
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>Registration Confirmation: ${courseName}</title>
+                        </head>
+                        <body style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+                            <p>We would like to confirm your registration for exam ${courseName}.</p>
+                            <p>To add this event to your calendar, you can scan the QR code below:</p>
+                            <img src=${qrCodeUrl} alt="Exam event QR Code">
+                            <p>Best regards :)</p>
+                        </body>
+                        </html>
+                    """.trimIndent().replace("\n", "").replace("\r", "")
+        client.sendEmail(email(execution), EXAM_CONFIRMATION_MESSAGE, qrCode)
     }
 
     fun sendRejection(execution: DelegateExecution) {

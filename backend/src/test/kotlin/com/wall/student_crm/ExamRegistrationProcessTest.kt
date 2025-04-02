@@ -115,6 +115,11 @@ class ExamRegistrationProcessTest {
             )
         }
 
+        `when`(process.waitsAtServiceTask("generateQrCodeTask")).thenReturn { task ->
+            task.complete(
+                withVariables("qrCodeUrl", "QrCodeString")
+            )
+        }
     }
 
     @AfterEach
