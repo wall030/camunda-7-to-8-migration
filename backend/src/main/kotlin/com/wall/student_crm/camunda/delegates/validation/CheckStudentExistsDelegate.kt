@@ -14,9 +14,7 @@ class CheckStudentExistsDelegate(
     override fun execute(execution: DelegateExecution) {
         val studentEmail = execution.getVariable("studentEmail").toString()
         val student = studentRepository.findByEmail(studentEmail)
-
         if (student == null) {
-            execution.setVariable("error", true)
             throw BpmnError("STUDENT_NOT_FOUND")
         }
         execution.setVariable("studentExists", true)

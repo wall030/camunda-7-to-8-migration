@@ -22,7 +22,7 @@ class EnrollCourseDelegate(
             student.courses.add(fetchedCourse!!)
             studentRepository.save(student)
         } catch (e: Exception) {
-            throw BpmnError("SYSTEM_ERROR", "Unexpected error while assigning course.")
+            throw BpmnError("SYSTEM_ERROR")
         }
     }
 }

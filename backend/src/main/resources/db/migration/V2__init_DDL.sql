@@ -22,15 +22,15 @@ CREATE TABLE justifications (
 
 -- Add 'students' group
 INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
-VALUES ('students', 'students', 'WORKFLOW');
+VALUES ('students', 'students', 'students');
 
 -- Add 'examOffice' group
 INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
-VALUES ('examOffice', 'examOffice', 'WORKFLOW');
+VALUES ('examoffice', 'examoffice', 'examoffice');
 
 -- Add 'technicalService' group
 INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
-VALUES ('technicalService', 'technicalService', 'WORKFLOW');
+VALUES ('technicalservice', 'technicalservice', 'technicalservice');
 
 
 -- student
@@ -58,8 +58,8 @@ VALUES ('ca', 'students');
 
 -- Assign Bail to 'examination_office' group
 INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('ba', 'examOffice');
+VALUES ('ba', 'examoffice');
 
 -- Assign Rick to 'technicalService' group
 INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('rt', 'technicalService');
+VALUES ('rt', 'technicalservice');

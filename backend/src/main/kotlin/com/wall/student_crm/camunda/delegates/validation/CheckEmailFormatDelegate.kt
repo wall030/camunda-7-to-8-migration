@@ -3,21 +3,15 @@ package com.wall.student_crm.camunda.delegates.validation
 import org.camunda.bpm.engine.delegate.BpmnError
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.JavaDelegate
-import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class CheckEmailFormatDelegate : JavaDelegate {
-
-    private val logger = LoggerFactory.getLogger(CheckEmailFormatDelegate::class.java)
-
     override fun execute(execution: DelegateExecution) {
         val studentEmail = execution.getVariable("studentEmail").toString()
 
         if (!isValidEmail(studentEmail)) {
-            logger.error("Invalid email format detected: $studentEmail")
-            execution.setVariable("error", true)
-            throw BpmnError("INVALID_EMAIL", "Invalid Email Format")
+            throw BpmnError("INVALID_EMAIL_FORMAT")
         }
     }
 
