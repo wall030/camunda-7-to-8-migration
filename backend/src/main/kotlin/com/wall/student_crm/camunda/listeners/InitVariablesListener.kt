@@ -1,5 +1,6 @@
 package com.wall.student_crm.camunda.listeners
 
+import com.wall.student_crm.persistence.course.CourseRepository
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.ExecutionListener
 import org.springframework.stereotype.Component
@@ -7,21 +8,38 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Component
-class InitVariablesListener : ExecutionListener {
+class InitVariablesListener(
+    private val courseRepository: CourseRepository
+) : ExecutionListener {
     override fun notify(execution: DelegateExecution) {
-        val selectedCourses: MutableList<String> = mutableListOf()
+        val courseName = execution.getVariable("course") as String
 
-        val courseA = execution.getVariable("courseA") as Boolean
-        val courseB = execution.getVariable("courseB") as Boolean
-        val courseC = execution.getVariable("courseC") as Boolean
+        val prerequisitesList = courseRepository.findByName(courseName)?.prerequisites?.map { it.name } ?: emptyList()
+        val studentsPrerequisites = mutableListOf<String>()
 
-        if (courseA) selectedCourses.add("Course A")
-        if (courseB) selectedCourses.add("Course B")
-        if (courseC) selectedCourses.add("Course C")
+        val prerequisiteA = execution.getVariable("prerequisiteA") as Boolean
+        val prerequisiteB = execution.getVariable("prerequisiteB") as Boolean
+        val prerequisiteC = execution.getVariable("prerequisiteC") as Boolean
+        val prerequisiteD = execution.getVariable("prerequisiteD") as Boolean
 
-        val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toString()
+        if (prerequisiteA) {
+            studentsPrerequisites.add("prerequisite a")
+        }
+        if (prerequisiteB) {
+            studentsPrerequisites.add("prerequisite b")
+        }
+        if (prerequisiteC) {
+            studentsPrerequisites.add("prerequisite c")
+        }
+        if (prerequisiteD) {
+            studentsPrerequisites.add("prerequisite d")
+        }
 
-        execution.setVariable("selectedCoursesList", selectedCourses)
+        val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MM"))
+
+        execution.setVariable("prerequisitesList", prerequisitesList)
+        execution.setVariable("studentsPrerequisites", studentsPrerequisites)
         execution.setVariable("currentMonth", currentMonth)
+        execution.setVariable("missingFound", false)
     }
 }

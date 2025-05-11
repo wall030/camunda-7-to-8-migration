@@ -2,6 +2,7 @@ package com.wall.student_crm.persistence.student
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.wall.student_crm.persistence.course.CourseEntity
+import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
@@ -10,7 +11,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
-
 
 @Entity
 @Table(name = "act_id_user")
@@ -36,10 +36,12 @@ class StudentEntity(
     )
     @JsonIgnoreProperties("students")
     var courses: MutableList<CourseEntity> = mutableListOf(),
-) {
-    constructor(firstName: String, lastName: String, email: String) : this() {
-        this.firstName = firstName
-        this.lastName = lastName
-        this.email = email
-    }
-}
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "student_prerequisite",
+        joinColumns = [JoinColumn(name = "student_id")],
+        inverseJoinColumns = [JoinColumn(name = "prerequisite_id")],
+    )
+    var prerequisites: MutableList<PrerequisiteEntity> = mutableListOf()
+)

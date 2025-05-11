@@ -7,7 +7,7 @@ import com.wall.student_crm.shared.enums.MailMessageTemplate.EXAM_REJECTION_MESS
 import com.wall.student_crm.shared.enums.MailMessageTemplate.ALREADY_ENROLLED_MESSAGE
 import com.wall.student_crm.shared.enums.MailMessageTemplate.STUDENT_NOT_FOUND_MESSAGE
 import com.wall.student_crm.shared.enums.MailMessageTemplate.COURSE_NOT_FOUND_MESSAGE
-import com.wall.student_crm.shared.enums.MailMessageTemplate.LATE_ENROLLMENT_MESSAGE
+import com.wall.student_crm.shared.enums.MailMessageTemplate.PREREQUISITES_NOT_MET
 
 @Service
 class MailService(
@@ -48,13 +48,12 @@ class MailService(
         client.sendEmail(email(execution), STUDENT_NOT_FOUND_MESSAGE)
     }
 
-
     fun sendCourseNotFound(execution: DelegateExecution) {
         client.sendEmail(email(execution), COURSE_NOT_FOUND_MESSAGE)
     }
 
-    fun sendLateEnrollment(execution: DelegateExecution) {
-        client.sendEmail(email(execution), LATE_ENROLLMENT_MESSAGE)
+    fun sendPrerequisitesNotMet(execution: DelegateExecution) {
+        client.sendEmail(email(execution), PREREQUISITES_NOT_MET)
     }
 
     private fun email(execution: DelegateExecution): String {

@@ -4,6 +4,7 @@ import com.wall.student_crm.camunda.delegates.EnrollCourseDelegate
 import com.wall.student_crm.camunda.delegates.RemoveJustificationDelegate
 import com.wall.student_crm.camunda.delegates.StoreJustificationDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckCourseExistsDelegate
+import com.wall.student_crm.camunda.delegates.validation.CheckCourseFullDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckEmailFormatDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckEnrollmentDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckStudentExistsDelegate
@@ -12,6 +13,8 @@ import com.wall.student_crm.camunda.listeners.StatusListener
 import com.wall.student_crm.persistence.course.CourseEntity
 import com.wall.student_crm.persistence.course.CourseRepository
 import com.wall.student_crm.persistence.justification.JustificationRepository
+import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
+import com.wall.student_crm.persistence.prerequisite.PrerequisiteRepository
 import com.wall.student_crm.persistence.student.StudentEntity
 import com.wall.student_crm.persistence.student.StudentRepository
 import com.wall.student_crm.shared.mail.MailService
@@ -63,7 +66,6 @@ class ExamRegistrationProcessTest {
     private lateinit var delegateExecution: DelegateExecution
 
 
-
     @BeforeEach
     fun setup() {
         MockitoAnnotations.openMocks(this)
@@ -77,7 +79,8 @@ class ExamRegistrationProcessTest {
             "checkEmailFormatDelegate" to CheckEmailFormatDelegate(),
             "checkEnrollmentDelegate" to CheckEnrollmentDelegate(studentRepository, courseRepository),
             "checkStudentExistsDelegate" to CheckStudentExistsDelegate(studentRepository),
-            "initVariablesListener" to InitVariablesListener(),
+            "checkCourseFullDelegate" to CheckCourseFullDelegate(courseRepository),
+            "initVariablesListener" to InitVariablesListener(courseRepository),
             "statusListener" to StatusListener()
         ).forEach { (name, delegate) -> Mocks.register(name, delegate) }
 
@@ -87,11 +90,19 @@ class ExamRegistrationProcessTest {
         doNothing().`when`(mailService).sendAlreadyEnrolled(delegateExecution)
         doNothing().`when`(mailService).sendStudentNotFound(delegateExecution)
         doNothing().`when`(mailService).sendCourseNotFound(delegateExecution)
-        doNothing().`when`(mailService).sendLateEnrollment(delegateExecution)
+        doNothing().`when`(mailService).sendPrerequisitesNotMet(delegateExecution)
 
         // default scenario
         `when`(studentRepository.findByEmail((anyString()))).thenReturn(StudentEntity())
-        `when`(courseRepository.findByName(anyString())).thenReturn(CourseEntity())
+        `when`(courseRepository.findByName(anyString())).thenReturn(
+            CourseEntity(
+                prerequisites = mutableListOf(
+                    PrerequisiteEntity(name = "prerequisite a"),
+                    PrerequisiteEntity(name = "prerequisite b")
+                )
+            )
+        )
+
 
         `when`(process.waitsAtUserTask("userTaskCancelOrApply")).thenReturn { task ->
             task.complete(
@@ -115,11 +126,18 @@ class ExamRegistrationProcessTest {
             )
         }
 
+        `when`(process.waitsAtUserTask("reviewOverbooking")).thenReturn { task ->
+            task.complete(
+                withVariables("overbooked", true)
+            )
+        }
+
         `when`(process.waitsAtServiceTask("generateQrCodeTask")).thenReturn { task ->
             task.complete(
                 withVariables("qrCodeUrl", "QrCodeString")
             )
         }
+
     }
 
     @AfterEach
@@ -132,9 +150,11 @@ class ExamRegistrationProcessTest {
     fun shouldSuccessfullyRegister() {
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "03"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -142,15 +162,40 @@ class ExamRegistrationProcessTest {
     }
 
     @Test
-    fun shouldSuccessfullyRegisterWithManualLateEnrollment() {
-        `when`(studentRepository.save(any())).thenThrow(BpmnError("SYSTEM_ERROR"))
-        `when`(process.waitsAtUserTask("enrollManually")).thenReturn { task -> task.complete() }
+    fun shouldSuccessfullyRegisterWithOverbooking() {
+        `when`(courseRepository.findByName(anyString())).thenReturn(CourseEntity(currentSize = 10))
+        `when`(process.waitsAtUserTask("reviewOverbooking")).thenReturn { task ->
+            task.complete(
+                withVariables("overbooked", false)
+            )
+        }
 
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
+            "currentMonth" to "03"
+        )
+        Scenario.run(process).startByKey(processKey, variables).execute()
+
+        verify(process).hasFinished("EndEvent_NoOverbooking")
+    }
+
+    @Test
+    fun shouldBeRejectedWithNoOverbooking() {
+        `when`(courseRepository.findByName(anyString())).thenReturn(CourseEntity(currentSize = 10))
+
+
+        val variables = mapOf(
+            "studentEmail" to "test@test.com",
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "03"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -165,9 +210,11 @@ class ExamRegistrationProcessTest {
         }
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "04"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -182,9 +229,11 @@ class ExamRegistrationProcessTest {
         }
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "04"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -208,9 +257,11 @@ class ExamRegistrationProcessTest {
         }
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "04"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -222,9 +273,11 @@ class ExamRegistrationProcessTest {
     fun shouldStopInvalidEmailFormat() {
         val variables = mapOf(
             "studentEmail" to "invalid Email",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "03"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -236,9 +289,11 @@ class ExamRegistrationProcessTest {
         `when`(studentRepository.findByEmail((anyString()))).thenReturn(null)
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "03"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -251,9 +306,11 @@ class ExamRegistrationProcessTest {
         `when`(courseRepository.findByName(anyString())).thenReturn(null)
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course X",
             "currentMonth" to "03"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
@@ -269,12 +326,29 @@ class ExamRegistrationProcessTest {
         `when`(courseRepository.findByName(anyString())).thenReturn(course)
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "courseA" to true,
-            "courseB" to true,
-            "courseC" to false,
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
             "currentMonth" to "03"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_AlreadyEnrolled")
+    }
+
+    @Test
+    fun shouldStopPrerequisiteNotMet() {
+        val variables = mapOf(
+            "studentEmail" to "test@test.com",
+            "prerequisiteA" to true,
+            "prerequisiteB" to false,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
+            "currentMonth" to "03"
+        )
+        Scenario.run(process).startByKey(processKey, variables).execute()
+        verify(process).hasFinished("EndEvent_PrerequisitesNotMet")
     }
 }

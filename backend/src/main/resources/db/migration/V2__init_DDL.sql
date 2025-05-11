@@ -1,65 +1,80 @@
-CREATE TABLE IF NOT EXISTS course (
-    id BIGSERIAL NOT NULL,
-    name VARCHAR(255) NOT NULL,
-    CONSTRAINT pk_course_id PRIMARY KEY (id)
+create table if not exists prerequisites (
+    id bigserial primary key,
+    name varchar(100) not null
+    );
+
+insert into prerequisites (name) values
+    ('prerequisite a'),
+    ('prerequisite b'),
+    ('prerequisite c'),
+    ('prerequisite d');
+
+create table if not exists course (
+    id bigserial not null,
+    name varchar(255) not null,
+    max_size int default 10,
+    current_size int default 0,
+    constraint pk_course_id primary key (id)
+    );
+
+create table if not exists course_prerequisite (
+    course_id bigint not null,
+    prerequisite_id bigint not null,
+    constraint pk_course_prerequisite primary key (course_id, prerequisite_id),
+    constraint fk_cp_course foreign key (course_id) references course(id) on delete cascade,
+    constraint fk_cp_prerequisite foreign key (prerequisite_id) references prerequisites(id) on delete cascade
+    );
+
+create table if not exists student_course (
+                                              student_id varchar(64) not null,
+    course_id bigint not null,
+    constraint pk_student_course primary key (student_id, course_id),
+    constraint fk_sc_student foreign key (student_id) references act_id_user(id_) on delete cascade,
+    constraint fk_sc_course foreign key (course_id) references course(id) on delete cascade
+    );
+
+create table if not exists student_prerequisite (
+    student_id varchar(64) not null,
+    prerequisite_id bigint not null,
+    constraint pk_student_prerequisite primary key (student_id, prerequisite_id),
+    constraint fk_sp_student foreign key (student_id) references act_id_user(id_) on delete cascade,
+    constraint fk_sp_prerequisite foreign key (prerequisite_id) references prerequisites(id) on delete cascade
+    );
+
+create table justifications (
+    id uuid primary key,
+    student_id varchar(64) not null,
+    justification text not null,
+    created_at timestamp not null default now(),
+    constraint fk_student foreign key (student_id) references act_id_user(id_) on delete cascade
 );
 
-CREATE TABLE IF NOT EXISTS student_course (
-    student_id VARCHAR(64) NOT NULL,
-    course_id BIGINT NOT NULL,
-    CONSTRAINT pk_student_course PRIMARY KEY (student_id, course_id),
-    CONSTRAINT fk_student_course_student FOREIGN KEY (student_id) REFERENCES act_id_user(id_) ON DELETE CASCADE,
-    CONSTRAINT fk_student_course_course FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
-);
+insert into act_id_group (id_, name_, type_) values
+    ('students', 'students', 'students'),
+    ('examoffice', 'examoffice', 'examoffice'),
+    ('technicalservice', 'technicalservice', 'technicalservice');
 
-CREATE TABLE justifications (
-    id UUID PRIMARY KEY,
-    student_id VARCHAR(64) NOT NULL,
-    justification TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    CONSTRAINT fk_student FOREIGN KEY (student_id) REFERENCES act_id_user(id_) ON DELETE CASCADE
-);
+insert into act_id_user (id_, rev_, pwd_, salt_, first_, last_, email_) values
+    ('ca', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Cassian', 'Andor', 'cassian@mail.com'),
+    ('ba', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Bail', 'Organa', 'bail@mail.com'),
+    ('rt', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Rick', 'Tecer', 'rick@mail.com');
 
--- Add 'students' group
-INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
-VALUES ('students', 'students', 'students');
+-- kurs-voraussetzungen
+insert into course (name, current_size) values
+    ('Course A', 0),
+    ('Course B', 10);
 
--- Add 'examOffice' group
-INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
-VALUES ('examoffice', 'examoffice', 'examoffice');
+insert into course_prerequisite (course_id, prerequisite_id) values
+    (1, 1),
+    (1, 2),
+    (2, 3),
+    (2, 4);
 
--- Add 'technicalService' group
-INSERT INTO ACT_ID_GROUP (ID_, NAME_, TYPE_)
-VALUES ('technicalservice', 'technicalservice', 'technicalservice');
+-- cassian → studenten
+insert into act_id_membership (user_id_, group_id_) values ('ca', 'students');
 
+-- bail → prüfungsamt
+insert into act_id_membership (user_id_, group_id_) values ('ba', 'examoffice');
 
--- student
-INSERT INTO act_id_user (ID_, REV_, PWD_, SALT_, FIRST_, LAST_, EMAIL_)
-VALUES ('ca', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==','Cassian', 'Andor', 'cassian@mail.com');
-
--- examination office
-INSERT INTO act_id_user (ID_, REV_, PWD_, SALT_, FIRST_ , LAST_, EMAIL_)
-VALUES ('ba', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Bail', 'Organa', 'bail@mail.com');
-
-
--- techinal service
-INSERT INTO act_id_user (ID_, REV_, PWD_, SALT_, FIRST_ , LAST_, EMAIL_)
-VALUES ('rt', 1, '{SHA-512}lrYuJ6QfWlyrcS4JL5uV6XdyXVfcf+sUBdGtySK20RBorvTCjEB3GMAfnScgDMzKXNQyMf61XIe2Zcqvnil8bA==', 'JaKB6RMHFxeryKNnes90dg==', 'Rick', 'Tecer', 'rick@mail.com');
-
-
--- course
-INSERT INTO course (name)
-VALUES ('Course A'),
-        ('Course B');
-
--- Assign Cassian to 'students' group
-INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('ca', 'students');
-
--- Assign Bail to 'examination_office' group
-INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('ba', 'examoffice');
-
--- Assign Rick to 'technicalService' group
-INSERT INTO ACT_ID_MEMBERSHIP (USER_ID_, GROUP_ID_)
-VALUES ('rt', 'technicalservice');
+-- rick → technischer dienst
+insert into act_id_membership (user_id_, group_id_) values ('rt', 'technicalservice');
