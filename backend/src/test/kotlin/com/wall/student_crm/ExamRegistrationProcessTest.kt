@@ -1,6 +1,7 @@
 package com.wall.student_crm
 
 import com.wall.student_crm.camunda.delegates.EnrollCourseDelegate
+import com.wall.student_crm.camunda.delegates.IncreaseCourseSizeDelegate
 import com.wall.student_crm.camunda.delegates.RemoveJustificationDelegate
 import com.wall.student_crm.camunda.delegates.StoreJustificationDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckCourseExistsDelegate
@@ -77,6 +78,7 @@ class ExamRegistrationProcessTest {
             "storeJustificationDelegate" to StoreJustificationDelegate(justificationRepository, studentRepository),
             "checkCourseExistsDelegate" to CheckCourseExistsDelegate(courseRepository),
             "checkEmailFormatDelegate" to CheckEmailFormatDelegate(),
+            "increaseCourseSizeDelegate" to IncreaseCourseSizeDelegate(courseRepository),
             "checkEnrollmentDelegate" to CheckEnrollmentDelegate(studentRepository, courseRepository),
             "checkStudentExistsDelegate" to CheckStudentExistsDelegate(studentRepository),
             "checkCourseFullDelegate" to CheckCourseFullDelegate(courseRepository),
@@ -129,6 +131,12 @@ class ExamRegistrationProcessTest {
         `when`(process.waitsAtUserTask("reviewOverbooking")).thenReturn { task ->
             task.complete(
                 withVariables("overbooked", true)
+            )
+        }
+
+        `when`(process.waitsAtUserTask("checkChangeCourseSize")).thenReturn { task ->
+            task.complete(
+                withVariables("courseSizeCanBeIncreased", true)
             )
         }
 
@@ -187,6 +195,11 @@ class ExamRegistrationProcessTest {
     @Test
     fun shouldBeRejectedWithNoOverbooking() {
         `when`(courseRepository.findByName(anyString())).thenReturn(CourseEntity(currentSize = 10))
+        `when`(process.waitsAtUserTask("checkChangeCourseSize")).thenReturn { task ->
+            task.complete(
+                withVariables("courseSizeCanBeIncreased", false)
+            )
+        }
 
 
         val variables = mapOf(
