@@ -1,7 +1,7 @@
 import { Client, logger, Variables } from "camunda-external-task-client-js";
 
 const config = {
-    baseUrl: "http://localhost:8080/engine-rest",
+    baseUrl: process.env.BASE_URL || "http://localhost:8080/engine-rest",
     use: logger,
 };
 

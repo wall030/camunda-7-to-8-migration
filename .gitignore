@@ -44,3 +44,4 @@ out/
 /.vscode/
 /external/node_modules/
 /backend/target/
+/backend/db/camunda-h2-database.mv.db
