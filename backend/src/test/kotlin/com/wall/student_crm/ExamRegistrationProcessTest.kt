@@ -42,7 +42,7 @@ import org.springframework.test.context.ActiveProfiles
 
 
 @SpringBootTest
-@Deployment(resources = ["exam-registration.bpmn", "initial-existence-check.bpmn", "checkExamRegistrationDeadline.dmn"])
+@Deployment(resources = ["exam-registration.bpmn", "revise-course-size.bpmn", "initial-existence-check.bpmn", "checkExamRegistrationDeadline.dmn"])
 @ActiveProfiles("test")
 class ExamRegistrationProcessTest {
 
@@ -50,6 +50,9 @@ class ExamRegistrationProcessTest {
 
     @Mock
     private lateinit var process: ProcessScenario
+
+    @Mock
+    private lateinit var reviseCourseSizeProcess: ProcessScenario
 
     @Mock
     private lateinit var studentRepository: StudentRepository
@@ -134,16 +137,16 @@ class ExamRegistrationProcessTest {
             )
         }
 
-        `when`(process.waitsAtUserTask("checkChangeCourseSize")).thenReturn { task ->
-            task.complete(
-                withVariables("courseSizeCanBeIncreased", true)
-            )
-        }
-
         `when`(process.waitsAtServiceTask("generateQrCodeTask")).thenReturn { task ->
             task.complete(
                 withVariables("qrCodeUrl", "QrCodeString")
             )
+        }
+
+        `when`(process.runsCallActivity("reviseCourseSizeCallActivity")).thenReturn(Scenario.use(reviseCourseSizeProcess))
+
+        `when`(reviseCourseSizeProcess.waitsAtUserTask("checkChangeCourseSize")).thenReturn { task ->
+            task.complete(withVariables("courseSizeCanBeIncreased", true))
         }
 
     }
@@ -171,36 +174,15 @@ class ExamRegistrationProcessTest {
 
     @Test
     fun shouldSuccessfullyRegisterWithOverbooking() {
-        `when`(courseRepository.findByName(anyString())).thenReturn(CourseEntity(currentSize = 10))
-        `when`(process.waitsAtUserTask("reviewOverbooking")).thenReturn { task ->
-            task.complete(
-                withVariables("overbooked", false)
+        `when`(courseRepository.findByName(anyString())).thenReturn(
+            CourseEntity(
+                currentSize = 10,
+                prerequisites = mutableListOf(
+                    PrerequisiteEntity(name = "prerequisite a"),
+                    PrerequisiteEntity(name = "prerequisite b")
+                )
             )
-        }
-
-        val variables = mapOf(
-            "studentEmail" to "test@test.com",
-            "prerequisiteA" to true,
-            "prerequisiteB" to true,
-            "prerequisiteC" to false,
-            "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "03"
         )
-        Scenario.run(process).startByKey(processKey, variables).execute()
-
-        verify(process).hasFinished("EndEvent_NoOverbooking")
-    }
-
-    @Test
-    fun shouldBeRejectedWithNoOverbooking() {
-        `when`(courseRepository.findByName(anyString())).thenReturn(CourseEntity(currentSize = 10))
-        `when`(process.waitsAtUserTask("checkChangeCourseSize")).thenReturn { task ->
-            task.complete(
-                withVariables("courseSizeCanBeIncreased", false)
-            )
-        }
-
 
         val variables = mapOf(
             "studentEmail" to "test@test.com",
@@ -214,6 +196,44 @@ class ExamRegistrationProcessTest {
         Scenario.run(process).startByKey(processKey, variables).execute()
 
         verify(process).hasFinished("EndEvent_RegistrationSuccessful")
+    }
+
+    @Test
+    fun shouldBeRejectedWithNoOverbooking() {
+        `when`(courseRepository.findByName(anyString())).thenReturn(
+            CourseEntity(
+                currentSize = 10,
+                prerequisites = mutableListOf(
+                    PrerequisiteEntity(name = "prerequisite a"),
+                    PrerequisiteEntity(name = "prerequisite b")
+                )
+            )
+        )
+        `when`(reviseCourseSizeProcess.waitsAtUserTask("checkChangeCourseSize")).thenReturn { task ->
+            task.complete(
+                withVariables("courseSizeCanBeIncreased", false)
+            )
+        }
+        `when`(process.waitsAtUserTask("reviewOverbooking")).thenReturn { task ->
+            task.complete(
+                withVariables("overbooked", false)
+            )
+        }
+
+
+        val variables = mapOf(
+            "studentEmail" to "test@test.com",
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
+            "currentMonth" to "03"
+        )
+        Scenario.run(process).startByKey(processKey, variables).execute()
+        verify(process).hasStarted("reviseCourseSizeCallActivity")
+
+        verify(process).hasFinished("EndEvent_NoOverbooking")
     }
 
     @Test
