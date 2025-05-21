@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 
 
 @Component
-class CombinedAuthorizationSetup(
+class AuthorizationSetup(
     private val processEngine: ProcessEngine
 ) {
     private val authorizationService = processEngine.authorizationService

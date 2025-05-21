@@ -35,11 +35,13 @@ class InitVariablesListener(
             studentsPrerequisites.add("prerequisite d")
         }
 
-        val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MM"))
-
         execution.setVariable("prerequisitesList", prerequisitesList)
         execution.setVariable("studentsPrerequisites", studentsPrerequisites)
-        execution.setVariable("currentMonth", currentMonth)
         execution.setVariable("missingFound", false)
+
+        val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MM"))
+        if (execution.getVariable("currentMonth") == null) {
+            execution.setVariable("currentMonth", currentMonth)
+        }
     }
 }
