@@ -1,11 +1,15 @@
-import { Client, logger, Variables } from "camunda-external-task-client-js";
+import { Client, logger, Variables, BasicAuthInterceptor } from "camunda-external-task-client-js";
 
-const config = {
-    baseUrl: process.env.BASE_URL || "http://localhost:8080/engine-rest",
-    use: logger,
-};
-
-const client = new Client(config);
+const client = new Client({
+  baseUrl: process.env.BASE_URL || "http://localhost:8080/engine-rest",
+  workerId: "demo-worker",
+  asyncResponseTimeout: 10000,
+  use: logger,
+  interceptors: [new BasicAuthInterceptor({
+    username: "demo",
+    password: "demo"
+  })]
+});
 
 client.subscribe("generateQrCode", async function ({ task, taskService }) {
     try {
@@ -16,7 +20,6 @@ client.subscribe("generateQrCode", async function ({ task, taskService }) {
         const repeatRule = "";
         const reminder = "-PT24H";
 
-        // Set start and end date 1 month from now)
         const now = new Date();
         now.setMonth(now.getMonth() + 1);
 
@@ -28,9 +31,9 @@ client.subscribe("generateQrCode", async function ({ task, taskService }) {
         const endDate = `${yyyy}${mm}${dd}T100000`;
 
         const qrCodeUrl = `https://qrickit.com/api/qr.php?d=BEGIN%3AVEVENT%0D%0ASUMMARY%3A${encodeURIComponent(summary)}%0D%0ALOCATION%3A${encodeURIComponent(location)}%0D%0AURL%3A${encodeURIComponent(website)}%0D%0ADESCRIPTION%3A${encodeURIComponent(description)}%0D%0ADTSTART%3A${encodeURIComponent(startDate)}%0D%0ADTEND%3A${encodeURIComponent(endDate)}%0D%0ARRULE%3A${encodeURIComponent(repeatRule)}%0D%0ABEGIN%3AVALARM%0D%0ATRIGGER%3A${encodeURIComponent(reminder)}%0D%0AACTION%3ADISPLAY%0D%0AEND%3AVALARM%0D%0AEND%3AVEVENT%0D%0A&t=g&addtext=&txtcolor=000000&fgdcolor=000000&bgdcolor=FFFFFF&qrsize=200`;
-        
+
         console.log("Generated QR Code URL:", qrCodeUrl);
- 
+
         const qrCode = new Variables().set("qrCodeUrl", qrCodeUrl);
 
         await taskService.complete(task, qrCode);

@@ -7,7 +7,7 @@ import org.springframework.boot.runApplication
 import javax.sql.DataSource
 
 @SpringBootApplication
-class StudentCrmApplication(private val dataSource: DataSource) : CommandLineRunner {
+class Application(private val dataSource: DataSource) : CommandLineRunner {
 
     // manual migration, so custom tables are built after camundas tables
      override fun run(vararg args: String?) {
@@ -21,5 +21,5 @@ class StudentCrmApplication(private val dataSource: DataSource) : CommandLineRun
 }
 
 fun main(args: Array<String>) {
-    runApplication<StudentCrmApplication>(*args)
+    runApplication<Application>(*args)
 }
