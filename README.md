@@ -9,14 +9,20 @@ In this project the following was used:
 - **Gradle**
 
 ## Process Models
-![exam-registration.png](../../Downloads/exam-registration.png)
-![initial-existence-check.png](../../Downloads/initial-existence-check.png)
-![revise-course-size.png](../../Downloads/revise-course-size.png)
+exam-registration.bpmn
+![exam-registration](https://github.com/user-attachments/assets/a97ea40f-bf40-4f1d-8d28-03ac0915d71d)
+initial-existence-check.bpmn
+![initial-existence-check](https://github.com/user-attachments/assets/1dc0d086-d9b5-4d89-8e10-1ff5c547445f)
+revise-course-size.bpmn
+![revise-course-size](https://github.com/user-attachments/assets/1cd26020-d6bf-48da-ad0c-727e4e1546a9)
+
+
+
 ---
 
 ## 1. Run Docker Compose
 
-In the root directory, run the following command to start the whole project with te clean start script. Alternatively run docker compose up in the backend directory after building the app:
+In the root directory, run the following command to start the whole project with the clean start script. Alternatively run docker compose up in the backend directory after building the app. This starts 4 Containers (Spring App, Camunda DB, Business DB, External Task Client):
 
 ```bash
 ./clean-start.sh
