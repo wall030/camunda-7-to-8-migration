@@ -1,28 +1,34 @@
 package com.wall.student_crm.unit
 
+import com.wall.student_crm.persistence.CamundaUserService
 import com.wall.student_crm.camunda.delegates.EnrollCourseDelegate
-import com.wall.student_crm.persistence.course.CourseRepository
 import com.wall.student_crm.persistence.course.CourseEntity
-import com.wall.student_crm.persistence.student.StudentRepository
-import com.wall.student_crm.persistence.student.StudentEntity
+import com.wall.student_crm.persistence.course.CourseRepository
+import com.wall.student_crm.persistence.course.StudentCourseEntity
+import com.wall.student_crm.persistence.course.StudentCourseRepository
 import org.camunda.bpm.engine.delegate.BpmnError
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.ArgumentMatchers.any
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 
 @ExtendWith(MockitoExtension::class)
 class EnrollCourseDelegateTest {
     @Mock
-    private lateinit var studentRepository: StudentRepository
+    private lateinit var camundaUserService: CamundaUserService
 
     @Mock
     private lateinit var courseRepository: CourseRepository
+
+    @Mock
+    private lateinit var studentCourseRepository: StudentCourseRepository
 
     @Mock
     private lateinit var delegateExecution: DelegateExecution
@@ -34,21 +40,25 @@ class EnrollCourseDelegateTest {
     fun `should enroll student in course successfully`() {
         val studentEmail = "test@student.com"
         val courseName = "Test Course"
-        val student = StudentEntity(email = studentEmail, courses = mutableListOf())
-        val course = CourseEntity(name = courseName)
+        val userId = "id"
+        val course = CourseEntity(id = 1L, name = courseName, currentSize = 0)
+        val enrollment = StudentCourseEntity(userId, course.id)
 
         `when`(delegateExecution.getVariable("studentEmail")).thenReturn(studentEmail)
         `when`(delegateExecution.getVariable("course")).thenReturn(courseName)
-        `when`(studentRepository.findByEmail(studentEmail)).thenReturn(student)
+        `when`(camundaUserService.getUserIdByEmail(studentEmail)).thenReturn(userId)
         `when`(courseRepository.findByName(courseName)).thenReturn(course)
-        `when`(studentRepository.save(student)).thenReturn(student)
+        `when`(studentCourseRepository.save(any())).thenReturn(enrollment)
+        `when`(courseRepository.save(course)).thenReturn(course)
 
         enrollCourseDelegate.execute(delegateExecution)
 
-        verify(studentRepository).findByEmail(studentEmail)
+        verify(camundaUserService).getUserIdByEmail(studentEmail)
         verify(courseRepository).findByName(courseName)
-        verify(studentRepository).save(student)
-        Assertions.assertTrue(student.courses.contains(course))
+        verify(courseRepository).save(course)
+        verify(studentCourseRepository).save(any())
+        assert(course.currentSize == 1)
+
     }
 
     @Test
@@ -66,11 +76,11 @@ class EnrollCourseDelegateTest {
     fun `should throw BpmnError when course is not found`() {
         val studentEmail = "test@student.com"
         val courseName = "Test Course"
-        val student = StudentEntity(email = studentEmail, courses = mutableListOf())
+        val studentId = "id"
 
         `when`(delegateExecution.getVariable("studentEmail")).thenReturn(studentEmail)
         `when`(delegateExecution.getVariable("course")).thenReturn(courseName)
-        `when`(studentRepository.findByEmail(studentEmail)).thenReturn(student)
+        `when`(camundaUserService.getUserIdByEmail(studentEmail)).thenReturn(studentId)
         `when`(courseRepository.findByName(courseName)).thenReturn(null)
 
         assertThrows<BpmnError> {

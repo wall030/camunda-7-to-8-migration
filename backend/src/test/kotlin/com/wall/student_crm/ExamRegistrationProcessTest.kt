@@ -11,15 +11,15 @@ import com.wall.student_crm.camunda.delegates.validation.CheckEnrollmentDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckStudentExistsDelegate
 import com.wall.student_crm.camunda.listeners.InitVariablesListener
 import com.wall.student_crm.camunda.listeners.StatusListener
+import com.wall.student_crm.persistence.CamundaUserService
 import com.wall.student_crm.persistence.course.CourseEntity
 import com.wall.student_crm.persistence.course.CourseRepository
+import com.wall.student_crm.persistence.course.StudentCourseId
+import com.wall.student_crm.persistence.course.StudentCourseRepository
+import com.wall.student_crm.persistence.justification.JustificationEntity
 import com.wall.student_crm.persistence.justification.JustificationRepository
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
-import com.wall.student_crm.persistence.prerequisite.PrerequisiteRepository
-import com.wall.student_crm.persistence.student.StudentEntity
-import com.wall.student_crm.persistence.student.StudentRepository
 import com.wall.student_crm.shared.mail.MailService
-import org.camunda.bpm.engine.delegate.BpmnError
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.test.Deployment
 import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables
@@ -39,12 +39,13 @@ import org.mockito.MockitoAnnotations
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
+import java.util.Optional
 
 
 @SpringBootTest
 @Deployment(resources = ["exam-registration.bpmn", "revise-course-size.bpmn", "initial-existence-check.bpmn", "checkExamRegistrationDeadline.dmn"])
 @ActiveProfiles("test")
-class ExamRegistrationProcessTest {
+class ExamRegistrationProcessTest : AbstractIntegrationTest() {
 
     private val processKey = "examRegistration"
 
@@ -55,10 +56,13 @@ class ExamRegistrationProcessTest {
     private lateinit var reviseCourseSizeProcess: ProcessScenario
 
     @Mock
-    private lateinit var studentRepository: StudentRepository
+    private lateinit var camundaUserService: CamundaUserService
 
     @Mock
     private lateinit var courseRepository: CourseRepository
+
+    @Mock
+    private lateinit var studentCourseRepository: StudentCourseRepository
 
     @Mock
     private lateinit var justificationRepository: JustificationRepository
@@ -76,14 +80,20 @@ class ExamRegistrationProcessTest {
 
         // Register mocks for the delegates
         listOf(
-            "enrollCourseDelegate" to EnrollCourseDelegate(studentRepository, courseRepository),
+            "enrollCourseDelegate" to EnrollCourseDelegate(
+                camundaUserService, courseRepository, studentCourseRepository
+            ),
             "removeJustificationDelegate" to RemoveJustificationDelegate(justificationRepository),
-            "storeJustificationDelegate" to StoreJustificationDelegate(justificationRepository, studentRepository),
+            "storeJustificationDelegate" to StoreJustificationDelegate(justificationRepository, camundaUserService),
             "checkCourseExistsDelegate" to CheckCourseExistsDelegate(courseRepository),
             "checkEmailFormatDelegate" to CheckEmailFormatDelegate(),
             "increaseCourseSizeDelegate" to IncreaseCourseSizeDelegate(courseRepository),
-            "checkEnrollmentDelegate" to CheckEnrollmentDelegate(studentRepository, courseRepository),
-            "checkStudentExistsDelegate" to CheckStudentExistsDelegate(studentRepository),
+            "checkEnrollmentDelegate" to CheckEnrollmentDelegate(
+                camundaUserService,
+                courseRepository,
+                studentCourseRepository
+            ),
+            "checkStudentExistsDelegate" to CheckStudentExistsDelegate(camundaUserService),
             "checkCourseFullDelegate" to CheckCourseFullDelegate(courseRepository),
             "initVariablesListener" to InitVariablesListener(courseRepository),
             "statusListener" to StatusListener()
@@ -97,8 +107,13 @@ class ExamRegistrationProcessTest {
         doNothing().`when`(mailService).sendCourseNotFound(delegateExecution)
         doNothing().`when`(mailService).sendPrerequisitesNotMet(delegateExecution)
 
+
         // default scenario
-        `when`(studentRepository.findByEmail((anyString()))).thenReturn(StudentEntity())
+
+        val justification = JustificationEntity(studentId = "studentId", justification = "Website Down")
+        `when`(justificationRepository.save(any())).thenReturn(justification)
+        `when`(justificationRepository.findById(any())).thenReturn(Optional.of(justification))
+        `when`(camundaUserService.getUserIdByEmail(anyString())).thenReturn("studentId")
         `when`(courseRepository.findByName(anyString())).thenReturn(
             CourseEntity(
                 prerequisites = mutableListOf(
@@ -197,6 +212,23 @@ class ExamRegistrationProcessTest {
 
         verify(process).hasFinished("EndEvent_RegistrationSuccessful")
     }
+
+    @Test
+    fun shouldSuccessfullyRegisterWithJustificationAccepted() {
+        val variables = mapOf(
+            "studentEmail" to "test@test.com",
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "course" to "Course A",
+            "currentMonth" to "04"
+        )
+        Scenario.run(process).startByKey(processKey, variables).execute()
+
+        verify(process).hasFinished("EndEvent_RegistrationSuccessful")
+    }
+
 
     @Test
     fun shouldBeRejectedWithNoOverbooking() {
@@ -319,7 +351,7 @@ class ExamRegistrationProcessTest {
 
     @Test
     fun shouldStopStudentNotFound() {
-        `when`(studentRepository.findByEmail((anyString()))).thenReturn(null)
+        `when`(camundaUserService.getUserIdByEmail((anyString()))).thenReturn(null)
         val variables = mapOf(
             "studentEmail" to "test@test.com",
             "prerequisiteA" to true,
@@ -354,9 +386,10 @@ class ExamRegistrationProcessTest {
     @Test
     fun shouldStopStudentAlreadyEnrolled() {
         val course = CourseEntity()
-        val student = StudentEntity(courses = mutableListOf(course))
-        `when`(studentRepository.findByEmail((anyString()))).thenReturn(student)
+        val userId = "id"
+        `when`(camundaUserService.getUserIdByEmail((anyString()))).thenReturn(userId)
         `when`(courseRepository.findByName(anyString())).thenReturn(course)
+        `when`(studentCourseRepository.existsById(StudentCourseId(userId, course.id))).thenReturn(true)
         val variables = mapOf(
             "studentEmail" to "test@test.com",
             "prerequisiteA" to true,

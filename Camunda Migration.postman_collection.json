@@ -34,7 +34,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"studentEmail\": { \"value\": \"cassian@mail.com\", \"type\": \"String\" },\n    \"prerequisiteA\": { \"value\": true, \"type\": \"Boolean\" },\n    \"prerequisiteB\": { \"value\": true, \"type\": \"Boolean\" },\n    \"prerequisiteC\": { \"value\": false, \"type\": \"Boolean\" },\n    \"prerequisiteD\": { \"value\": false, \"type\": \"Boolean\" },\n    \"course\": { \"value\": \"Course A\", \"type\": \"String\"}\n  }\n}",
+					"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": true,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -42,18 +42,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/process-definition/key/examRegistration/start",
+					"raw": "http://localhost:8080/api/process/registerExam",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"process-definition",
-						"key",
-						"examRegistration",
-						"start"
+						"api",
+						"process",
+						"registerExam"
 					]
 				}
 			},
@@ -87,7 +85,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"studentEmail\": { \"value\": \"cassian@mail.com\", \"type\": \"String\" },\n    \"prerequisiteA\": { \"value\": true, \"type\": \"Boolean\" },\n    \"prerequisiteB\": { \"value\": false, \"type\": \"Boolean\" },\n    \"prerequisiteC\": { \"value\": false, \"type\": \"Boolean\" },\n    \"prerequisiteD\": { \"value\": false, \"type\": \"Boolean\" },\n    \"course\": { \"value\": \"Course A\", \"type\": \"String\"}\n  }\n}",
+					"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -140,7 +138,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"studentEmail\": { \"value\": \"cassian@mail.com\", \"type\": \"String\" },\n    \"prerequisiteA\": { \"value\": false, \"type\": \"Boolean\" },\n    \"prerequisiteB\": { \"value\": false, \"type\": \"Boolean\" },\n    \"prerequisiteC\": { \"value\": true, \"type\": \"Boolean\" },\n    \"prerequisiteD\": { \"value\": true, \"type\": \"Boolean\" },\n    \"course\": { \"value\": \"Course B\", \"type\": \"String\"}\n  }\n}",
+					"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": false,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": true,\n    \"prerequisiteD\": true,\n    \"course\": \"Course B\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -192,16 +190,15 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/",
+					"raw": "http://localhost:8080/api/tasks",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						""
+						"api",
+						"tasks"
 					],
 					"query": [
 						{
@@ -251,16 +248,15 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/",
+					"raw": "http://localhost:8080/api/tasks",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						""
+						"api",
+						"tasks"
 					]
 				}
 			},
@@ -293,16 +289,15 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/",
+					"raw": "http://localhost:8080/api/tasks",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						""
+						"api",
+						"tasks"
 					]
 				}
 			},
@@ -336,7 +331,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"cancelRegistration\": { \"value\": false, \"type\": \"Boolean\" },\n    \"justification\": { \"value\": \"Website was down\", \"type\": \"String\" },\n    \"justificationType\": { \"value\": \"personal\", \"type\": \"String\" }\n  }\n}",
+					"raw": "{\n  \"cancelRegistration\": false,\n  \"justification\": \"Website was down\",\n  \"justificationType\": \"personal\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -344,16 +339,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
+					"raw": "http://localhost:8080/api/tasks/3e81f537-3901-11f0-9ebc-1e4d44573c63/complete",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						"8bde37ea-37c0-11f0-9c6d-0242ac120003",
+						"api",
+						"tasks",
+						"3e81f537-3901-11f0-9ebc-1e4d44573c63",
 						"complete"
 					]
 				}
@@ -388,7 +383,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"acceptJustification\": { \"value\": true, \"type\": \"Boolean\" }\n  }\n}",
+					"raw": "{\n    \"acceptJustification\": true\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -396,16 +391,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/99dc1bbd-37c1-11f0-9c6d-0242ac120003/complete",
+					"raw": "http://localhost:8080/api/tasks/8193e921-3901-11f0-9ebc-1e4d44573c63/complete",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						"99dc1bbd-37c1-11f0-9c6d-0242ac120003",
+						"api",
+						"tasks",
+						"8193e921-3901-11f0-9ebc-1e4d44573c63",
 						"complete"
 					]
 				}
@@ -440,7 +435,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"overbooked\": { \"value\": true, \"type\": \"Boolean\" }\n  }\n}",
+					"raw": "{\n    \"overbooked\": true\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -448,16 +443,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/99dc1bbd-37c1-11f0-9c6d-0242ac120003/complete",
+					"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						"99dc1bbd-37c1-11f0-9c6d-0242ac120003",
+						"api",
+						"tasks",
+						"8bde37ea-37c0-11f0-9c6d-0242ac120003",
 						"complete"
 					]
 				}
@@ -492,7 +487,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"courseSizeCanBeIncreased\": { \"value\": true, \"type\": \"Boolean\" }\n  }\n}",
+					"raw": "{\n    \"courseSizeCanBeIncreased\": true\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -500,16 +495,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/99dc1bbd-37c1-11f0-9c6d-0242ac120003/complete",
+					"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						"99dc1bbd-37c1-11f0-9c6d-0242ac120003",
+						"api",
+						"tasks",
+						"8bde37ea-37c0-11f0-9c6d-0242ac120003",
 						"complete"
 					]
 				}
@@ -544,7 +539,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"variables\": {\n    \"acceptJustification\": { \"value\": true, \"type\": \"Boolean\" }\n  }\n}",
+					"raw": "{\n    \"acceptJustification\": true\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -552,16 +547,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/engine-rest/task/99dc1bbd-37c1-11f0-9c6d-0242ac120003/complete",
+					"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"engine-rest",
-						"task",
-						"99dc1bbd-37c1-11f0-9c6d-0242ac120003",
+						"api",
+						"tasks",
+						"8bde37ea-37c0-11f0-9c6d-0242ac120003",
 						"complete"
 					]
 				}

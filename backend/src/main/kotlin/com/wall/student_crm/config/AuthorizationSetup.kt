@@ -1,4 +1,4 @@
-package com.wall.student_crm
+package com.wall.student_crm.config
 
 import jakarta.annotation.PostConstruct
 import org.camunda.bpm.engine.ProcessEngine
@@ -6,7 +6,6 @@ import org.camunda.bpm.engine.authorization.Authorization
 import org.camunda.bpm.engine.authorization.Permissions
 import org.camunda.bpm.engine.authorization.Resources
 import org.springframework.stereotype.Component
-
 
 @Component
 class AuthorizationSetup(

@@ -5,7 +5,9 @@ import com.wall.student_crm.persistence.course.CourseRepository
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.JavaDelegate
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
+@Transactional("businessTransactionManager")
 @Component
 class IncreaseCourseSizeDelegate (
     private val courseRepository: CourseRepository,

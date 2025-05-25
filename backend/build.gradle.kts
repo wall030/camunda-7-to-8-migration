@@ -43,7 +43,12 @@ dependencies {
 	testImplementation("org.camunda.community.process_test_coverage:camunda-process-test-coverage-starter-platform-7:2.8.0")
 	testImplementation("org.assertj:assertj-core:3.25.3")
 	testImplementation("org.camunda.bpm.extension.scenario:camunda-platform-scenario-runner:2.0.0.alpha.2")
-	testImplementation("com.h2database:h2")
+
+	testImplementation("org.testcontainers:testcontainers:1.19.3")
+	testImplementation("org.testcontainers:junit-jupiter:1.19.3")
+	testImplementation("org.testcontainers:postgresql:1.19.3")
+	testImplementation("org.flywaydb:flyway-core")
+
 }
 
 kotlin {

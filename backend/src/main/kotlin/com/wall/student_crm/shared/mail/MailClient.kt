@@ -3,13 +3,13 @@ package com.wall.student_crm.shared.mail
 import com.wall.student_crm.shared.enums.MailMessageTemplate
 import jakarta.mail.MessagingException
 import jakarta.mail.internet.MimeMessage
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.MailException
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Component
-import org.springframework.beans.factory.annotation.Value
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 @Component
 class MailClient(

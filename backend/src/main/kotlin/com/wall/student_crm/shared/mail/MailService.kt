@@ -1,13 +1,8 @@
 package com.wall.student_crm.shared.mail
 
+import com.wall.student_crm.shared.enums.MailMessageTemplate.*
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.springframework.stereotype.Service
-import com.wall.student_crm.shared.enums.MailMessageTemplate.EXAM_CONFIRMATION_MESSAGE
-import com.wall.student_crm.shared.enums.MailMessageTemplate.EXAM_REJECTION_MESSAGE
-import com.wall.student_crm.shared.enums.MailMessageTemplate.ALREADY_ENROLLED_MESSAGE
-import com.wall.student_crm.shared.enums.MailMessageTemplate.STUDENT_NOT_FOUND_MESSAGE
-import com.wall.student_crm.shared.enums.MailMessageTemplate.COURSE_NOT_FOUND_MESSAGE
-import com.wall.student_crm.shared.enums.MailMessageTemplate.PREREQUISITES_NOT_MET
 
 @Service
 class MailService(
@@ -57,6 +52,6 @@ class MailService(
     }
 
     private fun email(execution: DelegateExecution): String {
-        return execution.getVariable("studentEmail").toString()
+        return execution.getVariable("studentEmail") as String
     }
 }

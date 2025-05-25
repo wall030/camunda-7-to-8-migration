@@ -1,9 +1,9 @@
 package com.wall.student_crm.camunda.listeners
 
 import com.wall.student_crm.shared.enums.Status
+import com.wall.student_crm.shared.enums.Status.*
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.ExecutionListener
-import com.wall.student_crm.shared.enums.Status.*
 import org.springframework.stereotype.Component
 
 @Component

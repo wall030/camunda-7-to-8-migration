@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class CheckEmailFormatDelegate : JavaDelegate {
     override fun execute(execution: DelegateExecution) {
-        val studentEmail = execution.getVariable("studentEmail").toString()
+        val studentEmail = execution.getVariable("studentEmail") as String
 
         if (!isValidEmail(studentEmail)) {
             throw BpmnError("INVALID_EMAIL_FORMAT")

@@ -2,10 +2,12 @@ package com.wall.student_crm
 
 import com.wall.student_crm.persistence.course.CourseEntity
 import com.wall.student_crm.persistence.course.CourseRepository
+import com.wall.student_crm.persistence.course.StudentCourseId
+import com.wall.student_crm.persistence.course.StudentCourseRepository
+import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteRepository
-import com.wall.student_crm.persistence.student.StudentEntity
-import com.wall.student_crm.persistence.student.StudentRepository
 import jakarta.mail.internet.MimeMessage
+import org.camunda.bpm.engine.IdentityService
 import org.camunda.bpm.engine.test.Deployment
 import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables
 import org.camunda.bpm.scenario.ProcessScenario
@@ -14,23 +16,18 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
-import org.mockito.Mockito.doNothing
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.transaction.annotation.Transactional
 
 
 @SpringBootTest
 @Deployment(resources = ["exam-registration.bpmn", "revise-course-size.bpmn", "initial-existence-check.bpmn", "checkExamRegistrationDeadline.dmn"])
 @ActiveProfiles("test")
-@Transactional
-class ExamRegistrationIntegrationTest {
+class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
 
     private val processKey = "examRegistration"
 
@@ -44,7 +41,10 @@ class ExamRegistrationIntegrationTest {
     lateinit var mailSender: JavaMailSender
 
     @Autowired
-    lateinit var studentRepository: StudentRepository
+    lateinit var identityService: IdentityService
+
+    @Autowired
+    lateinit var studentCourseRepository: StudentCourseRepository
 
     @Autowired
     lateinit var courseRepository: CourseRepository
@@ -54,24 +54,32 @@ class ExamRegistrationIntegrationTest {
 
     @BeforeEach
     fun setup() {
-        val prerequisiteA = prerequisiteRepository.findByName("prerequisite a")!!
-        val prerequisiteB = prerequisiteRepository.findByName("prerequisite b")!!
-        val student = StudentEntity(email = "test@test.com", courses = mutableListOf())
+        prerequisiteRepository.deleteAll()
+        courseRepository.deleteAll()
+        identityService.deleteUser("tt")
+
+
+        val prerequisiteA = PrerequisiteEntity(name = "prerequisite a")
+        val prerequisiteB = PrerequisiteEntity(name = "prerequisite b")
+        prerequisiteRepository.save(prerequisiteA)
+        prerequisiteRepository.save(prerequisiteB)
         val course = CourseEntity(
-            name = "Course A", currentSize = 0,
+            name = "Course X",
+            currentSize = 0,
             prerequisites = mutableListOf(
                 prerequisiteA,
                 prerequisiteB
             )
         )
-
-        // cant use deleteAll users because of membership referencing admin user
-        studentRepository.delete(student)
-        courseRepository.deleteAll()
-
-
         courseRepository.save(course)
-        studentRepository.save(student)
+
+        if (identityService.createUserQuery().userId("tt").singleResult() == null) {
+            val user = identityService.newUser("tt")
+            user.email = "test@test.com"
+            user.firstName = "test"
+            user.lastName = "test"
+            identityService.saveUser(user)
+        }
 
 
         // user tasks
@@ -125,9 +133,10 @@ class ExamRegistrationIntegrationTest {
 
     @Test
     fun shouldSuccessfullyRegister() {
+        val studentId = "tt"
         val variables = mapOf(
             "studentEmail" to "test@test.com",
-            "course" to "Course A",
+            "course" to "Course X",
             "prerequisiteA" to true,
             "prerequisiteB" to true,
             "prerequisiteC" to false,
@@ -141,9 +150,33 @@ class ExamRegistrationIntegrationTest {
 
 
         verify(process).hasFinished("EndEvent_RegistrationSuccessful")
+        val course = courseRepository.findByName("Course X")!!
+        val isEnrolled = studentCourseRepository.existsById(StudentCourseId(studentId, course.id))
+        assert(isEnrolled)
 
-        val student = studentRepository.findByEmail("test@test.com")!!
-        assert(student.courses.any { it.name == "Course A" })
+    }
 
+    @Test
+    fun shouldBeRejected() {
+        `when`(process.waitsAtUserTask("technicalCheck")).thenReturn { task ->
+            task.complete(
+                withVariables("acceptJustification", false)
+            )
+        }
+
+        val variables = mapOf(
+            "studentEmail" to "test@test.com",
+            "course" to "Course X",
+            "prerequisiteA" to true,
+            "prerequisiteB" to true,
+            "prerequisiteC" to false,
+            "prerequisiteD" to false,
+            "currentMonth" to "04"
+        )
+        Scenario.run(process)
+            .startByKey(processKey, variables)
+            .execute()
+
+        verify(process).hasFinished("EndEvent_Rejected")
     }
 }
