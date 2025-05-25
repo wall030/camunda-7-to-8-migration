@@ -1,30 +1,29 @@
 # Quickstart Guide   
 
-This guide will walk you through the steps to set up and run the **Student CRM with Camunda** project.
+This guide will walk you through the steps to set up and run the **Camunda Exam Registration Application** project.
 
 ## Technology
 In this project the following was used:
 - **Docker** and **Docker Compose**
-- **Java 21**
+- **Java 17**
 - **Gradle**
 
-
+## Process Models
+![exam-registration.png](../../Downloads/exam-registration.png)
+![initial-existence-check.png](../../Downloads/initial-existence-check.png)
+![revise-course-size.png](../../Downloads/revise-course-size.png)
 ---
 
 ## 1. Run Docker Compose
 
-In the backend directory, run the following command to start the database using Docker Compose:
+In the root directory, run the following command to start the whole project with te clean start script. Alternatively run docker compose up in the backend directory after building the app:
 
 ```bash
-docker-compose up -d
+./clean-start.sh
 ```
 
-## 2. Build and Run the Application
-
-Once the database is up and running, you can proceed to build and start the Spring Boot application by running:
-
 ```bash
-./gradlew bootRun
+./gradlew build
 ```
 
 Your application should now be running and accessible at: http://localhost:8080
@@ -44,24 +43,25 @@ Your application should now be running and accessible at: http://localhost:8080
 Currently there is only the "Exam Registration" available.
 
 1. Log in to Camunda Tasklist as the student (ca):
-   - Go to the Camunda web interface at: http://localhost:8080/camunda](http://localhost:8080/camunda/app/tasklist
+   - Go to the Camunda web interface at: http://localhost:8080/camunda / http://localhost:8080/camunda/app/tasklist
    - Start the process "exam-registration" in start process tab
-   - use Email "cassian@mail.com" and select courses you want to enroll and hit start (Course C does not exist, you can select it to test other sequence flows)
+   - use Email "cassian@mail.com" and select prerequisites you have and the type the course you want to enroll. Then hit start.
    - If you are past the deadline the process will stop. You will get a User Task where you can decide to cancel or justify 
 
 2. Log in to Tasklist as examination office member (ba) or technical service (rt)
    - You will get a user task where you can decide to accept or decline the justification (depends on justification type, technical or personal reason)
-   - accepting results in successfuly assigning the courses to student "ca"
+   - accepting, results in successfuly assigning the courses to student "ca"
   
 3. You can check the assignment in the DB in table "student_course" and get an confirmation email, if you start the process with an course that is already enrolled or doesnt exist the process will stop and you get a information mail.
+4. Feel free to test other paths :)
 
 ## 4. Database
 
-| Key        | Value                                      |
-|------------|--------------------------------------------|
-| `url`      | `jdbc:postgresql://localhost:5432/postgres` |
-| `username` | `postgres`                                  |
-| `password` | `secret`                                    |
+| Key        | Value                                         |
+|------------|-----------------------------------------------|
+| `url`      | `jdbc:postgresql://localhost:5433/camunda_db` |
+| `username` | `postgres`                                    |
+| `password` | `secret`                                      |
 
 
 
