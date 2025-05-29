@@ -47,3 +47,4 @@ out/
 /backend/db/camunda-h2-database.mv.db
 c7/backend/.gradle
 c7/backend/.gradle
+c7/backend/target/process-test-coverage

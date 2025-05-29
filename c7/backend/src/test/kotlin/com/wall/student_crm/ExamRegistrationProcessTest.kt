@@ -21,6 +21,7 @@ import com.wall.student_crm.persistence.justification.JustificationRepository
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
 import com.wall.student_crm.shared.TimeProvider
 import com.wall.student_crm.shared.mail.MailService
+import org.camunda.bpm.engine.RuntimeService
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.test.Deployment
 import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyString
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mock
 import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.verify
@@ -67,6 +69,9 @@ class ExamRegistrationProcessTest : AbstractTest() {
     @Mock
     private lateinit var justificationRepository: JustificationRepository
 
+    @Mock
+    private lateinit var runtimeService: RuntimeService
+
     @MockBean
     private lateinit var timeProvider: TimeProvider
 
@@ -97,7 +102,7 @@ class ExamRegistrationProcessTest : AbstractTest() {
                 studentCourseRepository
             ),
             "checkStudentExistsDelegate" to CheckStudentExistsDelegate(camundaUserService),
-            "checkCourseFullDelegate" to CheckCourseFullDelegate(courseRepository),
+            "checkCourseFullDelegate" to CheckCourseFullDelegate(courseRepository, runtimeService),
             "initVariablesListener" to InitVariablesListener(courseRepository, timeProvider),
             "statusListener" to StatusListener()
         ).forEach { (name, delegate) -> Mocks.register(name, delegate) }
@@ -110,15 +115,15 @@ class ExamRegistrationProcessTest : AbstractTest() {
         doNothing().`when`(mailService).sendCourseNotFound(delegateExecution)
         doNothing().`when`(mailService).sendPrerequisitesNotMet(delegateExecution)
 
-
         // default scenario
-
         val justification = JustificationEntity(studentId = "studentId", justification = "Website Down")
         `when`(justificationRepository.save(any())).thenReturn(justification)
         `when`(justificationRepository.findById(any())).thenReturn(Optional.of(justification))
         `when`(camundaUserService.getUserIdByEmail(anyString())).thenReturn("studentId")
         `when`(courseRepository.findByName(anyString())).thenReturn(
             CourseEntity(
+                currentSize = 5,
+                maxSize = 20,
                 prerequisites = mutableListOf(
                     PrerequisiteEntity(name = "prerequisite a"),
                     PrerequisiteEntity(name = "prerequisite b")
@@ -126,8 +131,7 @@ class ExamRegistrationProcessTest : AbstractTest() {
             )
         )
         `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 3, 1))
-
-
+        `when`(runtimeService.startProcessInstanceByMessage(eq("startReviseCourseSize"))).thenReturn(null)
 
         `when`(process.waitsAtUserTask("userTaskCancelOrApply")).thenReturn { task ->
             task.complete(
@@ -168,7 +172,6 @@ class ExamRegistrationProcessTest : AbstractTest() {
         `when`(reviseCourseSizeProcess.waitsAtUserTask("checkChangeCourseSize")).thenReturn { task ->
             task.complete(withVariables("courseSizeCanBeIncreased", true))
         }
-
     }
 
     @AfterEach
@@ -195,7 +198,8 @@ class ExamRegistrationProcessTest : AbstractTest() {
     fun shouldSuccessfullyRegisterWithOverbooking() {
         `when`(courseRepository.findByName(anyString())).thenReturn(
             CourseEntity(
-                currentSize = 10,
+                currentSize = 20,
+                maxSize = 20,
                 prerequisites = mutableListOf(
                     PrerequisiteEntity(name = "prerequisite a"),
                     PrerequisiteEntity(name = "prerequisite b")
@@ -214,6 +218,7 @@ class ExamRegistrationProcessTest : AbstractTest() {
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
 
+        verify(runtimeService).startProcessInstanceByMessage("startReviseCourseSize", mapOf("course" to "Course A"))
         verify(process).hasFinished("EndEvent_RegistrationSuccessful")
     }
 
@@ -233,12 +238,12 @@ class ExamRegistrationProcessTest : AbstractTest() {
         verify(process).hasFinished("EndEvent_RegistrationSuccessful")
     }
 
-
     @Test
     fun shouldBeRejectedWithNoOverbooking() {
         `when`(courseRepository.findByName(anyString())).thenReturn(
             CourseEntity(
-                currentSize = 10,
+                currentSize = 20,
+                maxSize = 20,
                 prerequisites = mutableListOf(
                     PrerequisiteEntity(name = "prerequisite a"),
                     PrerequisiteEntity(name = "prerequisite b")
@@ -265,8 +270,8 @@ class ExamRegistrationProcessTest : AbstractTest() {
             "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
-        verify(process).hasStarted("reviseCourseSizeCallActivity")
 
+        verify(runtimeService).startProcessInstanceByMessage("startReviseCourseSize", mapOf("course" to "Course A"))
         verify(process).hasFinished("EndEvent_NoOverbooking")
     }
 
