@@ -1,5 +1,5 @@
 HELP.md
-backend/.gradle
+c7/backend/.gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
@@ -42,6 +42,8 @@ out/
 .kotlin
 /.idea/
 /.vscode/
-/external/node_modules/
+/c7/external/node_modules/
 /backend/target/
 /backend/db/camunda-h2-database.mv.db
+c7/backend/.gradle
+c7/backend/.gradle

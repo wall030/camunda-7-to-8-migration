@@ -1,6 +1,7 @@
 package com.wall.student_crm.camunda.listeners
 
 import com.wall.student_crm.persistence.course.CourseRepository
+import com.wall.student_crm.shared.TimeProvider
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.ExecutionListener
 import org.springframework.stereotype.Component
@@ -9,7 +10,8 @@ import java.time.format.DateTimeFormatter
 
 @Component
 class InitVariablesListener(
-    private val courseRepository: CourseRepository
+    private val courseRepository: CourseRepository,
+    private val timeProvider: TimeProvider
 ) : ExecutionListener {
     override fun notify(execution: DelegateExecution) {
         val courseName = execution.getVariable("course") as String
@@ -39,7 +41,7 @@ class InitVariablesListener(
         execution.setVariable("studentsPrerequisites", studentsPrerequisites)
         execution.setVariable("missingFound", false)
 
-        val currentMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MM"))
+        val currentMonth = timeProvider.now().format(DateTimeFormatter.ofPattern("MM"))
         if (execution.getVariable("currentMonth") == null) {
             execution.setVariable("currentMonth", currentMonth)
         }

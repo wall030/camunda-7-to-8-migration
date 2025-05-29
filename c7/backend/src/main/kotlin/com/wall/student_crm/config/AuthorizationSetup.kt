@@ -48,6 +48,13 @@ class AuthorizationSetup(
         )
 
         createAuthorizationIfNotExists(
+            groupId = "students",
+            resourceType = Resources.PROCESS_DEFINITION,
+            resourceId = "initialExistenceCheck",
+            permissions = listOf(Permissions.READ)
+        )
+
+        createAuthorizationIfNotExists(
             groupId = "examoffice",
             resourceType = Resources.PROCESS_DEFINITION,
             resourceId = "examRegistration",

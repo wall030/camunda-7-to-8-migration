@@ -19,6 +19,7 @@ import com.wall.student_crm.persistence.course.StudentCourseRepository
 import com.wall.student_crm.persistence.justification.JustificationEntity
 import com.wall.student_crm.persistence.justification.JustificationRepository
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
+import com.wall.student_crm.shared.TimeProvider
 import com.wall.student_crm.shared.mail.MailService
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.test.Deployment
@@ -36,16 +37,15 @@ import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDate
 import java.util.Optional
 
 
-@SpringBootTest
 @Deployment(resources = ["exam-registration.bpmn", "revise-course-size.bpmn", "initial-existence-check.bpmn", "checkExamRegistrationDeadline.dmn"])
 @ActiveProfiles("test")
-class ExamRegistrationProcessTest : AbstractIntegrationTest() {
+class ExamRegistrationProcessTest : AbstractTest() {
 
     private val processKey = "examRegistration"
 
@@ -66,6 +66,9 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
 
     @Mock
     private lateinit var justificationRepository: JustificationRepository
+
+    @MockBean
+    private lateinit var timeProvider: TimeProvider
 
     @MockBean
     private lateinit var mailService: MailService
@@ -95,7 +98,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             ),
             "checkStudentExistsDelegate" to CheckStudentExistsDelegate(camundaUserService),
             "checkCourseFullDelegate" to CheckCourseFullDelegate(courseRepository),
-            "initVariablesListener" to InitVariablesListener(courseRepository),
+            "initVariablesListener" to InitVariablesListener(courseRepository, timeProvider),
             "statusListener" to StatusListener()
         ).forEach { (name, delegate) -> Mocks.register(name, delegate) }
 
@@ -122,6 +125,8 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
                 )
             )
         )
+        `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 3, 1))
+
 
 
         `when`(process.waitsAtUserTask("userTaskCancelOrApply")).thenReturn { task ->
@@ -180,8 +185,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "03"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_RegistrationSuccessful")
@@ -215,14 +219,14 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
 
     @Test
     fun shouldSuccessfullyRegisterWithJustificationAccepted() {
+        `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 4, 1))
         val variables = mapOf(
             "studentEmail" to "test@test.com",
             "prerequisiteA" to true,
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "04"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
 
@@ -252,15 +256,13 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             )
         }
 
-
         val variables = mapOf(
             "studentEmail" to "test@test.com",
             "prerequisiteA" to true,
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "03"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasStarted("reviseCourseSizeCallActivity")
@@ -270,6 +272,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
 
     @Test
     fun shouldNotBeInDeadlineAndStudentCancels() {
+        `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 4, 1))
         `when`(process.waitsAtUserTask("userTaskCancelOrApply")).thenReturn { task ->
             task.complete(withVariables("cancelRegistration", true))
         }
@@ -279,8 +282,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "04"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_Canceled")
@@ -289,6 +291,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
 
     @Test
     fun shouldNotBeInDeadlineAndAutoCancels() {
+        `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 4, 1))
         `when`(process.waitsAtUserTask("userTaskCancelOrApply")).thenReturn { task ->
             task.defer("P7D", {})
         }
@@ -298,8 +301,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "04"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_Stopped")
@@ -308,6 +310,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
 
     @Test
     fun shouldBeRejected() {
+        `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 4, 1))
         `when`(process.waitsAtUserTask("taskOfficeCheck")).thenReturn { task ->
             task.complete(withVariables("acceptJustification", false))
         }
@@ -326,8 +329,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "04"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_Rejected")
@@ -342,8 +344,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "03"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_InvalidEmailFormat")
@@ -358,8 +359,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "03"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_StudentNotFound")
@@ -375,8 +375,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course X",
-            "currentMonth" to "03"
+            "course" to "Course X"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_CourseNotFound")
@@ -396,8 +395,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to true,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "03"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_AlreadyEnrolled")
@@ -411,8 +409,7 @@ class ExamRegistrationProcessTest : AbstractIntegrationTest() {
             "prerequisiteB" to false,
             "prerequisiteC" to false,
             "prerequisiteD" to false,
-            "course" to "Course A",
-            "currentMonth" to "03"
+            "course" to "Course A"
         )
         Scenario.run(process).startByKey(processKey, variables).execute()
         verify(process).hasFinished("EndEvent_PrerequisitesNotMet")

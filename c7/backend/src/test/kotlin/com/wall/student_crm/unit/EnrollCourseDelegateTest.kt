@@ -1,7 +1,7 @@
 package com.wall.student_crm.unit
 
-import com.wall.student_crm.persistence.CamundaUserService
 import com.wall.student_crm.camunda.delegates.EnrollCourseDelegate
+import com.wall.student_crm.persistence.CamundaUserService
 import com.wall.student_crm.persistence.course.CourseEntity
 import com.wall.student_crm.persistence.course.CourseRepository
 import com.wall.student_crm.persistence.course.StudentCourseEntity

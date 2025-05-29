@@ -6,8 +6,10 @@ import com.wall.student_crm.persistence.course.StudentCourseId
 import com.wall.student_crm.persistence.course.StudentCourseRepository
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteRepository
+import com.wall.student_crm.shared.TimeProvider
 import jakarta.mail.internet.MimeMessage
 import org.camunda.bpm.engine.IdentityService
+import org.camunda.bpm.engine.identity.User
 import org.camunda.bpm.engine.test.Deployment
 import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.withVariables
 import org.camunda.bpm.scenario.ProcessScenario
@@ -16,29 +18,22 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.doNothing
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.test.context.ActiveProfiles
+import java.time.LocalDate
 
 
-@SpringBootTest
 @Deployment(resources = ["exam-registration.bpmn", "revise-course-size.bpmn", "initial-existence-check.bpmn", "checkExamRegistrationDeadline.dmn"])
 @ActiveProfiles("test")
-class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
+class ExamRegistrationIntegrationTest : AbstractTest() {
 
     private val processKey = "examRegistration"
-
-    @Mock
-    private lateinit var process: ProcessScenario
-
-    @Mock
-    private lateinit var reviseCourseSizeProcess: ProcessScenario
-
-    @MockBean
-    lateinit var mailSender: JavaMailSender
 
     @Autowired
     lateinit var identityService: IdentityService
@@ -52,11 +47,26 @@ class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
     @Autowired
     lateinit var prerequisiteRepository: PrerequisiteRepository
 
+    @Mock
+    private lateinit var process: ProcessScenario
+
+    @Mock
+    private lateinit var reviseCourseSizeProcess: ProcessScenario
+
+    @MockBean
+    lateinit var mailSender: JavaMailSender
+
+    @MockBean
+    private lateinit var timeProvider: TimeProvider
+
     @BeforeEach
     fun setup() {
         prerequisiteRepository.deleteAll()
         courseRepository.deleteAll()
-        identityService.deleteUser("tt")
+        val users: MutableList<User> = identityService.createUserQuery().list()
+        for (user in users) {
+            identityService.deleteUser(user.id)
+        }
 
 
         val prerequisiteA = PrerequisiteEntity(name = "prerequisite a")
@@ -73,13 +83,12 @@ class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
         )
         courseRepository.save(course)
 
-        if (identityService.createUserQuery().userId("tt").singleResult() == null) {
-            val user = identityService.newUser("tt")
-            user.email = "test@test.com"
-            user.firstName = "test"
-            user.lastName = "test"
-            identityService.saveUser(user)
-        }
+
+        val user = identityService.newUser("tt")
+        user.email = "test@test.com"
+        user.firstName = "test"
+        user.lastName = "test"
+        identityService.saveUser(user)
 
 
         // user tasks
@@ -129,6 +138,8 @@ class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
         val mimeMessage = mock(MimeMessage::class.java)
         `when`(mailSender.createMimeMessage()).thenReturn(mimeMessage)
         doNothing().`when`(mailSender).send(any(MimeMessage::class.java))
+
+        `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 3, 1))
     }
 
     @Test
@@ -140,8 +151,7 @@ class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
             "prerequisiteA" to true,
             "prerequisiteB" to true,
             "prerequisiteC" to false,
-            "prerequisiteD" to false,
-            "currentMonth" to "03"
+            "prerequisiteD" to false
         )
         Scenario.run(process)
             .startByKey(processKey, variables)
@@ -158,6 +168,7 @@ class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
 
     @Test
     fun shouldBeRejected() {
+        `when`(timeProvider.now()).thenReturn(LocalDate.of(2025, 4, 1))
         `when`(process.waitsAtUserTask("technicalCheck")).thenReturn { task ->
             task.complete(
                 withVariables("acceptJustification", false)
@@ -170,8 +181,7 @@ class ExamRegistrationIntegrationTest: AbstractIntegrationTest() {
             "prerequisiteA" to true,
             "prerequisiteB" to true,
             "prerequisiteC" to false,
-            "prerequisiteD" to false,
-            "currentMonth" to "04"
+            "prerequisiteD" to false
         )
         Scenario.run(process)
             .startByKey(processKey, variables)
