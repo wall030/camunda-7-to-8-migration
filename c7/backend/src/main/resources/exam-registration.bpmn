@@ -115,13 +115,6 @@
       <bpmn:incoming>Flow_0cpos3f</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0cpos3f" sourceRef="Event_0tp9fim" targetRef="EndEvent_InvalidEmailFormat" />
-    <bpmn:endEvent id="EndEvent_Rejected" name="Registration rejected">
-      <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${statusListener}" event="start" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_16khaca</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0v26jo8" camunda:expression="${mailService.sendRejection(execution)}" />
-    </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_Stopped" name="Registration stopped">
       <bpmn:extensionElements>
         <camunda:executionListener delegateExpression="${statusListener}" event="start" />
@@ -161,10 +154,6 @@
       <bpmn:outgoing>Flow_0l6iwij</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1eyzkri" errorRef="Error_1ppmr49" />
     </bpmn:boundaryEvent>
-    <bpmn:endEvent id="EndEvent_StudentNotFound" name="Send Student not found">
-      <bpmn:incoming>Flow_1fnck62</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0a7dnu4" camunda:expression="${mailService.sendStudentNotFound(execution)}" />
-    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1fnck62" sourceRef="Event_0ekkseq" targetRef="EndEvent_StudentNotFound" />
     <bpmn:callActivity id="initialExistenceCheck" name="Initial existence check" calledElement="initialExistenceCheck">
       <bpmn:extensionElements>
@@ -178,16 +167,7 @@
       <bpmn:outgoing>Flow_0kgevfg</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_036fzp1" errorRef="Error_1v7ezgj" />
     </bpmn:boundaryEvent>
-    <bpmn:endEvent id="EndEvent_AlreadyEnrolled" name="Send already enrolled">
-      <bpmn:incoming>Flow_0kgevfg</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1hitmxl" camunda:expression="${mailService.sendAlreadyEnrolled(execution)}" />
-    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0kgevfg" sourceRef="Event_16ow9bg" targetRef="EndEvent_AlreadyEnrolled" />
-    <bpmn:endEvent id="EndEvent_CourseNotFound" name="Send Course Not Found">
-      <bpmn:incoming>Flow_0l6iwij</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_06vh9r9" camunda:expression="${mailService.sendCourseNotFound(execution)}" />
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0l6iwij" sourceRef="Event_0yf971t" targetRef="EndEvent_CourseNotFound" />
     <bpmn:sequenceFlow id="Flow_0nq5d67" sourceRef="Gateway_0pvk1wz" targetRef="taskOfficeCheck">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${(justificationType == "personal") or (justificationType == "other")}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -302,13 +282,6 @@
     <bpmn:sequenceFlow id="Flow_1sbmp1i" name="yes" sourceRef="Gateway_1fouw7x" targetRef="Gateway_15uislg">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${overbooked}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:endEvent id="EndEvent_NoOverbooking" name="Registration rejected">
-      <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${statusListener}" event="start" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0ko9zg9</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0ggc1qx" camunda:expression="${mailService.sendRejection(execution)}" />
-    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0ko9zg9" name="no" sourceRef="Gateway_1fouw7x" targetRef="EndEvent_NoOverbooking">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!overbooked}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -317,13 +290,6 @@
       <bpmn:outgoing>Flow_1kw8bwm</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1kw8bwm" sourceRef="generateQrCodeTask" targetRef="EndEvent_RegistrationSuccessful" />
-    <bpmn:endEvent id="EndEvent_RegistrationSuccessful" name="Registration successful">
-      <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${statusListener}" event="start" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1kw8bwm</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1qmrsmz" camunda:expression="${mailService.sendConfirmation(execution)}" />
-    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0db73ot" sourceRef="checkAllPrerequisites" targetRef="checkRegistrationDeadline" />
     <bpmn:subProcess id="checkAllPrerequisites" name="Check all prerequisites">
       <bpmn:incoming>Flow_04dvgsy</bpmn:incoming>
@@ -357,10 +323,6 @@
       <bpmn:outgoing>Flow_00hwkyv</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1omtjxk" errorRef="Error_0tbotyk" />
     </bpmn:boundaryEvent>
-    <bpmn:endEvent id="EndEvent_PrerequisitesNotMet" name="Send Prerequisites not met">
-      <bpmn:incoming>Flow_00hwkyv</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_02gwrfz" camunda:expression="${mailService.sendPrerequisitesNotMet(execution)}" />
-    </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_00hwkyv" sourceRef="Event_02q8z0p" targetRef="EndEvent_PrerequisitesNotMet" />
     <bpmn:intermediateThrowEvent id="Event_StatusEnrolling" name="Status: Enrolling">
       <bpmn:extensionElements>
@@ -385,6 +347,73 @@
       <bpmn:outgoing>Flow_1i5riaz</bpmn:outgoing>
     </bpmn:businessRuleTask>
     <bpmn:sequenceFlow id="Flow_1i5riaz" sourceRef="checkRegistrationDeadline" targetRef="Gateway_InDeadline" />
+    <bpmn:sequenceFlow id="Flow_0l6iwij" sourceRef="Event_0yf971t" targetRef="EndEvent_CourseNotFound" />
+    <bpmn:endEvent id="EndEvent_CourseNotFound" name="Send Course Not Found">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mailType">COURSE_NOT_FOUND</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0l6iwij</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_06vh9r9" camunda:delegateExpression="${sendMailDelegate}" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_StudentNotFound" name="Send Student not found">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mailType">STUDENT_NOT_FOUND</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1fnck62</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0a7dnu4" camunda:delegateExpression="${sendMailDelegate}" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_AlreadyEnrolled" name="Send already enrolled">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mailType">ALREADY_ENROLLED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0kgevfg</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1hitmxl" camunda:delegateExpression="${sendMailDelegate}" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_PrerequisitesNotMet" name="Send Prerequisites not met">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mailType"> PREREQUISITES_NOT_MET</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00hwkyv</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_02gwrfz" camunda:delegateExpression="${sendMailDelegate}" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_Rejected" name="Registration rejected">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${statusListener}" event="start" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mailType">EXAM_REJECTION</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16khaca</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0v26jo8" camunda:delegateExpression="${sendMailDelegate}" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_NoOverbooking" name="Registration rejected">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${statusListener}" event="start" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mailType">EXAM_REJECTION</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ko9zg9</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0ggc1qx" camunda:delegateExpression="${sendMailDelegate}" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_RegistrationSuccessful" name="Registration successful">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${statusListener}" event="start" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="mailType">EXAM_CONFIRMATION</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1kw8bwm</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0xirxog" camunda:delegateExpression="${sendMailDelegate}" />
+    </bpmn:endEvent>
     <bpmn:textAnnotation id="TextAnnotation_1argorg">
       <bpmn:text>checks if student and course are valid and if the student is already registered to the course</bpmn:text>
     </bpmn:textAnnotation>
@@ -522,12 +551,28 @@
           <dc:Bounds x="2179" y="416" width="75" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0fc8due_di" bpmnElement="checkCourseSizeProcess">
-        <dc:Bounds x="2300" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="Event_0flsh6y_di" bpmnElement="Event_StatusEnrolling">
+        <dc:Bounds x="2672" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2649" y="318" width="81" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1xlbb2s" bpmnElement="enrollCours">
-        <dc:Bounds x="2850" y="320" width="100" height="80" />
+        <dc:Bounds x="2740" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0qfnyzv" bpmnElement="generateQrCodeTask">
+        <dc:Bounds x="2880" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xho5tf_di" bpmnElement="EndEvent_RegistrationSuccessful" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="3012" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3003" y="385" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fc8due_di" bpmnElement="checkCourseSizeProcess">
+        <dc:Bounds x="2300" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_15ho6xu" bpmnElement="reviewOverbooking">
@@ -549,16 +594,6 @@
           <dc:Bounds x="3001" y="125" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0qfnyzv" bpmnElement="generateQrCodeTask">
-        <dc:Bounds x="2980" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_10uy0r6_di" bpmnElement="EndEvent_RegistrationSuccessful" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
-        <dc:Bounds x="3132" y="342" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3123" y="385" width="59" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0kki1q0_di" bpmnElement="checkAllPrerequisites">
         <dc:Bounds x="730" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -567,12 +602,6 @@
         <dc:Bounds x="812" y="162" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="788" y="119" width="83" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0flsh6y_di" bpmnElement="Event_StatusEnrolling">
-        <dc:Bounds x="2772" y="342" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2749" y="318" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1ohzfcm_di" bpmnElement="Gateway_1ohzfcm" isMarkerVisible="true">
@@ -742,15 +771,15 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1bfbte1_di" bpmnElement="Flow_1bfbte1">
         <di:waypoint x="2625" y="360" />
-        <di:waypoint x="2772" y="360" />
+        <di:waypoint x="2672" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04jhlnx_di" bpmnElement="Flow_04jhlnx">
         <di:waypoint x="2380" y="302" />
         <di:waypoint x="2380" y="220" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0y1y7fq_di" bpmnElement="Flow_0y1y7fq">
-        <di:waypoint x="2950" y="360" />
-        <di:waypoint x="2980" y="360" />
+        <di:waypoint x="2840" y="360" />
+        <di:waypoint x="2880" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0whhznp_di" bpmnElement="Flow_0whhznp">
         <di:waypoint x="2430" y="180" />
@@ -773,14 +802,14 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1kw8bwm_di" bpmnElement="Flow_1kw8bwm">
-        <di:waypoint x="3080" y="360" />
-        <di:waypoint x="3132" y="360" />
+        <di:waypoint x="2980" y="360" />
+        <di:waypoint x="3012" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0db73ot_di" bpmnElement="Flow_0db73ot">
         <di:waypoint x="830" y="360" />
         <di:waypoint x="910" y="360" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00hwkyv_di" bpmnElement="Flow_00hwkyv">
+      <bpmndi:BPMNEdge id="Flow_00hwkyv_di" bpmnElement="Flow_00hwkyv" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="830" y="302" />
         <di:waypoint x="830" y="198" />
       </bpmndi:BPMNEdge>
@@ -800,8 +829,8 @@
         <di:waypoint x="2300" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_03vp801_di" bpmnElement="Flow_03vp801">
-        <di:waypoint x="2808" y="360" />
-        <di:waypoint x="2850" y="360" />
+        <di:waypoint x="2708" y="360" />
+        <di:waypoint x="2740" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1i5riaz_di" bpmnElement="Flow_1i5riaz" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="1010" y="360" />

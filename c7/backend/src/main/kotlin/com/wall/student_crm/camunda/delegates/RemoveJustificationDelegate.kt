@@ -1,21 +1,20 @@
 package com.wall.student_crm.camunda.delegates
 
-import com.wall.student_crm.persistence.justification.JustificationRepository
+import com.wall.student_crm.service.JustificationService
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.delegate.JavaDelegate
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import java.util.*
+import java.util.UUID
 
 @Transactional("businessTransactionManager")
 @Component
 class RemoveJustificationDelegate(
-    private val justificationRepository: JustificationRepository
+    private val justificationService: JustificationService
 ) : JavaDelegate {
     override fun execute(execution: DelegateExecution) {
-        val id = execution.getVariable("justificationId") as UUID
-        val justification = justificationRepository.findById(id).get()
-        justificationRepository.delete(justification)
+        val justificationId = execution.getVariable("justificationId") as UUID
+        justificationService.removeJustification(justificationId)
         execution.removeVariable("justification")
     }
 }

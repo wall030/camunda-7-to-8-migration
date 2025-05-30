@@ -1,4 +1,4 @@
-package com.wall.student_crm.shared.mail
+package com.wall.student_crm.shared
 
 import com.wall.student_crm.shared.enums.MailMessageTemplate
 import jakarta.mail.MessagingException

@@ -5,13 +5,13 @@ import com.wall.student_crm.camunda.delegates.IncreaseCourseSizeDelegate
 import com.wall.student_crm.camunda.delegates.RemoveJustificationDelegate
 import com.wall.student_crm.camunda.delegates.StoreJustificationDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckCourseExistsDelegate
-import com.wall.student_crm.camunda.delegates.validation.CheckCourseFullDelegate
+import com.wall.student_crm.camunda.delegates.CheckCourseFullDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckEmailFormatDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckEnrollmentDelegate
 import com.wall.student_crm.camunda.delegates.validation.CheckStudentExistsDelegate
 import com.wall.student_crm.camunda.listeners.InitVariablesListener
 import com.wall.student_crm.camunda.listeners.StatusListener
-import com.wall.student_crm.persistence.CamundaUserService
+import com.wall.student_crm.service.CamundaUserService
 import com.wall.student_crm.persistence.course.CourseEntity
 import com.wall.student_crm.persistence.course.CourseRepository
 import com.wall.student_crm.persistence.course.StudentCourseId
@@ -20,7 +20,7 @@ import com.wall.student_crm.persistence.justification.JustificationEntity
 import com.wall.student_crm.persistence.justification.JustificationRepository
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
 import com.wall.student_crm.shared.TimeProvider
-import com.wall.student_crm.shared.mail.MailService
+import com.wall.student_crm.service.MailService
 import org.camunda.bpm.engine.RuntimeService
 import org.camunda.bpm.engine.delegate.DelegateExecution
 import org.camunda.bpm.engine.test.Deployment

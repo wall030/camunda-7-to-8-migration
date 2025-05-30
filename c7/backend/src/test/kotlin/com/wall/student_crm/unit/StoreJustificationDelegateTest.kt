@@ -1,7 +1,7 @@
 package com.wall.student_crm.unit
 
 import com.wall.student_crm.camunda.delegates.StoreJustificationDelegate
-import com.wall.student_crm.persistence.CamundaUserService
+import com.wall.student_crm.service.CamundaUserService
 import com.wall.student_crm.persistence.justification.JustificationEntity
 import com.wall.student_crm.persistence.justification.JustificationRepository
 import org.camunda.bpm.engine.delegate.DelegateExecution
