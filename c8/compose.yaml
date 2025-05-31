@@ -1,0 +1,45 @@
+services:
+  camunda-database:
+    image: "postgres:15.8-alpine3.20"
+    environment:
+      POSTGRES_DB: "camunda_db"
+      POSTGRES_PASSWORD: "secret"
+      POSTGRES_USER: "postgres"
+    ports:
+      - "5432:5432"
+
+  business-database:
+    image: "postgres:15.8-alpine3.20"
+    environment:
+      POSTGRES_DB: "business_db"
+      POSTGRES_PASSWORD: "secret"
+      POSTGRES_USER: "postgres"
+    ports:
+      - "5433:5432"
+
+  app:
+    build: backend
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://camunda-database:5432/camunda_db"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "secret"
+
+      SPRING_BUSINESS_DATASOURCE_URL: "jdbc:postgresql://business-database:5432/business_db"
+      SPRING_BUSINESS_DATASOURCE_USERNAME: "postgres"
+      SPRING_BUSINESS_DATASOURCE_PASSWORD: "secret"
+
+      SPRING_MAIL_USERNAME: "PLACEHOLDER"
+      SPRING_MAIL_PASSWORD: "PLACEHOLDER"
+      SPRING_MAIL_HOST: "smtp.office365.com"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - camunda-database
+      - business-database
+
+  external-task-worker:
+    build: external
+    depends_on:
+      - app
+    environment:
+      BASE_URL: http://app:8080/engine-rest

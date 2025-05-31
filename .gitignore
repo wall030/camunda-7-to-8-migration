@@ -48,3 +48,6 @@ out/
 c7/backend/.gradle
 c7/backend/.gradle
 c7/backend/target/process-test-coverage
+c8/backend/.gradle
+c8/backend/target/process-test-coverage
+c8/external/node_modules

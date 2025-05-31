@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0o35cpb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
+  <bpmn:process id="reviseCourseSize" name="revise-course-size" isExecutable="true">
+    <bpmn:endEvent id="EndEvent_CourseSizeIncreased" name="Course size increased">
+      <bpmn:incoming>Flow_1n4ev4t</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="checkChangeCourseSize" name="Check if course size can be changed" camunda:candidateGroups="examoffice">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="courseSizeCanBeIncreased" label="Course Size increased?" type="boolean" defaultValue="false" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1kl9i76</bpmn:incoming>
+      <bpmn:outgoing>Flow_14xxl20</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1bki90x" name="can be increased?">
+      <bpmn:incoming>Flow_14xxl20</bpmn:incoming>
+      <bpmn:outgoing>Flow_1mtqdo3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1rw3y4p</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="increaseCourseSize" name="Increase Course Size" camunda:delegateExpression="${increaseCourseSizeDelegate}">
+      <bpmn:incoming>Flow_1mtqdo3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1n4ev4t</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_CourseSizeNotIncreased" name="Course size not increased">
+      <bpmn:incoming>Flow_1rw3y4p</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1n4ev4t" sourceRef="increaseCourseSize" targetRef="EndEvent_CourseSizeIncreased" />
+    <bpmn:sequenceFlow id="Flow_14xxl20" sourceRef="checkChangeCourseSize" targetRef="Gateway_1bki90x" />
+    <bpmn:sequenceFlow id="Flow_1mtqdo3" name="yes" sourceRef="Gateway_1bki90x" targetRef="increaseCourseSize">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${courseSizeCanBeIncreased}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1rw3y4p" name="no" sourceRef="Gateway_1bki90x" targetRef="EndEvent_CourseSizeNotIncreased">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!courseSizeCanBeIncreased}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:startEvent id="StartEvent_CourseIsFull" name="Course is full">
+      <bpmn:outgoing>Flow_1kl9i76</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1mmvinm" messageRef="Message_1p5jjnb" />
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1kl9i76" sourceRef="StartEvent_CourseIsFull" targetRef="checkChangeCourseSize" />
+  </bpmn:process>
+  <bpmn:message id="Message_1p5jjnb" name="startReviseCourseSize" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="reviseCourseSize">
+      <bpmndi:BPMNShape id="Event_19qtrh3_di" bpmnElement="EndEvent_CourseSizeIncreased">
+        <dc:Bounds x="732" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="721" y="155" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1e1y7ro_di" bpmnElement="checkChangeCourseSize">
+        <dc:Bounds x="300" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1bki90x_di" bpmnElement="Gateway_1bki90x" isMarkerVisible="true">
+        <dc:Bounds x="435" y="105" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="415" y="81" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1vs4r4k_di" bpmnElement="increaseCourseSize">
+        <dc:Bounds x="570" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1g9jeus_di" bpmnElement="EndEvent_CourseSizeNotIncreased">
+        <dc:Bounds x="732" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="712" y="265" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_135748v_di" bpmnElement="StartEvent_CourseIsFull">
+        <dc:Bounds x="172" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="159" y="155" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1n4ev4t_di" bpmnElement="Flow_1n4ev4t">
+        <di:waypoint x="670" y="130" />
+        <di:waypoint x="732" y="130" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="642" y="842" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14xxl20_di" bpmnElement="Flow_14xxl20">
+        <di:waypoint x="400" y="130" />
+        <di:waypoint x="435" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mtqdo3_di" bpmnElement="Flow_1mtqdo3">
+        <di:waypoint x="485" y="130" />
+        <di:waypoint x="570" y="130" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="519" y="112" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rw3y4p_di" bpmnElement="Flow_1rw3y4p">
+        <di:waypoint x="460" y="155" />
+        <di:waypoint x="460" y="240" />
+        <di:waypoint x="732" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="469" y="195" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kl9i76_di" bpmnElement="Flow_1kl9i76">
+        <di:waypoint x="208" y="130" />
+        <di:waypoint x="300" y="130" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
