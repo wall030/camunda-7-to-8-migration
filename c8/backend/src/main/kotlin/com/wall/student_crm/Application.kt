@@ -1,13 +1,11 @@
 package com.wall.student_crm
 
-import org.flywaydb.core.Flyway
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.boot.CommandLineRunner
+import io.camunda.zeebe.spring.client.annotation.Deployment
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import javax.sql.DataSource
 
 @SpringBootApplication
+@Deployment(resources = ["classpath:exam-registration.bpmn", "classpath:initial-existence-check.bpmn", "classpath:revise-course-size.bpmn", "classpath:checkExamRegistrationDeadline.dmn"])
 class Application {
 
 }

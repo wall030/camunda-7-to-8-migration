@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0o35cpb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
-  <bpmn:process id="reviseCourseSize" name="revise-course-size" isExecutable="true">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:conversion="http://camunda.org/schema/conversion/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0o35cpb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0" conversion:converterVersion="0.12.4" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:process id="reviseCourseSize" name="revise-course-size" processType="None" isClosed="false" isExecutable="true">
     <bpmn:endEvent id="EndEvent_CourseSizeIncreased" name="Course size increased">
       <bpmn:incoming>Flow_1n4ev4t</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="checkChangeCourseSize" name="Check if course size can be changed" camunda:candidateGroups="examoffice">
+    <bpmn:userTask id="checkChangeCourseSize" name="Check if course size can be changed" implementation="##unspecified">
       <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="courseSizeCanBeIncreased" label="Course Size increased?" type="boolean" defaultValue="false" />
-        </camunda:formData>
+        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
+        <zeebe:userTask />
+        <zeebe:assignmentDefinition assignee="" candidateGroups="examoffice" candidateUsers="" />
+        <zeebe:formDefinition formId="form-checkChangeCourseSize" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1kl9i76</bpmn:incoming>
       <bpmn:outgoing>Flow_14xxl20</bpmn:outgoing>
@@ -18,7 +19,14 @@
       <bpmn:outgoing>Flow_1mtqdo3</bpmn:outgoing>
       <bpmn:outgoing>Flow_1rw3y4p</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="increaseCourseSize" name="Increase Course Size" camunda:delegateExpression="${increaseCourseSizeDelegate}">
+    <bpmn:serviceTask id="increaseCourseSize" name="Increase Course Size" implementation="##WebService">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${increaseCourseSizeDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:taskHeaders>
+          <zeebe:header key="delegateExpression" value="${increaseCourseSizeDelegate}" />
+        </zeebe:taskHeaders>
+        <zeebe:taskDefinition type="camunda-7-adapter" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1mtqdo3</bpmn:incoming>
       <bpmn:outgoing>Flow_1n4ev4t</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -28,18 +36,32 @@
     <bpmn:sequenceFlow id="Flow_1n4ev4t" sourceRef="increaseCourseSize" targetRef="EndEvent_CourseSizeIncreased" />
     <bpmn:sequenceFlow id="Flow_14xxl20" sourceRef="checkChangeCourseSize" targetRef="Gateway_1bki90x" />
     <bpmn:sequenceFlow id="Flow_1mtqdo3" name="yes" sourceRef="Gateway_1bki90x" targetRef="increaseCourseSize">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${courseSizeCanBeIncreased}</bpmn:conditionExpression>
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${courseSizeCanBeIncreased}' -&gt; '=courseSizeCanBeIncreased'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=courseSizeCanBeIncreased</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1rw3y4p" name="no" sourceRef="Gateway_1bki90x" targetRef="EndEvent_CourseSizeNotIncreased">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!courseSizeCanBeIncreased}</bpmn:conditionExpression>
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!courseSizeCanBeIncreased}' -&gt; '=not(courseSizeCanBeIncreased)'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(courseSizeCanBeIncreased)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:startEvent id="StartEvent_CourseIsFull" name="Course is full">
+      <bpmn:extensionElements>
+        <conversion:reference>Message_1p5jjnb</conversion:reference>
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_1kl9i76</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1mmvinm" messageRef="Message_1p5jjnb" />
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1kl9i76" sourceRef="StartEvent_CourseIsFull" targetRef="checkChangeCourseSize" />
   </bpmn:process>
-  <bpmn:message id="Message_1p5jjnb" name="startReviseCourseSize" />
+  <bpmn:message id="Message_1p5jjnb" name="startReviseCourseSize">
+    <bpmn:extensionElements>
+      <conversion:message severity="TASK">Please define a correlation key if the message is used in a message catch event.</conversion:message>
+      <conversion:referencedBy>StartEvent_CourseIsFull</conversion:referencedBy>
+    </bpmn:extensionElements>
+  </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="reviseCourseSize">
       <bpmndi:BPMNShape id="Event_19qtrh3_di" bpmnElement="EndEvent_CourseSizeIncreased">

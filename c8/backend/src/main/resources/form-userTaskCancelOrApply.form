@@ -1,0 +1,64 @@
+{
+  "components": [
+    {
+      "label": "Cancel",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_0ttrftl",
+        "columns": null
+      },
+      "id": "Field_1ikxld9",
+      "key": "cancelRegistration"
+    },
+    {
+      "label": "Justification",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0gw07w3",
+        "columns": null
+      },
+      "id": "Field_0053pt3",
+      "key": "justification",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Justification Type",
+      "values": [
+        {
+          "label": "Technical Problem",
+          "value": "technical"
+        },
+        {
+          "label": "Personal Reasons",
+          "value": "personal"
+        },
+        {
+          "label": "Other",
+          "value": "other"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_1mcqtpw",
+        "columns": null
+      },
+      "id": "Field_0apo7xh",
+      "key": "justificationType",
+      "properties": {},
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "form-userTaskCancelOrApply",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
+}

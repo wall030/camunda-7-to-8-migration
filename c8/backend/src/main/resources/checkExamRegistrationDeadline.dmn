@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" id="checkRegistrationDeadlineDMN" name="checkRegistrationDeadlineDMN" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
-  <decision id="checkExamRegistrationDeadline" name="checkExamRegistrationDeadline" camunda:historyTimeToLive="30">
-    <decisionTable id="DecisionTable_0facc17" hitPolicy="FIRST">
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:conversion="http://camunda.org/schema/conversion/1.0" id="checkRegistrationDeadlineDMN" name="checkRegistrationDeadlineDMN" namespace="http://camunda.org/schema/1.0/dmn" expressionLanguage="https://www.omg.org/spec/DMN/20191111/FEEL/" typeLanguage="https://www.omg.org/spec/DMN/20191111/FEEL/" exporter="Camunda Modeler" exporterVersion="5.35.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0" conversion:converterVersion="0.12.4">
+  <decision id="checkExamRegistrationDeadline" name="checkExamRegistrationDeadline">
+    <extensionElements>
+      <conversion:message severity="INFO">Unused attribute 'historyTimeToLive' on 'decision' is removed.</conversion:message>
+    </extensionElements>
+    <decisionTable id="DecisionTable_0facc17" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
       <input id="Input_1" label="currentMonth" biodi:width="192">
         <inputExpression id="InputExpression_1" typeRef="string">
           <text>currentMonth</text>
@@ -26,6 +29,9 @@
       </rule>
       <rule id="DecisionRule_0p2zatz">
         <inputEntry id="UnaryTests_0n1yeg3">
+          <extensionElements>
+            <conversion:message severity="REVIEW">Text field: Please review transformed expression: '' -&gt; 'null'.</conversion:message>
+          </extensionElements>
           <text></text>
         </inputEntry>
         <outputEntry id="LiteralExpression_0sf3co0">
@@ -36,7 +42,7 @@
   </decision>
   <dmndi:DMNDI>
     <dmndi:DMNDiagram>
-      <dmndi:DMNShape dmnElementRef="checkExamRegistrationDeadline">
+      <dmndi:DMNShape dmnElementRef="checkExamRegistrationDeadline" isCollapsed="false">
         <dc:Bounds height="80" width="180" x="160" y="100" />
       </dmndi:DMNShape>
     </dmndi:DMNDiagram>

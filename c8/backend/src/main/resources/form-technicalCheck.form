@@ -1,0 +1,41 @@
+{
+  "components": [
+    {
+      "text": "Students Justification:",
+      "type": "text",
+      "layout": {
+        "row": "Row_0bpp53a",
+        "columns": null
+      },
+      "id": "Field_00qh7bz"
+    },
+    {
+      "text": "=justification",
+      "type": "text",
+      "layout": {
+        "row": "Row_13nhs9o",
+        "columns": null
+      },
+      "id": "Field_1tasslm"
+    },
+    {
+      "label": "Accept (leave blank if not your field of responsibility)",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_00xlnqk",
+        "columns": null
+      },
+      "id": "Field_16ha501",
+      "key": "acceptJustification"
+    }
+  ],
+  "type": "default",
+  "id": "form-technicalCheck",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
+}
