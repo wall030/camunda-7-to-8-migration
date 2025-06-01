@@ -1,0 +1,23 @@
+{
+  "components": [
+    {
+      "label": "Overbook Course",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_1yyccv7",
+        "columns": null
+      },
+      "id": "Field_00wnn5f",
+      "key": "overbooked"
+    }
+  ],
+  "type": "default",
+  "id": "form-reviewOverbooking",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
+}

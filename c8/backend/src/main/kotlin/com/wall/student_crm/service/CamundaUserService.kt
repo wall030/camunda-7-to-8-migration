@@ -13,11 +13,13 @@ class CamundaUserService(
 
     fun getUserIdByEmail(email: String): String? {
         logger.info("Entering getUserIdByEmail with email={}", email)
-        return ""
+        // ToDo
+        return "test"
     }
 
     fun existsByEmail(email: String): Boolean {
         logger.info("Entering existsByEmail with email={}", email)
-       return false
+        // ToDo
+       return true
     }
 }

@@ -16,4 +16,4 @@ echo "Starting up the services..."
 docker-compose up -d
 
 echo "Services started..."
-docker-compose logs -f app
+docker-compose logs -f app external-task-worker

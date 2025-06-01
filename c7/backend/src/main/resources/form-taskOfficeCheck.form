@@ -1,19 +1,11 @@
 {
-  "executionPlatform": "Camunda Cloud",
-  "executionPlatformVersion": "8.6.0",
-  "exporter": {
-    "name": "Camunda Web Modeler",
-    "version": "f35ea64"
-  },
-  "schemaVersion": 18,
-  "id": "form-justificationCheck",
   "components": [
     {
       "text": "Students Justification:",
       "type": "text",
       "layout": {
         "row": "Row_12lhv76",
-        "columns": 4
+        "columns": null
       },
       "id": "Field_0aswwui"
     },
@@ -21,19 +13,11 @@
       "text": "=justification",
       "type": "text",
       "layout": {
-        "row": "Row_12lhv76",
+        "row": "Row_17l77z7",
         "columns": null
       },
       "id": "Field_0b09ney",
-      "properties": { }
-    },
-    {
-      "type": "separator",
-      "layout": {
-        "row": "Row_1rz1rgu",
-        "columns": null
-      },
-      "id": "Field_0dn5r0e"
+      "properties": {}
     },
     {
       "label": "Accept (leave blank if not your field of responsibility)",
@@ -46,5 +30,13 @@
       "key": "acceptJustification"
     }
   ],
-  "type": "default"
+  "type": "default",
+  "id": "form-taskOfficeCheck",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
 }

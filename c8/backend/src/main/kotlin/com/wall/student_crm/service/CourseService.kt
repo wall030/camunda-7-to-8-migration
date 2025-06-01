@@ -17,7 +17,7 @@ class CourseService(
         private val logger = LoggerFactory.getLogger(CourseService::class.java)
     }
 
-    @Transactional("businessTransactionManager")
+    @Transactional
     fun enrollStudent(studentEmail: String, courseName: String) {
         logger.info("Entering enrollStudent with studentEmail={}, courseName={}", studentEmail, courseName)
 
@@ -41,7 +41,7 @@ class CourseService(
         logger.info("Increased course {} currentSize to {}", courseName, course.currentSize)
     }
 
-    @Transactional("businessTransactionManager", readOnly = true)
+    @Transactional(readOnly = true)
     fun isCourseFull(courseName: String): Boolean {
         logger.info("Entering isCourseFull with courseName={}", courseName)
         val course = courseRepository.findByName(courseName)!!
@@ -50,7 +50,7 @@ class CourseService(
         return isFull
     }
 
-    @Transactional("businessTransactionManager")
+    @Transactional
     fun increaseCourseSize(courseName: String) {
         logger.info("Entering increaseCourseSize with courseName={}", courseName)
         val course = courseRepository.findByName(courseName)!!

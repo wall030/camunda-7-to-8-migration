@@ -1,178 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:conversion="http://camunda.org/schema/conversion/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ia7fl5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.35.0" conversion:converterVersion="0.12.4" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:conversion="http://camunda.org/schema/conversion/1.0" id="Definitions_0ia7fl5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="f35ea64" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0" conversion:converterVersion="0.12.4">
   <bpmn:process id="examRegistration" name="exam-registration" processType="None" isClosed="false" isExecutable="true">
     <bpmn:extensionElements>
       <conversion:message severity="INFO">Unused attribute 'historyTimeToLive' on 'process' is removed.</conversion:message>
     </bpmn:extensionElements>
-    <bpmn:startEvent id="StartEvent" name="Course registration started">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_13upj83</bpmn:outgoing>
-    </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_13upj83" sourceRef="StartEvent" targetRef="Event_StatusChecking" />
-    <bpmn:exclusiveGateway id="Gateway_1tu7dt0" name="justification accepted?">
-      <bpmn:incoming>Flow_0ob0zxi</bpmn:incoming>
-      <bpmn:outgoing>Flow_16khaca</bpmn:outgoing>
-      <bpmn:outgoing>Flow_09a9q6e</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:userTask id="taskOfficeCheck" name="Check justification from exam office" implementation="##unspecified">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition assignee="" candidateGroups="examoffice" candidateUsers="" />
-        <zeebe:formDefinition formId="form-taskOfficeCheck" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0nq5d67</bpmn:incoming>
-      <bpmn:outgoing>Flow_0kwi25w</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:endEvent id="EndEvent_Canceled" name="Registration stopped">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_047b1dt</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:exclusiveGateway id="Gateway_05huf6g" name="cancel registration?">
-      <bpmn:incoming>Flow_1hmth07</bpmn:incoming>
-      <bpmn:outgoing>Flow_06r5348</bpmn:outgoing>
-      <bpmn:outgoing>Flow_047b1dt</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:userTask id="userTaskCancelOrApply" name="Select application with justification or cancel" implementation="##unspecified">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition assignee="" candidateGroups="students" candidateUsers="" />
-        <zeebe:formDefinition formId="form-userTaskCancelOrApply" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_09bc11a</bpmn:incoming>
-      <bpmn:outgoing>Flow_1hmth07</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_InDeadline" name="Registration in deadline?">
-      <bpmn:incoming>Flow_1i5riaz</bpmn:incoming>
-      <bpmn:outgoing>Flow_035de0m</bpmn:outgoing>
-      <bpmn:outgoing>Flow_069pg5e</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
     <bpmn:boundaryEvent id="TimeBoundaryEvent_AutoCancel" name="after 7 days" attachedToRef="userTaskCancelOrApply">
       <bpmn:outgoing>Flow_0tsgbcm</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_0xpbhhh">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P7D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_16khaca" name="no" sourceRef="Gateway_1tu7dt0" targetRef="EndEvent_Rejected">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!acceptJustification}' -&gt; '=not(acceptJustification)'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(acceptJustification)</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06r5348" name="no" sourceRef="Gateway_05huf6g" targetRef="Event_0z5g2c9">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!cancelRegistration}' -&gt; '=not(cancelRegistration)'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(cancelRegistration)</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_047b1dt" name="yes" sourceRef="Gateway_05huf6g" targetRef="EndEvent_Canceled">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${cancelRegistration}' -&gt; '=cancelRegistration'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cancelRegistration</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1hmth07" sourceRef="userTaskCancelOrApply" targetRef="Gateway_05huf6g" />
-    <bpmn:sequenceFlow id="Flow_035de0m" name="no" sourceRef="Gateway_InDeadline" targetRef="Event_0npinso">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!registrationAllowed}' -&gt; '=not(registrationAllowed)'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(registrationAllowed)</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:boundaryEvent id="Event_0ekkseq" name="Student not found" attachedToRef="initialExistenceCheck">
-      <bpmn:extensionElements>
-        <conversion:reference>Error_02i2fc5</conversion:reference>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_1fnck62</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1qliiyi" errorRef="Error_02i2fc5" />
-    </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_04dvgsy" sourceRef="initialExistenceCheck" targetRef="checkAllPrerequisites" />
-    <bpmn:boundaryEvent id="Event_0tp9fim" name="Invalid Email Format" attachedToRef="initialExistenceCheck">
-      <bpmn:extensionElements>
-        <conversion:reference>Error_1i4qbxu</conversion:reference>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_0cpos3f</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1ggbcdn" errorRef="Error_1i4qbxu" />
-    </bpmn:boundaryEvent>
-    <bpmn:endEvent id="EndEvent_InvalidEmailFormat" name="Stop process">
-      <bpmn:incoming>Flow_0cpos3f</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0cpos3f" sourceRef="Event_0tp9fim" targetRef="EndEvent_InvalidEmailFormat" />
-    <bpmn:endEvent id="EndEvent_Stopped" name="Registration stopped">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0tsgbcm</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0tsgbcm" sourceRef="TimeBoundaryEvent_AutoCancel" targetRef="EndEvent_Stopped" />
-    <bpmn:intermediateThrowEvent id="Event_StatusChecking" name="Status: &#10;Checking">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
-        <conversion:message severity="TASK">Listener at 'start' with implementation '${initVariablesListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-          <zeebe:executionListener eventType="start" type="initVariablesListener" />
-        </zeebe:executionListeners>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_13upj83</bpmn:incoming>
-      <bpmn:outgoing>Flow_02yyfyv</bpmn:outgoing>
-    </bpmn:intermediateThrowEvent>
-    <bpmn:sequenceFlow id="Flow_02yyfyv" sourceRef="Event_StatusChecking" targetRef="initialExistenceCheck" />
-    <bpmn:intermediateThrowEvent id="Event_0z5g2c9" name="Status: &#10;Exam office checking">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_06r5348</bpmn:incoming>
-      <bpmn:outgoing>Flow_10sq00o</bpmn:outgoing>
-    </bpmn:intermediateThrowEvent>
-    <bpmn:sequenceFlow id="Flow_10sq00o" sourceRef="Event_0z5g2c9" targetRef="storeJustification" />
-    <bpmn:intermediateThrowEvent id="Event_0npinso" name="Status: Justifying">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_035de0m</bpmn:incoming>
-      <bpmn:outgoing>Flow_09bc11a</bpmn:outgoing>
-    </bpmn:intermediateThrowEvent>
-    <bpmn:sequenceFlow id="Flow_09bc11a" sourceRef="Event_0npinso" targetRef="userTaskCancelOrApply" />
-    <bpmn:sequenceFlow id="Flow_09a9q6e" name="yes" sourceRef="Gateway_1tu7dt0" targetRef="Event_1mbk6yi">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${acceptJustification}' -&gt; '=acceptJustification'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=acceptJustification</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:boundaryEvent id="Event_0yf971t" name="Course not found" attachedToRef="initialExistenceCheck">
-      <bpmn:extensionElements>
-        <conversion:reference>Error_1ppmr49</conversion:reference>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_0l6iwij</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1eyzkri" errorRef="Error_1ppmr49" />
-    </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1fnck62" sourceRef="Event_0ekkseq" targetRef="EndEvent_StudentNotFound" />
-    <bpmn:callActivity id="initialExistenceCheck" name="Initial existence check" calledElement="initialExistenceCheck">
-      <bpmn:extensionElements>
-        <conversion:message severity="INFO">Element 'camunda:in' with attribute 'variables="all"' is mapped to 'propagateAllParentVariables="true"'.</conversion:message>
-        <conversion:message severity="INFO">Element 'camunda:out' with attribute 'variables="all"' is mapped to 'propagateAllChildVariables="true"'.</conversion:message>
-        <zeebe:calledElement processId="initialExistenceCheck" propagateAllChildVariables="true" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_02yyfyv</bpmn:incoming>
-      <bpmn:outgoing>Flow_04dvgsy</bpmn:outgoing>
-    </bpmn:callActivity>
     <bpmn:boundaryEvent id="Event_16ow9bg" name="Already enrolled" attachedToRef="initialExistenceCheck">
       <bpmn:extensionElements>
         <conversion:reference>Error_1v7ezgj</conversion:reference>
@@ -180,185 +17,11 @@
       <bpmn:outgoing>Flow_0kgevfg</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_036fzp1" errorRef="Error_1v7ezgj" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0kgevfg" sourceRef="Event_16ow9bg" targetRef="EndEvent_AlreadyEnrolled" />
-    <bpmn:sequenceFlow id="Flow_0nq5d67" sourceRef="Gateway_0pvk1wz" targetRef="taskOfficeCheck">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${(justificationType == "personal") or (justificationType == "other")}' -&gt; '=(justificationType = "personal") or (justificationType = "other")'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(justificationType = "personal") or (justificationType = "other")</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:inclusiveGateway id="Gateway_0pvk1wz">
-      <bpmn:incoming>Flow_09hf0p7</bpmn:incoming>
-      <bpmn:outgoing>Flow_0nq5d67</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0sr2obh</bpmn:outgoing>
-    </bpmn:inclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0sr2obh" sourceRef="Gateway_0pvk1wz" targetRef="technicalCheck">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${(justificationType == "technical") or (justificationType == "other")}' -&gt; '=(justificationType = "technical") or (justificationType = "other")'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(justificationType = "technical") or (justificationType = "other")</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:inclusiveGateway id="Gateway_0f1q0ss">
-      <bpmn:incoming>Flow_0kwi25w</bpmn:incoming>
-      <bpmn:incoming>Flow_08exkju</bpmn:incoming>
-      <bpmn:outgoing>Flow_0ob0zxi</bpmn:outgoing>
-    </bpmn:inclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0kwi25w" sourceRef="taskOfficeCheck" targetRef="Gateway_0f1q0ss" />
-    <bpmn:sequenceFlow id="Flow_08exkju" sourceRef="technicalCheck" targetRef="Gateway_0f1q0ss" />
-    <bpmn:sequenceFlow id="Flow_0ob0zxi" sourceRef="Gateway_0f1q0ss" targetRef="Gateway_1tu7dt0" />
-    <bpmn:userTask id="technicalCheck" name="Check from technical service" implementation="##unspecified">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition assignee="" candidateGroups="technicalservice" candidateUsers="" />
-        <zeebe:formDefinition formId="form-technicalCheck" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0sr2obh</bpmn:incoming>
-      <bpmn:outgoing>Flow_08exkju</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_09hf0p7" sourceRef="storeJustification" targetRef="Gateway_0pvk1wz" />
-    <bpmn:serviceTask id="storeJustification" name="Store justification in DB" implementation="##WebService">
-      <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${storeJustificationDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${storeJustificationDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_10sq00o</bpmn:incoming>
-      <bpmn:outgoing>Flow_09hf0p7</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="compensateStoreJustification" attachedToRef="storeJustification">
-      <bpmn:compensateEventDefinition id="CompensateEventDefinition_1foq8s7" />
-    </bpmn:boundaryEvent>
-    <bpmn:serviceTask id="removeJustification" name="Remove justification from successful registration" isForCompensation="true" implementation="##WebService">
-      <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${removeJustificationDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${removeJustificationDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
-      </bpmn:extensionElements>
-    </bpmn:serviceTask>
-    <bpmn:intermediateThrowEvent id="Event_1mbk6yi" name="Remove stored justification">
-      <bpmn:incoming>Flow_09a9q6e</bpmn:incoming>
-      <bpmn:outgoing>Flow_1gwxcj4</bpmn:outgoing>
-      <bpmn:compensateEventDefinition id="CompensateEventDefinition_0hgcpnd" />
-    </bpmn:intermediateThrowEvent>
-    <bpmn:subProcess id="checkCourseSizeProcess" name="Check course size">
-      <bpmn:incoming>Flow_115ywsr</bpmn:incoming>
-      <bpmn:outgoing>Flow_0a7wlft</bpmn:outgoing>
-      <bpmn:startEvent id="Event_15qarr1">
-        <bpmn:outgoing>Flow_0due5t0</bpmn:outgoing>
-      </bpmn:startEvent>
-      <bpmn:intermediateThrowEvent id="Event_1a6yz20" name="review needed">
-        <bpmn:extensionElements>
-          <conversion:reference>Escalation_244frdp</conversion:reference>
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_090lhw2</bpmn:incoming>
-        <bpmn:escalationEventDefinition id="EscalationEventDefinition_1sbeek0" escalationRef="Escalation_244frdp" />
-      </bpmn:intermediateThrowEvent>
-      <bpmn:sequenceFlow id="Flow_0due5t0" sourceRef="Event_15qarr1" targetRef="checkCourseSize" />
-      <bpmn:serviceTask id="checkCourseSize" name="Check if course is full" implementation="##WebService">
-        <bpmn:extensionElements>
-          <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${checkCourseFullDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-          <zeebe:taskHeaders>
-            <zeebe:header key="delegateExpression" value="${checkCourseFullDelegate}" />
-          </zeebe:taskHeaders>
-          <zeebe:taskDefinition type="camunda-7-adapter" />
-        </bpmn:extensionElements>
-        <bpmn:incoming>Flow_0due5t0</bpmn:incoming>
-        <bpmn:outgoing>Flow_1p9y6tn</bpmn:outgoing>
-      </bpmn:serviceTask>
-      <bpmn:exclusiveGateway id="Gateway_1od2k4k" name="course full?">
-        <bpmn:incoming>Flow_1p9y6tn</bpmn:incoming>
-        <bpmn:outgoing>Flow_0394vm8</bpmn:outgoing>
-        <bpmn:outgoing>Flow_090lhw2</bpmn:outgoing>
-      </bpmn:exclusiveGateway>
-      <bpmn:sequenceFlow id="Flow_1p9y6tn" sourceRef="checkCourseSize" targetRef="Gateway_1od2k4k" />
-      <bpmn:endEvent id="End_Event_CheckCourseSize">
-        <bpmn:incoming>Flow_0394vm8</bpmn:incoming>
-      </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0394vm8" sourceRef="Gateway_1od2k4k" targetRef="End_Event_CheckCourseSize">
-        <bpmn:extensionElements>
-          <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!courseIsFull}' -&gt; '=not(courseIsFull)'.</conversion:message>
-        </bpmn:extensionElements>
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(courseIsFull)</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
-      <bpmn:sequenceFlow id="Flow_090lhw2" sourceRef="Gateway_1od2k4k" targetRef="Event_1a6yz20">
-        <bpmn:extensionElements>
-          <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${courseIsFull}' -&gt; '=courseIsFull'.</conversion:message>
-        </bpmn:extensionElements>
-        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=courseIsFull</bpmn:conditionExpression>
-      </bpmn:sequenceFlow>
-    </bpmn:subProcess>
-    <bpmn:sequenceFlow id="Flow_0a7wlft" sourceRef="checkCourseSizeProcess" targetRef="Gateway_15uislg" />
-    <bpmn:boundaryEvent id="Event_1tjji2a" name="overbooking" attachedToRef="checkCourseSizeProcess">
-      <bpmn:extensionElements>
-        <conversion:message severity="WARNING">Attribute 'escalationCodeVariable' with value 'reviewOverbooking' on 'escalationEventDefinition' is not supported.</conversion:message>
-        <conversion:reference>Escalation_244frdp</conversion:reference>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_04jhlnx</bpmn:outgoing>
-      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0std82b" escalationRef="Escalation_244frdp" />
-    </bpmn:boundaryEvent>
-    <bpmn:serviceTask id="enrollCours" name="Enroll course" implementation="##WebService">
-      <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${enrollCourseDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${enrollCourseDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_03vp801</bpmn:incoming>
-      <bpmn:outgoing>Flow_0y1y7fq</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="reviewOverbooking" name="Review overbooking" implementation="##unspecified">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition assignee="" candidateGroups="examoffice" candidateUsers="" />
-        <zeebe:formDefinition formId="form-reviewOverbooking" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_04jhlnx</bpmn:incoming>
-      <bpmn:outgoing>Flow_0whhznp</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_15uislg">
-      <bpmn:incoming>Flow_0a7wlft</bpmn:incoming>
-      <bpmn:incoming>Flow_1sbmp1i</bpmn:incoming>
-      <bpmn:outgoing>Flow_1bfbte1</bpmn:outgoing>
+    <bpmn:exclusiveGateway id="Gateway_05huf6g" name="cancel registration?">
+      <bpmn:incoming>Flow_1hmth07</bpmn:incoming>
+      <bpmn:outgoing>Flow_06r5348</bpmn:outgoing>
+      <bpmn:outgoing>Flow_047b1dt</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1bfbte1" sourceRef="Gateway_15uislg" targetRef="Event_StatusEnrolling" />
-    <bpmn:sequenceFlow id="Flow_04jhlnx" sourceRef="Event_1tjji2a" targetRef="reviewOverbooking" />
-    <bpmn:sequenceFlow id="Flow_0y1y7fq" sourceRef="enrollCours" targetRef="generateQrCodeTask" />
-    <bpmn:exclusiveGateway id="Gateway_1fouw7x" name="overbooked?">
-      <bpmn:incoming>Flow_0whhznp</bpmn:incoming>
-      <bpmn:outgoing>Flow_1sbmp1i</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0ko9zg9</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0whhznp" sourceRef="reviewOverbooking" targetRef="Gateway_1fouw7x" />
-    <bpmn:sequenceFlow id="Flow_1sbmp1i" name="yes" sourceRef="Gateway_1fouw7x" targetRef="Gateway_15uislg">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${overbooked}' -&gt; '=overbooked'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=overbooked</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0ko9zg9" name="no" sourceRef="Gateway_1fouw7x" targetRef="EndEvent_NoOverbooking">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!overbooked}' -&gt; '=not(overbooked)'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(overbooked)</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="generateQrCodeTask" name="Generate QR Code Event for Calendar" implementation="##WebService">
-      <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'topic' on 'serviceTask' was mapped. Is set as job type.</conversion:message>
-        <conversion:message severity="INFO">Unused attribute 'type' on 'serviceTask' is removed.</conversion:message>
-        <zeebe:taskDefinition type="generateQrCode" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0y1y7fq</bpmn:incoming>
-      <bpmn:outgoing>Flow_1kw8bwm</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1kw8bwm" sourceRef="generateQrCodeTask" targetRef="EndEvent_RegistrationSuccessful" />
-    <bpmn:sequenceFlow id="Flow_0db73ot" sourceRef="checkAllPrerequisites" targetRef="checkRegistrationDeadline" />
     <bpmn:subProcess id="checkAllPrerequisites" name="Check all prerequisites">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Collecting results in a multi instance is now natively possible with Zeebe. Please review.</conversion:message>
@@ -370,20 +33,17 @@
       <bpmn:multiInstanceLoopCharacteristics isSequential="true">
         <bpmn:documentation />
         <bpmn:extensionElements>
-          <zeebe:loopCharacteristics inputCollection="prerequisitesList" inputElement="prerequisite" />
+          <zeebe:loopCharacteristics inputCollection="=prerequisitesList" inputElement="prerequisite" />
         </bpmn:extensionElements>
         <bpmn:completionCondition xsi:type="bpmn:tFormalExpression">=missingFound = true</bpmn:completionCondition>
       </bpmn:multiInstanceLoopCharacteristics>
-      <bpmn:startEvent id="Event_05mr2no" name="Start prerequisite check">
-        <bpmn:outgoing>Flow_0c91xek</bpmn:outgoing>
-      </bpmn:startEvent>
       <bpmn:serviceTask id="checkPrerequisite" name="Check prerequisite" implementation="##WebService">
         <bpmn:extensionElements>
           <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${checkPrerequisitesDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
           <zeebe:taskHeaders>
             <zeebe:header key="delegateExpression" value="${checkPrerequisitesDelegate}" />
           </zeebe:taskHeaders>
-          <zeebe:taskDefinition type="camunda-7-adapter" />
+          <zeebe:taskDefinition type="check-prerequisites" />
         </bpmn:extensionElements>
         <bpmn:incoming>Flow_0c91xek</bpmn:incoming>
         <bpmn:outgoing>Flow_1kcrrbw</bpmn:outgoing>
@@ -396,10 +56,11 @@
         <bpmn:errorEventDefinition id="ErrorEventDefinition_124y4hm" errorRef="Error_04seq4g" />
       </bpmn:boundaryEvent>
       <bpmn:sequenceFlow id="Flow_0c91xek" sourceRef="Event_05mr2no" targetRef="checkPrerequisite" />
+      <bpmn:sequenceFlow id="Flow_0m80oo8" sourceRef="Event_1eq3mjc" targetRef="Event_0fqnniy" />
+      <bpmn:sequenceFlow id="Flow_1kcrrbw" sourceRef="checkPrerequisite" targetRef="Event_0llif7p" />
       <bpmn:endEvent id="Event_0llif7p" name="Prerequisite met">
         <bpmn:incoming>Flow_1kcrrbw</bpmn:incoming>
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_1kcrrbw" sourceRef="checkPrerequisite" targetRef="Event_0llif7p" />
       <bpmn:endEvent id="Event_0fqnniy" name="Prerequisites not met">
         <bpmn:extensionElements>
           <conversion:reference>Error_04seq4g</conversion:reference>
@@ -407,40 +68,67 @@
         <bpmn:incoming>Flow_0m80oo8</bpmn:incoming>
         <bpmn:errorEventDefinition id="ErrorEventDefinition_0xal8q1" errorRef="Error_04seq4g" />
       </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0m80oo8" sourceRef="Event_1eq3mjc" targetRef="Event_0fqnniy" />
+      <bpmn:startEvent id="Event_05mr2no" name="Start prerequisite check">
+        <bpmn:outgoing>Flow_0c91xek</bpmn:outgoing>
+      </bpmn:startEvent>
     </bpmn:subProcess>
-    <bpmn:boundaryEvent id="Event_02q8z0p" attachedToRef="checkAllPrerequisites">
+    <bpmn:subProcess id="checkCourseSizeProcess" name="Check course size">
+      <bpmn:incoming>Flow_115ywsr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0a7wlft</bpmn:outgoing>
+      <bpmn:serviceTask id="checkCourseSize" name="Check if course is full" implementation="##WebService">
+        <bpmn:extensionElements>
+          <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${checkCourseFullDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+          <zeebe:taskHeaders>
+            <zeebe:header key="delegateExpression" value="${checkCourseFullDelegate}" />
+          </zeebe:taskHeaders>
+          <zeebe:taskDefinition type="check-course-full" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0due5t0</bpmn:incoming>
+        <bpmn:outgoing>Flow_1p9y6tn</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:exclusiveGateway id="Gateway_1od2k4k" name="course full?">
+        <bpmn:incoming>Flow_1p9y6tn</bpmn:incoming>
+        <bpmn:outgoing>Flow_0394vm8</bpmn:outgoing>
+        <bpmn:outgoing>Flow_090lhw2</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:endEvent id="End_Event_CheckCourseSize">
+        <bpmn:incoming>Flow_0394vm8</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:startEvent id="Event_15qarr1">
+        <bpmn:outgoing>Flow_0due5t0</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_0394vm8" sourceRef="Gateway_1od2k4k" targetRef="End_Event_CheckCourseSize">
+        <bpmn:extensionElements>
+          <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!courseIsFull}' -&gt; '=not(courseIsFull)'.</conversion:message>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(courseIsFull)</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_090lhw2" sourceRef="Gateway_1od2k4k" targetRef="Event_1a6yz20">
+        <bpmn:extensionElements>
+          <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${courseIsFull}' -&gt; '=courseIsFull'.</conversion:message>
+        </bpmn:extensionElements>
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=courseIsFull</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0due5t0" sourceRef="Event_15qarr1" targetRef="checkCourseSize" />
+      <bpmn:sequenceFlow id="Flow_1p9y6tn" sourceRef="checkCourseSize" targetRef="Gateway_1od2k4k" />
+      <bpmn:intermediateThrowEvent id="Event_1a6yz20" name="review needed">
+        <bpmn:extensionElements>
+          <conversion:reference>Escalation_244frdp</conversion:reference>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_090lhw2</bpmn:incoming>
+        <bpmn:escalationEventDefinition id="EscalationEventDefinition_1sbeek0" escalationRef="Escalation_244frdp" />
+      </bpmn:intermediateThrowEvent>
+    </bpmn:subProcess>
+    <bpmn:userTask id="technicalCheck" name="Check from technical service" implementation="##unspecified">
       <bpmn:extensionElements>
-        <conversion:reference>Error_0tbotyk</conversion:reference>
+        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
+        <zeebe:userTask />
+        <zeebe:assignmentDefinition assignee="" candidateUsers="" />
+        <zeebe:formDefinition formId="form-justificationCheck" />
       </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_00hwkyv</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_1omtjxk" errorRef="Error_0tbotyk" />
-    </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_00hwkyv" sourceRef="Event_02q8z0p" targetRef="EndEvent_PrerequisitesNotMet" />
-    <bpmn:intermediateThrowEvent id="Event_StatusEnrolling" name="Status: Enrolling">
-      <bpmn:extensionElements>
-        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1bfbte1</bpmn:incoming>
-      <bpmn:outgoing>Flow_03vp801</bpmn:outgoing>
-    </bpmn:intermediateThrowEvent>
-    <bpmn:sequenceFlow id="Flow_1gwxcj4" sourceRef="Event_1mbk6yi" targetRef="Gateway_1ohzfcm" />
-    <bpmn:sequenceFlow id="Flow_069pg5e" name="yes" sourceRef="Gateway_InDeadline" targetRef="Gateway_1ohzfcm">
-      <bpmn:extensionElements>
-        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${registrationAllowed}' -&gt; '=registrationAllowed'.</conversion:message>
-      </bpmn:extensionElements>
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=registrationAllowed</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:exclusiveGateway id="Gateway_1ohzfcm">
-      <bpmn:incoming>Flow_069pg5e</bpmn:incoming>
-      <bpmn:incoming>Flow_1gwxcj4</bpmn:incoming>
-      <bpmn:outgoing>Flow_115ywsr</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_115ywsr" sourceRef="Gateway_1ohzfcm" targetRef="checkCourseSizeProcess" />
-    <bpmn:sequenceFlow id="Flow_03vp801" sourceRef="Event_StatusEnrolling" targetRef="enrollCours" />
+      <bpmn:incoming>Flow_0sr2obh</bpmn:incoming>
+      <bpmn:outgoing>Flow_08exkju</bpmn:outgoing>
+    </bpmn:userTask>
     <bpmn:businessRuleTask id="checkRegistrationDeadline" name="Check if registration is within deadline" implementation="##unspecified">
       <bpmn:extensionElements>
         <conversion:message severity="REVIEW">Attribute 'resultVariable' on 'businessRuleTask' was mapped.</conversion:message>
@@ -450,80 +138,203 @@
       <bpmn:incoming>Flow_0db73ot</bpmn:incoming>
       <bpmn:outgoing>Flow_1i5riaz</bpmn:outgoing>
     </bpmn:businessRuleTask>
-    <bpmn:sequenceFlow id="Flow_1i5riaz" sourceRef="checkRegistrationDeadline" targetRef="Gateway_InDeadline" />
+    <bpmn:userTask id="taskOfficeCheck" name="Check justification from exam office" implementation="##unspecified">
+      <bpmn:extensionElements>
+        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
+        <zeebe:userTask />
+        <zeebe:assignmentDefinition assignee="" candidateUsers="" />
+        <zeebe:formDefinition formId="form-justificationCheck" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0nq5d67</bpmn:incoming>
+      <bpmn:outgoing>Flow_0kwi25w</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:boundaryEvent id="compensateStoreJustification" attachedToRef="storeJustification">
+      <bpmn:compensateEventDefinition id="CompensateEventDefinition_1foq8s7" />
+    </bpmn:boundaryEvent>
+    <bpmn:boundaryEvent id="Event_0yf971t" name="Course not found" attachedToRef="initialExistenceCheck">
+      <bpmn:extensionElements>
+        <conversion:reference>Error_1ppmr49</conversion:reference>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0l6iwij</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1eyzkri" errorRef="Error_1ppmr49" />
+    </bpmn:boundaryEvent>
+    <bpmn:startEvent id="StartEvent" name="Course registration started">
+      <bpmn:extensionElements>
+        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
+        <zeebe:formDefinition formId="form-start-exam-registration" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_13upj83</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="enrollCours" name="Enroll course" implementation="##WebService">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${enrollCourseDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:taskHeaders>
+          <zeebe:header key="delegateExpression" value="${enrollCourseDelegate}" />
+        </zeebe:taskHeaders>
+        <zeebe:taskDefinition type="enroll-course" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1bfbte1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0y1y7fq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_02q8z0p" attachedToRef="checkAllPrerequisites">
+      <bpmn:extensionElements>
+        <conversion:reference>Error_0tbotyk</conversion:reference>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_00hwkyv</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1omtjxk" errorRef="Error_0tbotyk" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_00hwkyv" sourceRef="Event_02q8z0p" targetRef="EndEvent_PrerequisitesNotMet" />
+    <bpmn:sequenceFlow id="Flow_04dvgsy" sourceRef="initialExistenceCheck" targetRef="checkAllPrerequisites" />
+    <bpmn:sequenceFlow id="Flow_04jhlnx" sourceRef="Event_1tjji2a" targetRef="reviewOverbooking" />
+    <bpmn:sequenceFlow id="Flow_08exkju" sourceRef="technicalCheck" targetRef="Gateway_0f1q0ss" />
+    <bpmn:sequenceFlow id="Flow_09hf0p7" sourceRef="storeJustification" targetRef="Gateway_0pvk1wz" />
+    <bpmn:sequenceFlow id="Flow_0a7wlft" sourceRef="checkCourseSizeProcess" targetRef="Gateway_15uislg" />
+    <bpmn:sequenceFlow id="Flow_0cpos3f" sourceRef="Event_0tp9fim" targetRef="EndEvent_InvalidEmailFormat" />
+    <bpmn:sequenceFlow id="Flow_0db73ot" sourceRef="checkAllPrerequisites" targetRef="checkRegistrationDeadline" />
+    <bpmn:sequenceFlow id="Flow_0kgevfg" sourceRef="Event_16ow9bg" targetRef="EndEvent_AlreadyEnrolled" />
+    <bpmn:sequenceFlow id="Flow_0kwi25w" sourceRef="taskOfficeCheck" targetRef="Gateway_0f1q0ss" />
     <bpmn:sequenceFlow id="Flow_0l6iwij" sourceRef="Event_0yf971t" targetRef="EndEvent_CourseNotFound" />
-    <bpmn:endEvent id="EndEvent_CourseNotFound" name="Send Course Not Found">
+    <bpmn:sequenceFlow id="Flow_0mfncwz" sourceRef="updateStatusChecking" targetRef="initialExistenceCheck" />
+    <bpmn:sequenceFlow id="Flow_0nq5d67" sourceRef="Gateway_0pvk1wz" targetRef="taskOfficeCheck">
       <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-        <zeebe:ioMapping>
-          <zeebe:input source="COURSE_NOT_FOUND" target="mailType" />
-        </zeebe:ioMapping>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${sendMailDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${(justificationType == "personal") or (justificationType == "other")}' -&gt; '=(justificationType = "personal") or (justificationType = "other")'.</conversion:message>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0l6iwij</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_06vh9r9" />
-    </bpmn:endEvent>
-    <bpmn:endEvent id="EndEvent_StudentNotFound" name="Send Student not found">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(justificationType = "personal") or (justificationType = "other")</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ob0zxi" sourceRef="Gateway_0f1q0ss" targetRef="Gateway_1tu7dt0" />
+    <bpmn:sequenceFlow id="Flow_0sr2obh" sourceRef="Gateway_0pvk1wz" targetRef="technicalCheck">
       <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-        <zeebe:ioMapping>
-          <zeebe:input source="STUDENT_NOT_FOUND" target="mailType" />
-        </zeebe:ioMapping>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${sendMailDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${(justificationType == "technical") or (justificationType == "other")}' -&gt; '=(justificationType = "technical") or (justificationType = "other")'.</conversion:message>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1fnck62</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0a7dnu4" />
-    </bpmn:endEvent>
-    <bpmn:endEvent id="EndEvent_AlreadyEnrolled" name="Send already enrolled">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(justificationType = "technical") or (justificationType = "other")</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0tsgbcm" sourceRef="TimeBoundaryEvent_AutoCancel" targetRef="updateStatusStoppedByTimer" />
+    <bpmn:sequenceFlow id="Flow_0whhznp" sourceRef="reviewOverbooking" targetRef="Gateway_1fouw7x" />
+    <bpmn:sequenceFlow id="Flow_0y1y7fq" sourceRef="enrollCours" targetRef="generateQrCodeTask" />
+    <bpmn:sequenceFlow id="Flow_115ywsr" sourceRef="Gateway_1ohzfcm" targetRef="checkCourseSizeProcess" />
+    <bpmn:sequenceFlow id="Flow_133tix0" sourceRef="updateStatusStoppedByTimer" targetRef="EndEvent_Stopped" />
+    <bpmn:sequenceFlow id="Flow_13upj83" sourceRef="StartEvent" targetRef="initVariables" />
+    <bpmn:sequenceFlow id="Flow_1bfbte1" sourceRef="Gateway_15uislg" targetRef="enrollCours" />
+    <bpmn:sequenceFlow id="Flow_1dvphgm" sourceRef="initVariables" targetRef="updateStatusChecking" />
+    <bpmn:sequenceFlow id="Flow_1edoeol" sourceRef="updateStatusJustifying" targetRef="userTaskCancelOrApply" />
+    <bpmn:sequenceFlow id="Flow_1fnck62" sourceRef="Event_0ekkseq" targetRef="EndEvent_StudentNotFound" />
+    <bpmn:sequenceFlow id="Flow_1gwxcj4" sourceRef="Event_1mbk6yi" targetRef="Gateway_1ohzfcm" />
+    <bpmn:sequenceFlow id="Flow_1hc4ia8" sourceRef="updateStatusStoppedByOverbookingRejection" targetRef="EndEvent_NoOverbooking" />
+    <bpmn:sequenceFlow id="Flow_1hmth07" sourceRef="userTaskCancelOrApply" targetRef="Gateway_05huf6g" />
+    <bpmn:sequenceFlow id="Flow_1i5riaz" sourceRef="checkRegistrationDeadline" targetRef="Gateway_InDeadline" />
+    <bpmn:sequenceFlow id="Flow_1kw8bwm" sourceRef="generateQrCodeTask" targetRef="updateStatusSuccessful" />
+    <bpmn:sequenceFlow id="Flow_1oieq6d" sourceRef="updateStatusStoppedByRejection" targetRef="EndEvent_Rejected" />
+    <bpmn:sequenceFlow id="Flow_1qpx5z3" sourceRef="updateStatusExamOfficeChecking" targetRef="storeJustification" />
+    <bpmn:sequenceFlow id="Flow_1y72yos" sourceRef="updateStatusStoppedByCancel" targetRef="EndEvent_Canceled" />
+    <bpmn:inclusiveGateway id="Gateway_0f1q0ss">
+      <bpmn:incoming>Flow_0kwi25w</bpmn:incoming>
+      <bpmn:incoming>Flow_08exkju</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ob0zxi</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:inclusiveGateway id="Gateway_0pvk1wz">
+      <bpmn:incoming>Flow_09hf0p7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nq5d67</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0sr2obh</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_15uislg">
+      <bpmn:incoming>Flow_0a7wlft</bpmn:incoming>
+      <bpmn:incoming>Flow_1sbmp1i</bpmn:incoming>
+      <bpmn:outgoing>Flow_1bfbte1</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_1ohzfcm">
+      <bpmn:incoming>Flow_069pg5e</bpmn:incoming>
+      <bpmn:incoming>Flow_1gwxcj4</bpmn:incoming>
+      <bpmn:outgoing>Flow_115ywsr</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="generateQrCodeTask" name="Generate QR Code Event for Calendar" implementation="##WebService">
       <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-        <zeebe:ioMapping>
-          <zeebe:input source="ALREADY_ENROLLED" target="mailType" />
-        </zeebe:ioMapping>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${sendMailDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <conversion:message severity="REVIEW">Attribute 'topic' on 'serviceTask' was mapped. Is set as job type.</conversion:message>
+        <conversion:message severity="INFO">Unused attribute 'type' on 'serviceTask' is removed.</conversion:message>
+        <zeebe:taskDefinition type="generateQrCode" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0kgevfg</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1hitmxl" />
-    </bpmn:endEvent>
-    <bpmn:endEvent id="EndEvent_PrerequisitesNotMet" name="Send Prerequisites not met">
+      <bpmn:incoming>Flow_0y1y7fq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kw8bwm</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:callActivity id="initialExistenceCheck" name="Initial existence check" calledElement="initialExistenceCheck">
       <bpmn:extensionElements>
-        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
-        <zeebe:ioMapping>
-          <zeebe:input source=" PREREQUISITES_NOT_MET" target="mailType" />
-        </zeebe:ioMapping>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${sendMailDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <conversion:message severity="INFO">Element 'camunda:in' with attribute 'variables="all"' is mapped to 'propagateAllParentVariables="true"'.</conversion:message>
+        <conversion:message severity="INFO">Element 'camunda:out' with attribute 'variables="all"' is mapped to 'propagateAllChildVariables="true"'.</conversion:message>
+        <zeebe:calledElement processId="initialExistenceCheck" propagateAllChildVariables="true" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_00hwkyv</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_02gwrfz" />
-    </bpmn:endEvent>
+      <bpmn:incoming>Flow_0mfncwz</bpmn:incoming>
+      <bpmn:outgoing>Flow_04dvgsy</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:serviceTask id="initVariables" name="Initialize variables">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="init-variables" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_13upj83</bpmn:incoming>
+      <bpmn:outgoing>Flow_1dvphgm</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_0tp9fim" name="Invalid Email Format" attachedToRef="initialExistenceCheck">
+      <bpmn:extensionElements>
+        <conversion:reference>Error_1i4qbxu</conversion:reference>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0cpos3f</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1ggbcdn" errorRef="Error_1i4qbxu" />
+    </bpmn:boundaryEvent>
+    <bpmn:exclusiveGateway id="Gateway_1tu7dt0" name="justification accepted?">
+      <bpmn:incoming>Flow_0ob0zxi</bpmn:incoming>
+      <bpmn:outgoing>Flow_16khaca</bpmn:outgoing>
+      <bpmn:outgoing>Flow_09a9q6e</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_16khaca" name="no" sourceRef="Gateway_1tu7dt0" targetRef="updateStatusStoppedByRejection">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!acceptJustification}' -&gt; '=not(acceptJustification)'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(acceptJustification)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06r5348" name="no" sourceRef="Gateway_05huf6g" targetRef="updateStatusExamOfficeChecking">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!cancelRegistration}' -&gt; '=not(cancelRegistration)'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(cancelRegistration)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_035de0m" name="no" sourceRef="Gateway_InDeadline" targetRef="updateStatusJustifying">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!registrationAllowed}' -&gt; '=not(registrationAllowed)'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(registrationAllowed)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0ko9zg9" name="no" sourceRef="Gateway_1fouw7x" targetRef="updateStatusStoppedByOverbookingRejection">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!overbooked}' -&gt; '=not(overbooked)'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(overbooked)</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1fouw7x" name="overbooked?">
+      <bpmn:incoming>Flow_0whhznp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sbmp1i</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0ko9zg9</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:boundaryEvent id="Event_1tjji2a" name="overbooking" attachedToRef="checkCourseSizeProcess">
+      <bpmn:extensionElements>
+        <conversion:message severity="WARNING">Attribute 'escalationCodeVariable' with value 'reviewOverbooking' on 'escalationEventDefinition' is not supported.</conversion:message>
+        <conversion:reference>Escalation_244frdp</conversion:reference>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_04jhlnx</bpmn:outgoing>
+      <bpmn:escalationEventDefinition id="EscalationEventDefinition_0std82b" escalationRef="Escalation_244frdp" />
+    </bpmn:boundaryEvent>
+    <bpmn:exclusiveGateway id="Gateway_InDeadline" name="Registration in deadline?">
+      <bpmn:incoming>Flow_1i5riaz</bpmn:incoming>
+      <bpmn:outgoing>Flow_035de0m</bpmn:outgoing>
+      <bpmn:outgoing>Flow_069pg5e</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
     <bpmn:endEvent id="EndEvent_Rejected" name="Registration rejected">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
         <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
         <zeebe:ioMapping>
-          <zeebe:input source="EXAM_REJECTION" target="mailType" />
+          <zeebe:input source="=&#34;EXAM_REJECTION&#34;" target="mailType" />
         </zeebe:ioMapping>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${sendMailDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
+        <zeebe:taskDefinition type="send-mail" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_16khaca</bpmn:incoming>
+      <bpmn:incoming>Flow_1oieq6d</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0v26jo8" />
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_NoOverbooking" name="Registration rejected">
@@ -531,37 +342,217 @@
         <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
         <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
         <zeebe:ioMapping>
-          <zeebe:input source="EXAM_REJECTION" target="mailType" />
+          <zeebe:input source="=&#34;EXAM_REJECTION&#34;" target="mailType" />
         </zeebe:ioMapping>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${sendMailDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
+        <zeebe:taskDefinition type="send-mail" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0ko9zg9</bpmn:incoming>
+      <bpmn:incoming>Flow_1hc4ia8</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0ggc1qx" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_Canceled" name="Registration stopped">
+      <bpmn:extensionElements>
+        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1y72yos</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_Stopped" name="Registration stopped">
+      <bpmn:extensionElements>
+        <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_133tix0</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_RegistrationSuccessful" name="Registration successful">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
         <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
         <zeebe:ioMapping>
-          <zeebe:input source="EXAM_CONFIRMATION" target="mailType" />
+          <zeebe:input source="=&#34;EXAM_CONFIRMATION&#34;" target="mailType" />
         </zeebe:ioMapping>
-        <zeebe:taskHeaders>
-          <zeebe:header key="delegateExpression" value="${sendMailDelegate}" />
-        </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
-        <zeebe:executionListeners>
-          <zeebe:executionListener eventType="start" type="statusListener" />
-        </zeebe:executionListeners>
+        <zeebe:taskDefinition type="send-mail" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1kw8bwm</bpmn:incoming>
+      <bpmn:incoming>Flow_0iecb7x</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0xirxog" />
     </bpmn:endEvent>
+    <bpmn:serviceTask id="removeJustification" name="Remove justification from successful registration" isForCompensation="true" implementation="##WebService">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${removeJustificationDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:taskHeaders>
+          <zeebe:header key="delegateExpression" value="${removeJustificationDelegate}" />
+        </zeebe:taskHeaders>
+        <zeebe:taskDefinition type="remove-justification" />
+      </bpmn:extensionElements>
+    </bpmn:serviceTask>
+    <bpmn:intermediateThrowEvent id="Event_1mbk6yi" name="Remove stored justification">
+      <bpmn:incoming>Flow_09a9q6e</bpmn:incoming>
+      <bpmn:outgoing>Flow_1gwxcj4</bpmn:outgoing>
+      <bpmn:compensateEventDefinition id="CompensateEventDefinition_0hgcpnd" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:userTask id="reviewOverbooking" name="Review overbooking" implementation="##unspecified">
+      <bpmn:extensionElements>
+        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
+        <zeebe:userTask />
+        <zeebe:assignmentDefinition assignee="" candidateUsers="" />
+        <zeebe:formDefinition formId="form-reviewOverbooking" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04jhlnx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0whhznp</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="userTaskCancelOrApply" name="Select application with justification or cancel" implementation="##unspecified">
+      <bpmn:extensionElements>
+        <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
+        <zeebe:userTask />
+        <zeebe:assignmentDefinition candidateUsers="" />
+        <zeebe:formDefinition formId="form-userTaskCancelOrApply" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1edoeol</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hmth07</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="EndEvent_AlreadyEnrolled" name="Send already enrolled">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;ALREADY_ENROLLED&#34;" target="mailType" />
+        </zeebe:ioMapping>
+        <zeebe:taskDefinition type="send-mail" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0kgevfg</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1hitmxl" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_CourseNotFound" name="Send Course Not Found">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;COURSE_NOT_FOUND&#34;" target="mailType" />
+        </zeebe:ioMapping>
+        <zeebe:taskDefinition type="send-mail" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0l6iwij</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_06vh9r9" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_PrerequisitesNotMet" name="Send Prerequisites not met">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;PREREQUISITES_NOT_MET&#34;" target="mailType" />
+        </zeebe:ioMapping>
+        <zeebe:taskDefinition type="send-mail" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00hwkyv</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_02gwrfz" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_StudentNotFound" name="Send Student not found">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'messageEventDefinition' was mapped. Delegate call to '${sendMailDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;STUDENT_NOT_FOUND&#34;" target="mailType" />
+        </zeebe:ioMapping>
+        <zeebe:taskDefinition type="send-mail" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1fnck62</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0a7dnu4" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_InvalidEmailFormat" name="Stop process">
+      <bpmn:incoming>Flow_0cpos3f</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="storeJustification" name="Store justification in DB" implementation="##WebService">
+      <bpmn:extensionElements>
+        <conversion:message severity="REVIEW">Attribute 'delegateExpression' on 'serviceTask' was mapped. Delegate call to '${storeJustificationDelegate}' was transformed to job type 'camunda-7-adapter'. Please review your implementation.</conversion:message>
+        <zeebe:taskHeaders>
+          <zeebe:header key="delegateExpression" value="${storeJustificationDelegate}" />
+        </zeebe:taskHeaders>
+        <zeebe:taskDefinition type="store-justification" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1qpx5z3</bpmn:incoming>
+      <bpmn:outgoing>Flow_09hf0p7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_0ekkseq" name="Student not found" attachedToRef="initialExistenceCheck">
+      <bpmn:extensionElements>
+        <conversion:reference>Error_02i2fc5</conversion:reference>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1fnck62</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1qliiyi" errorRef="Error_02i2fc5" />
+    </bpmn:boundaryEvent>
+    <bpmn:serviceTask id="updateStatusChecking" name="Update Status: Checking">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1dvphgm</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mfncwz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="updateStatusExamOfficeChecking" name="Update Status: Exam Office Checking">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06r5348</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qpx5z3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="updateStatusJustifying" name="Update Status: Justifying">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_035de0m</bpmn:incoming>
+      <bpmn:outgoing>Flow_1edoeol</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="updateStatusStoppedByCancel" name="Update Status: Stopped">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_047b1dt</bpmn:incoming>
+      <bpmn:outgoing>Flow_1y72yos</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="updateStatusStoppedByTimer" name="Update Status: Stopped">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0tsgbcm</bpmn:incoming>
+      <bpmn:outgoing>Flow_133tix0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="updateStatusStoppedByOverbookingRejection" name="Update Status: Stopped">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ko9zg9</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hc4ia8</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="updateStatusStoppedByRejection" name="Update Status: Stopped">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16khaca</bpmn:incoming>
+      <bpmn:outgoing>Flow_1oieq6d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_047b1dt" name="yes" sourceRef="Gateway_05huf6g" targetRef="updateStatusStoppedByCancel">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${cancelRegistration}' -&gt; '=cancelRegistration'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cancelRegistration</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_09a9q6e" name="yes" sourceRef="Gateway_1tu7dt0" targetRef="Event_1mbk6yi">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${acceptJustification}' -&gt; '=acceptJustification'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=acceptJustification</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1sbmp1i" name="yes" sourceRef="Gateway_1fouw7x" targetRef="Gateway_15uislg">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${overbooked}' -&gt; '=overbooked'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=overbooked</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_069pg5e" name="yes" sourceRef="Gateway_InDeadline" targetRef="Gateway_1ohzfcm">
+      <bpmn:extensionElements>
+        <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${registrationAllowed}' -&gt; '=registrationAllowed'.</conversion:message>
+      </bpmn:extensionElements>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=registrationAllowed</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="updateStatusSuccessful" name="Update Status: Successful">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="update-status" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1kw8bwm</bpmn:incoming>
+      <bpmn:outgoing>Flow_0iecb7x</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0iecb7x" sourceRef="updateStatusSuccessful" targetRef="EndEvent_RegistrationSuccessful" />
     <bpmn:textAnnotation id="TextAnnotation_1argorg">
       <bpmn:text>checks if student and course are valid and if the student is already registered to the course</bpmn:text>
     </bpmn:textAnnotation>
@@ -626,431 +617,451 @@
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="examRegistration">
+      <bpmndi:BPMNShape id="Gateway_05huf6g_di" bpmnElement="Gateway_05huf6g" isMarkerVisible="true">
+        <dc:Bounds x="1555" y="745" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1549" y="805" width="61" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_093efik" bpmnElement="updateStatusSuccessful">
+        <dc:Bounds x="3070" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0qfnyzv" bpmnElement="generateQrCodeTask">
+        <dc:Bounds x="2920" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xho5tf_di" bpmnElement="EndEvent_RegistrationSuccessful" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="3212" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3203" y="385" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kki1q0_di" bpmnElement="checkAllPrerequisites">
+        <dc:Bounds x="800" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0fc8due_di" bpmnElement="checkCourseSizeProcess">
+        <dc:Bounds x="2370" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0vhx1yz_di" bpmnElement="technicalCheck">
+        <dc:Bounds x="1940" y="570" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jwh4wd_di" bpmnElement="checkRegistrationDeadline">
+        <dc:Bounds x="980" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qx8mlq_di" bpmnElement="taskOfficeCheck">
+        <dc:Bounds x="1940" y="440" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent">
         <dc:Bounds x="162" y="342" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="154" y="385" width="55" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1tu7dt0_di" bpmnElement="Gateway_1tu7dt0" isMarkerVisible="true">
-        <dc:Bounds x="2135" y="525" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2133" y="585" width="54" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0qx8mlq_di" bpmnElement="taskOfficeCheck">
-        <dc:Bounds x="1870" y="440" width="100" height="80" />
+      <bpmndi:BPMNShape id="BPMNShape_1xlbb2s" bpmnElement="enrollCours">
+        <dc:Bounds x="2770" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1vnxayh_di" bpmnElement="EndEvent_Canceled" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
-        <dc:Bounds x="3012" y="752" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3000" y="796" width="59" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_05huf6g_di" bpmnElement="Gateway_05huf6g" isMarkerVisible="true">
-        <dc:Bounds x="1485" y="745" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1479" y="805" width="61" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0qnylg5_di" bpmnElement="userTaskCancelOrApply">
-        <dc:Bounds x="1310" y="730" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1lu1mxj_di" bpmnElement="Gateway_InDeadline" isMarkerVisible="true">
-        <dc:Bounds x="1085" y="335" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1075" y="298" width="71" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1m14kdc_di" bpmnElement="EndEvent_InvalidEmailFormat" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="482" y="162" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="407" y="158" width="65" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1u279ep_di" bpmnElement="EndEvent_Stopped" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
-        <dc:Bounds x="3012" y="852" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="3001" y="895" width="59" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_14s0rvq_di" bpmnElement="Event_StatusChecking">
-        <dc:Bounds x="352" y="342" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="347" y="306" width="46" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0z5g2c9_di" bpmnElement="Event_0z5g2c9">
-        <dc:Bounds x="1492" y="532" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1481" y="482" width="58" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0npinso_di" bpmnElement="Event_0npinso">
-        <dc:Bounds x="1182" y="752" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1160" y="795" width="84" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0y9821w_di" bpmnElement="initialExistenceCheck">
-        <dc:Bounds x="500" y="320" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1rylwqs_di" bpmnElement="Gateway_0pvk1wz">
-        <dc:Bounds x="1769" y="525" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_01jb42b_di" bpmnElement="Gateway_0f1q0ss">
-        <dc:Bounds x="2025" y="525" width="50" height="50" />
+        <dc:Bounds x="2095" y="525" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0vhx1yz_di" bpmnElement="technicalCheck">
-        <dc:Bounds x="1870" y="570" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1cyh1ro_di" bpmnElement="storeJustification">
-        <dc:Bounds x="1610" y="510" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ozjhob_di" bpmnElement="removeJustification">
-        <dc:Bounds x="1660" y="640" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0o3jpiw" bpmnElement="Event_1mbk6yi">
-        <dc:Bounds x="2142" y="412" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2179" y="416" width="75" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0fc8due_di" bpmnElement="checkCourseSizeProcess">
-        <dc:Bounds x="2300" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1xlbb2s" bpmnElement="enrollCours">
-        <dc:Bounds x="2740" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_15ho6xu" bpmnElement="reviewOverbooking">
-        <dc:Bounds x="2330" y="140" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="Gateway_1rylwqs_di" bpmnElement="Gateway_0pvk1wz">
+        <dc:Bounds x="1839" y="525" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_15uislg_di" bpmnElement="Gateway_15uislg" isMarkerVisible="true">
-        <dc:Bounds x="2575" y="335" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1fouw7x_di" bpmnElement="Gateway_1fouw7x" isMarkerVisible="true">
-        <dc:Bounds x="2485" y="155" width="50" height="50" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2478" y="212" width="64" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0qfnyzv" bpmnElement="generateQrCodeTask">
-        <dc:Bounds x="2880" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0kki1q0_di" bpmnElement="checkAllPrerequisites">
-        <dc:Bounds x="730" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0flsh6y_di" bpmnElement="Event_StatusEnrolling">
-        <dc:Bounds x="2672" y="342" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2649" y="318" width="81" height="14" />
-        </bpmndi:BPMNLabel>
+        <dc:Bounds x="2645" y="335" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1ohzfcm_di" bpmnElement="Gateway_1ohzfcm" isMarkerVisible="true">
-        <dc:Bounds x="2135" y="335" width="50" height="50" />
+        <dc:Bounds x="2205" y="335" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1jwh4wd_di" bpmnElement="checkRegistrationDeadline">
-        <dc:Bounds x="910" y="320" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0y9821w_di" bpmnElement="initialExistenceCheck">
+        <dc:Bounds x="570" y="320" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1j6kk66_di" bpmnElement="EndEvent_CourseNotFound" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="582" y="532" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_1nttadf_di" bpmnElement="initVariables">
+        <dc:Bounds x="240" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1tu7dt0_di" bpmnElement="Gateway_1tu7dt0" isMarkerVisible="true">
+        <dc:Bounds x="2205" y="525" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="627" y="556" width="85" height="27" />
+          <dc:Bounds x="2203" y="585" width="54" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1x3wyir_di" bpmnElement="EndEvent_StudentNotFound" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="482" y="532" width="36" height="36" />
+      <bpmndi:BPMNShape id="Gateway_1fouw7x_di" bpmnElement="Gateway_1fouw7x" isMarkerVisible="true">
+        <dc:Bounds x="2555" y="155" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="387" y="556" width="86" height="27" />
+          <dc:Bounds x="2548" y="212" width="64" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_12jre2h_di" bpmnElement="EndEvent_AlreadyEnrolled" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="582" y="162" width="36" height="36" />
+      <bpmndi:BPMNShape id="Gateway_1lu1mxj_di" bpmnElement="Gateway_InDeadline" isMarkerVisible="true">
+        <dc:Bounds x="1155" y="335" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="628" y="166" width="65" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0gnx6ob" bpmnElement="EndEvent_PrerequisitesNotMet" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="812" y="162" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="788" y="119" width="83" height="40" />
+          <dc:Bounds x="1145" y="298" width="71" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0lu8f08_di" bpmnElement="EndEvent_Rejected" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
-        <dc:Bounds x="3012" y="532" width="36" height="36" />
+        <dc:Bounds x="3082" y="532" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3001" y="575" width="59" height="27" />
+          <dc:Bounds x="3071" y="575" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0nw1qv0" bpmnElement="EndEvent_NoOverbooking" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
-        <dc:Bounds x="3012" y="82" width="36" height="36" />
+        <dc:Bounds x="3082" y="82" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3001" y="125" width="59" height="27" />
+          <dc:Bounds x="3071" y="125" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0xho5tf_di" bpmnElement="EndEvent_RegistrationSuccessful" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
-        <dc:Bounds x="3012" y="342" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_1vnxayh_di" bpmnElement="EndEvent_Canceled" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="3082" y="752" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3003" y="385" width="59" height="27" />
+          <dc:Bounds x="3070" y="796" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1argorg_di" bpmnElement="TextAnnotation_1argorg">
-        <dc:Bounds x="190" y="135" width="140" height="84" />
+      <bpmndi:BPMNShape id="Event_1u279ep_di" bpmnElement="EndEvent_Stopped" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="3082" y="852" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3071" y="895" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ozjhob_di" bpmnElement="removeJustification">
+        <dc:Bounds x="1730" y="640" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0o3jpiw" bpmnElement="Event_1mbk6yi">
+        <dc:Bounds x="2212" y="412" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2249" y="416" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_15ho6xu" bpmnElement="reviewOverbooking">
+        <dc:Bounds x="2400" y="140" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0tyn9hr_di" bpmnElement="Event_02q8z0p">
-        <dc:Bounds x="812" y="302" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_0qnylg5_di" bpmnElement="userTaskCancelOrApply">
+        <dc:Bounds x="1380" y="730" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12jre2h_di" bpmnElement="EndEvent_AlreadyEnrolled" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="652" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="698" y="166" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1j6kk66_di" bpmnElement="EndEvent_CourseNotFound" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="652" y="532" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="697" y="556" width="85" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0gnx6ob" bpmnElement="EndEvent_PrerequisitesNotMet" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="882" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="858" y="119" width="83" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1x3wyir_di" bpmnElement="EndEvent_StudentNotFound" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="552" y="532" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="457" y="556" width="86" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1m14kdc_di" bpmnElement="EndEvent_InvalidEmailFormat" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="552" y="162" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="477" y="158" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cyh1ro_di" bpmnElement="storeJustification">
+        <dc:Bounds x="1680" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1bipk9r_di" bpmnElement="updateStatusChecking">
+        <dc:Bounds x="380" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a218p3" bpmnElement="updateStatusExamOfficeChecking">
+        <dc:Bounds x="1530" y="570" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_097nmy6" bpmnElement="updateStatusJustifying">
+        <dc:Bounds x="1220" y="730" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1oyyz8p" bpmnElement="updateStatusStoppedByCancel">
+        <dc:Bounds x="2950" y="730" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0000fve" bpmnElement="updateStatusStoppedByTimer">
+        <dc:Bounds x="2950" y="830" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_09adrct" bpmnElement="updateStatusStoppedByOverbookingRejection">
+        <dc:Bounds x="2950" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0td3a3w" bpmnElement="updateStatusStoppedByRejection">
+        <dc:Bounds x="2950" y="510" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1argorg_di" bpmnElement="TextAnnotation_1argorg">
+        <dc:Bounds x="260" y="135" width="140" height="84" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0sp1xup_di" bpmnElement="Event_0ekkseq">
+        <dc:Bounds x="552" y="382" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="476" y="423" width="87" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1aoo6f2_di" bpmnElement="Event_1tjji2a">
-        <dc:Bounds x="2362" y="302" width="36" height="36" />
+        <dc:Bounds x="2432" y="302" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2400" y="293" width="60" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0bwa7py_di" bpmnElement="compensateStoreJustification">
-        <dc:Bounds x="1692" y="572" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_13zi939_di" bpmnElement="Event_16ow9bg">
-        <dc:Bounds x="582" y="302" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="610" y="293" width="80" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1l22dn5_di" bpmnElement="Event_0yf971t">
-        <dc:Bounds x="582" y="382" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="617" y="423" width="85" height="14" />
+          <dc:Bounds x="2470" y="293" width="60" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0w3212q_di" bpmnElement="Event_0tp9fim">
-        <dc:Bounds x="482" y="302" width="36" height="36" />
+        <dc:Bounds x="552" y="302" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="428" y="276" width="63" height="27" />
+          <dc:Bounds x="498" y="276" width="63" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0sp1xup_di" bpmnElement="Event_0ekkseq">
-        <dc:Bounds x="482" y="382" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0tyn9hr_di" bpmnElement="Event_02q8z0p">
+        <dc:Bounds x="882" y="302" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1l22dn5_di" bpmnElement="Event_0yf971t">
+        <dc:Bounds x="652" y="382" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="406" y="423" width="87" height="14" />
+          <dc:Bounds x="687" y="423" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0bwa7py_di" bpmnElement="compensateStoreJustification">
+        <dc:Bounds x="1762" y="572" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_13zi939_di" bpmnElement="Event_16ow9bg">
+        <dc:Bounds x="652" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="680" y="293" width="80" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_18q8jnm_di" bpmnElement="TimeBoundaryEvent_AutoCancel">
-        <dc:Bounds x="1392" y="792" width="36" height="36" />
+        <dc:Bounds x="1462" y="792" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1331" y="823" width="58" height="14" />
+          <dc:Bounds x="1401" y="823" width="58" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_00hwkyv_di" bpmnElement="Flow_00hwkyv" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="900" y="302" />
+        <di:waypoint x="900" y="198" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04dvgsy_di" bpmnElement="Flow_04dvgsy" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="670" y="360" />
+        <di:waypoint x="800" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_04jhlnx_di" bpmnElement="Flow_04jhlnx">
+        <di:waypoint x="2450" y="302" />
+        <di:waypoint x="2450" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08exkju_di" bpmnElement="Flow_08exkju">
+        <di:waypoint x="2040" y="610" />
+        <di:waypoint x="2120" y="610" />
+        <di:waypoint x="2120" y="575" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09hf0p7_di" bpmnElement="Flow_09hf0p7">
+        <di:waypoint x="1780" y="550" />
+        <di:waypoint x="1839" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0a7wlft_di" bpmnElement="Flow_0a7wlft" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="2470" y="360" />
+        <di:waypoint x="2645" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cpos3f_di" bpmnElement="Flow_0cpos3f" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="570" y="302" />
+        <di:waypoint x="570" y="198" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0db73ot_di" bpmnElement="Flow_0db73ot">
+        <di:waypoint x="900" y="360" />
+        <di:waypoint x="980" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kgevfg_di" bpmnElement="Flow_0kgevfg" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="670" y="302" />
+        <di:waypoint x="670" y="198" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0kwi25w_di" bpmnElement="Flow_0kwi25w">
+        <di:waypoint x="2040" y="480" />
+        <di:waypoint x="2120" y="480" />
+        <di:waypoint x="2120" y="525" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0l6iwij_di" bpmnElement="Flow_0l6iwij" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="670" y="418" />
+        <di:waypoint x="670" y="532" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mfncwz_di" bpmnElement="Flow_0mfncwz">
+        <di:waypoint x="480" y="360" />
+        <di:waypoint x="570" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nq5d67_di" bpmnElement="Flow_0nq5d67">
+        <di:waypoint x="1864" y="525" />
+        <di:waypoint x="1864" y="480" />
+        <di:waypoint x="1940" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ob0zxi_di" bpmnElement="Flow_0ob0zxi">
+        <di:waypoint x="2145" y="550" />
+        <di:waypoint x="2205" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sr2obh_di" bpmnElement="Flow_0sr2obh">
+        <di:waypoint x="1864" y="575" />
+        <di:waypoint x="1864" y="610" />
+        <di:waypoint x="1940" y="610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tsgbcm_di" bpmnElement="Flow_0tsgbcm">
+        <di:waypoint x="1480" y="828" />
+        <di:waypoint x="1480" y="870" />
+        <di:waypoint x="2950" y="870" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0whhznp_di" bpmnElement="Flow_0whhznp">
+        <di:waypoint x="2500" y="180" />
+        <di:waypoint x="2555" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0y1y7fq_di" bpmnElement="Flow_0y1y7fq" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="2870" y="360" />
+        <di:waypoint x="2920" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_115ywsr_di" bpmnElement="Flow_115ywsr" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="2255" y="360" />
+        <di:waypoint x="2370" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_133tix0_di" bpmnElement="Flow_133tix0">
+        <di:waypoint x="3050" y="870" />
+        <di:waypoint x="3082" y="870" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13upj83_di" bpmnElement="Flow_13upj83" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="198" y="360" />
-        <di:waypoint x="352" y="360" />
+        <di:waypoint x="240" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bfbte1_di" bpmnElement="Flow_1bfbte1" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="2695" y="360" />
+        <di:waypoint x="2770" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1dvphgm_di" bpmnElement="Flow_1dvphgm">
+        <di:waypoint x="340" y="360" />
+        <di:waypoint x="380" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1edoeol_di" bpmnElement="Flow_1edoeol">
+        <di:waypoint x="1320" y="770" />
+        <di:waypoint x="1380" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1fnck62_di" bpmnElement="Flow_1fnck62" bioc:stroke="#831311" color:border-color="#831311">
+        <di:waypoint x="570" y="418" />
+        <di:waypoint x="570" y="532" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gwxcj4_di" bpmnElement="Flow_1gwxcj4">
+        <di:waypoint x="2230" y="412" />
+        <di:waypoint x="2230" y="385" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hc4ia8_di" bpmnElement="Flow_1hc4ia8">
+        <di:waypoint x="3050" y="100" />
+        <di:waypoint x="3082" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hmth07_di" bpmnElement="Flow_1hmth07">
+        <di:waypoint x="1480" y="770" />
+        <di:waypoint x="1555" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1i5riaz_di" bpmnElement="Flow_1i5riaz" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="1080" y="360" />
+        <di:waypoint x="1155" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kw8bwm_di" bpmnElement="Flow_1kw8bwm" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="3020" y="360" />
+        <di:waypoint x="3070" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1oieq6d_di" bpmnElement="Flow_1oieq6d">
+        <di:waypoint x="3050" y="550" />
+        <di:waypoint x="3082" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qpx5z3_di" bpmnElement="Flow_1qpx5z3">
+        <di:waypoint x="1580" y="570" />
+        <di:waypoint x="1580" y="550" />
+        <di:waypoint x="1680" y="550" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y72yos_di" bpmnElement="Flow_1y72yos">
+        <di:waypoint x="3050" y="770" />
+        <di:waypoint x="3082" y="770" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16khaca_di" bpmnElement="Flow_16khaca">
-        <di:waypoint x="2185" y="550" />
-        <di:waypoint x="3012" y="550" />
+        <di:waypoint x="2255" y="550" />
+        <di:waypoint x="2950" y="550" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2267" y="533" width="13" height="14" />
+          <dc:Bounds x="2331" y="533" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06r5348_di" bpmnElement="Flow_06r5348">
-        <di:waypoint x="1510" y="745" />
-        <di:waypoint x="1510" y="568" />
+        <di:waypoint x="1580" y="745" />
+        <di:waypoint x="1580" y="650" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1473" y="663" width="13" height="14" />
+          <dc:Bounds x="1543" y="685" width="13" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_047b1dt_di" bpmnElement="Flow_047b1dt">
-        <di:waypoint x="1535" y="770" />
-        <di:waypoint x="3012" y="770" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1888" y="752" width="18" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1hmth07_di" bpmnElement="Flow_1hmth07">
-        <di:waypoint x="1410" y="770" />
-        <di:waypoint x="1485" y="770" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_035de0m_di" bpmnElement="Flow_035de0m">
-        <di:waypoint x="1110" y="385" />
-        <di:waypoint x="1110" y="770" />
-        <di:waypoint x="1182" y="770" />
+        <di:waypoint x="1180" y="385" />
+        <di:waypoint x="1180" y="770" />
+        <di:waypoint x="1220" y="770" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1093" y="640" width="13" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_04dvgsy_di" bpmnElement="Flow_04dvgsy" bioc:stroke="#205022" color:border-color="#205022">
-        <di:waypoint x="600" y="360" />
-        <di:waypoint x="730" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0cpos3f_di" bpmnElement="Flow_0cpos3f" bioc:stroke="#831311" color:border-color="#831311">
-        <di:waypoint x="500" y="302" />
-        <di:waypoint x="500" y="198" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0tsgbcm_di" bpmnElement="Flow_0tsgbcm">
-        <di:waypoint x="1410" y="828" />
-        <di:waypoint x="1410" y="870" />
-        <di:waypoint x="3012" y="870" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_02yyfyv_di" bpmnElement="Flow_02yyfyv">
-        <di:waypoint x="388" y="360" />
-        <di:waypoint x="500" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_10sq00o_di" bpmnElement="Flow_10sq00o">
-        <di:waypoint x="1528" y="550" />
-        <di:waypoint x="1610" y="550" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_09bc11a_di" bpmnElement="Flow_09bc11a">
-        <di:waypoint x="1218" y="770" />
-        <di:waypoint x="1310" y="770" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_09a9q6e_di" bpmnElement="Flow_09a9q6e">
-        <di:waypoint x="2160" y="525" />
-        <di:waypoint x="2160" y="448" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2166" y="495" width="18" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1fnck62_di" bpmnElement="Flow_1fnck62" bioc:stroke="#831311" color:border-color="#831311">
-        <di:waypoint x="500" y="418" />
-        <di:waypoint x="500" y="532" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0kgevfg_di" bpmnElement="Flow_0kgevfg" bioc:stroke="#831311" color:border-color="#831311">
-        <di:waypoint x="600" y="302" />
-        <di:waypoint x="600" y="198" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0nq5d67_di" bpmnElement="Flow_0nq5d67">
-        <di:waypoint x="1794" y="525" />
-        <di:waypoint x="1794" y="480" />
-        <di:waypoint x="1870" y="480" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0sr2obh_di" bpmnElement="Flow_0sr2obh">
-        <di:waypoint x="1794" y="575" />
-        <di:waypoint x="1794" y="610" />
-        <di:waypoint x="1870" y="610" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0kwi25w_di" bpmnElement="Flow_0kwi25w">
-        <di:waypoint x="1970" y="480" />
-        <di:waypoint x="2050" y="480" />
-        <di:waypoint x="2050" y="525" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_08exkju_di" bpmnElement="Flow_08exkju">
-        <di:waypoint x="1970" y="610" />
-        <di:waypoint x="2050" y="610" />
-        <di:waypoint x="2050" y="575" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ob0zxi_di" bpmnElement="Flow_0ob0zxi">
-        <di:waypoint x="2075" y="550" />
-        <di:waypoint x="2135" y="550" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_09hf0p7_di" bpmnElement="Flow_09hf0p7">
-        <di:waypoint x="1710" y="550" />
-        <di:waypoint x="1769" y="550" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0a7wlft_di" bpmnElement="Flow_0a7wlft">
-        <di:waypoint x="2400" y="360" />
-        <di:waypoint x="2575" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1bfbte1_di" bpmnElement="Flow_1bfbte1">
-        <di:waypoint x="2625" y="360" />
-        <di:waypoint x="2672" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_04jhlnx_di" bpmnElement="Flow_04jhlnx">
-        <di:waypoint x="2380" y="302" />
-        <di:waypoint x="2380" y="220" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0y1y7fq_di" bpmnElement="Flow_0y1y7fq">
-        <di:waypoint x="2840" y="360" />
-        <di:waypoint x="2880" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0whhznp_di" bpmnElement="Flow_0whhznp">
-        <di:waypoint x="2430" y="180" />
-        <di:waypoint x="2485" y="180" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1sbmp1i_di" bpmnElement="Flow_1sbmp1i">
-        <di:waypoint x="2535" y="180" />
-        <di:waypoint x="2600" y="180" />
-        <di:waypoint x="2600" y="335" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2559" y="162" width="18" height="14" />
+          <dc:Bounds x="1142.9999999999998" y="633" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ko9zg9_di" bpmnElement="Flow_0ko9zg9">
-        <di:waypoint x="2510" y="155" />
-        <di:waypoint x="2510" y="100" />
-        <di:waypoint x="3012" y="100" />
+        <di:waypoint x="2580" y="155" />
+        <di:waypoint x="2580" y="100" />
+        <di:waypoint x="2950" y="100" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2519" y="125" width="13" height="14" />
+          <dc:Bounds x="2589" y="125" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1kw8bwm_di" bpmnElement="Flow_1kw8bwm">
-        <di:waypoint x="2980" y="360" />
-        <di:waypoint x="3012" y="360" />
+      <bpmndi:BPMNEdge id="Flow_047b1dt_di" bpmnElement="Flow_047b1dt">
+        <di:waypoint x="1605" y="770" />
+        <di:waypoint x="2950" y="770" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1966" y="752" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0db73ot_di" bpmnElement="Flow_0db73ot">
-        <di:waypoint x="830" y="360" />
-        <di:waypoint x="910" y="360" />
+      <bpmndi:BPMNEdge id="Flow_09a9q6e_di" bpmnElement="Flow_09a9q6e">
+        <di:waypoint x="2230" y="525" />
+        <di:waypoint x="2230" y="448" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2236" y="495" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00hwkyv_di" bpmnElement="Flow_00hwkyv" bioc:stroke="#831311" color:border-color="#831311">
-        <di:waypoint x="830" y="302" />
-        <di:waypoint x="830" y="198" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1gwxcj4_di" bpmnElement="Flow_1gwxcj4">
-        <di:waypoint x="2160" y="412" />
-        <di:waypoint x="2160" y="385" />
+      <bpmndi:BPMNEdge id="Flow_1sbmp1i_di" bpmnElement="Flow_1sbmp1i">
+        <di:waypoint x="2605" y="180" />
+        <di:waypoint x="2670" y="180" />
+        <di:waypoint x="2670" y="335" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2629" y="162" width="18" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_069pg5e_di" bpmnElement="Flow_069pg5e" bioc:stroke="#205022" color:border-color="#205022">
-        <di:waypoint x="1135" y="360" />
-        <di:waypoint x="2135" y="360" />
+        <di:waypoint x="1205" y="360" />
+        <di:waypoint x="2205" y="360" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1538" y="343" width="18" height="14" />
+          <dc:Bounds x="1608" y="343" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_115ywsr_di" bpmnElement="Flow_115ywsr">
-        <di:waypoint x="2185" y="360" />
-        <di:waypoint x="2300" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03vp801_di" bpmnElement="Flow_03vp801">
-        <di:waypoint x="2708" y="360" />
-        <di:waypoint x="2740" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1i5riaz_di" bpmnElement="Flow_1i5riaz" bioc:stroke="#205022" color:border-color="#205022">
-        <di:waypoint x="1010" y="360" />
-        <di:waypoint x="1085" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0l6iwij_di" bpmnElement="Flow_0l6iwij" bioc:stroke="#831311" color:border-color="#831311">
-        <di:waypoint x="600" y="418" />
-        <di:waypoint x="600" y="532" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_09mglk5_di" bpmnElement="Association_09mglk5">
-        <di:waypoint x="500" y="350" />
-        <di:waypoint x="295" y="219" />
+        <di:waypoint x="570" y="350" />
+        <di:waypoint x="365" y="219" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_1777kox_di" bpmnElement="Association_1777kox">
-        <di:waypoint x="1710" y="608" />
-        <di:waypoint x="1710" y="640" />
+        <di:waypoint x="1780" y="608" />
+        <di:waypoint x="1780" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0iecb7x_di" bpmnElement="Flow_0iecb7x" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="3170" y="360" />
+        <di:waypoint x="3212" y="360" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_0whduo3">
     <bpmndi:BPMNPlane id="BPMNPlane_04ea020" bpmnElement="checkCourseSizeProcess">
-      <bpmndi:BPMNShape id="Event_15qarr1_di" bpmnElement="Event_15qarr1">
-        <dc:Bounds x="152" y="252" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="151" y="295" width="80" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0k5x9ce_di" bpmnElement="Event_1a6yz20">
-        <dc:Bounds x="412" y="112" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="398" y="82" width="72" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1e1u4l5" bpmnElement="checkCourseSize">
         <dc:Bounds x="250" y="230" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -1067,14 +1078,18 @@
           <dc:Bounds x="868" y="295" width="84" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0due5t0_di" bpmnElement="Flow_0due5t0">
-        <di:waypoint x="188" y="270" />
-        <di:waypoint x="250" y="270" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_1ekjm6a" bpmnElement="Flow_1p9y6tn">
-        <di:waypoint x="350" y="270" />
-        <di:waypoint x="405" y="270" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_15qarr1_di" bpmnElement="Event_15qarr1">
+        <dc:Bounds x="152" y="252" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="151" y="295" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0k5x9ce_di" bpmnElement="Event_1a6yz20">
+        <dc:Bounds x="412" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="398" y="82" width="72" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0394vm8_di" bpmnElement="Flow_0394vm8">
         <di:waypoint x="455" y="270" />
         <di:waypoint x="552" y="270" />
@@ -1083,16 +1098,18 @@
         <di:waypoint x="430" y="245" />
         <di:waypoint x="430" y="148" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0due5t0_di" bpmnElement="Flow_0due5t0">
+        <di:waypoint x="188" y="270" />
+        <di:waypoint x="250" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1ekjm6a" bpmnElement="Flow_1p9y6tn">
+        <di:waypoint x="350" y="270" />
+        <di:waypoint x="405" y="270" />
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1q0g0j3">
     <bpmndi:BPMNPlane id="BPMNPlane_0seg1iz" bpmnElement="checkAllPrerequisites">
-      <bpmndi:BPMNShape id="Event_05mr2no_di" bpmnElement="Event_05mr2no">
-        <dc:Bounds x="182" y="102" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="159" y="145" width="84" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ld0j4x_di" bpmnElement="checkPrerequisite">
         <dc:Bounds x="310" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -1109,6 +1126,12 @@
           <dc:Bounds x="480" y="225" width="83" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_05mr2no_di" bpmnElement="Event_05mr2no">
+        <dc:Bounds x="182" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="159" y="145" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1837ir0_di" bpmnElement="Event_1eq3mjc">
         <dc:Bounds x="392" y="142" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -1116,14 +1139,14 @@
         <di:waypoint x="218" y="120" />
         <di:waypoint x="310" y="120" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1kcrrbw_di" bpmnElement="Flow_1kcrrbw" bioc:stroke="#205022" color:border-color="#205022">
-        <di:waypoint x="410" y="120" />
-        <di:waypoint x="502" y="120" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0m80oo8_di" bpmnElement="Flow_0m80oo8" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="410" y="178" />
         <di:waypoint x="410" y="200" />
         <di:waypoint x="502" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kcrrbw_di" bpmnElement="Flow_1kcrrbw" bioc:stroke="#205022" color:border-color="#205022">
+        <di:waypoint x="410" y="120" />
+        <di:waypoint x="502" y="120" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

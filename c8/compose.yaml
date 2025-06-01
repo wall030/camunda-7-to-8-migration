@@ -18,6 +18,11 @@ services:
       SPRING_MAIL_USERNAME: "PLACEHOLDER"
       SPRING_MAIL_PASSWORD: "PLACEHOLDER"
       SPRING_MAIL_HOST: "smtp.office365.com"
+
+      ZEEBE_CLIENT_ID: "PLACEHOLDER"
+      ZEEBE_CLIENT_SECRET: "PLACEHOLDER"
+      ZEEBE_CLUSTER_ID: "PLACEHOLDER"
+      CLUSTER_REGION: "bru-2"
     ports:
       - "8080:8080"
     depends_on:
@@ -25,7 +30,12 @@ services:
 
   external-task-worker:
     build: external
+    environment:
+      ZEEBE_ADDRESS: "PLACEHOLDER"
+      ZEEBE_REST_ADDRESS: "PLACEHOLDER"
+      ZEEBE_CLIENT_ID: "PLACEHOLDER"
+      ZEEBE_CLIENT_SECRET: "PLACEHOLDER"
+      CAMUNDA_OAUTH_STRATEGY: "OAUTH"
+      CAMUNDA_OAUTH_URL: "https://login.cloud.camunda.io/oauth/token"
     depends_on:
       - app
-    environment:
-      BASE_URL: http://app:8080/engine-rest

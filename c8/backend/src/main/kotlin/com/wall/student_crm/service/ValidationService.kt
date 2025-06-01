@@ -18,7 +18,7 @@ class ValidationService(
         private val logger: Logger = LoggerFactory.getLogger(ValidationService::class.java)
     }
 
-    @Transactional("businessTransactionManager", readOnly = true)
+    @Transactional(readOnly = true)
     fun courseExists(courseName: String): Boolean {
         logger.info("Entering checkCourseExists with courseName={}", courseName)
         if (!courseRepository.existsByName(courseName)) {
@@ -41,7 +41,7 @@ class ValidationService(
         return true
     }
 
-    @Transactional("businessTransactionManager", readOnly = true)
+    @Transactional(readOnly = true)
     fun isEnrolled(studentEmail: String, courseName: String): Boolean {
         logger.info("Entering checkEnrollment with courseName={}", courseName)
         val studentId = camundaUserService.getUserIdByEmail(studentEmail)!!
@@ -64,7 +64,7 @@ class ValidationService(
         return missing
     }
 
-    @Transactional("businessTransactionManager", readOnly = true)
+    @Transactional(readOnly = true)
     fun studentExists(studentEmail: String): Boolean {
         logger.info("Entering checkStudentExists")
         if (!camundaUserService.existsByEmail(studentEmail)) {

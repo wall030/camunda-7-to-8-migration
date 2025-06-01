@@ -1,4 +1,12 @@
 {
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "f35ea64"
+  },
+  "schemaVersion": 18,
+  "id": "form-reviewOverbooking",
   "components": [
     {
       "label": "Overbook Course",
@@ -11,13 +19,5 @@
       "key": "overbooked"
     }
   ],
-  "type": "default",
-  "id": "form-reviewOverbooking",
-  "executionPlatform": "Camunda Cloud",
-  "executionPlatformVersion": "8.6.0",
-  "exporter": {
-    "name": "Camunda Modeler",
-    "version": "5.35.0"
-  },
-  "schemaVersion": 18
+  "type": "default"
 }

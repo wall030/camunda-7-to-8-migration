@@ -1,7 +1,6 @@
 package com.wall.student_crm.rest
 
 import com.wall.student_crm.rest.dto.RegistrationDto
-import org.camunda.bpm.engine.RuntimeService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/process")
 class ProcessController(
-    private val runtimeService: RuntimeService
+    // private val runtimeService: RuntimeService
 ) {
-
+/*
     @PostMapping("/registerExam")
     fun startRegistrationProcess(@RequestBody registration: RegistrationDto): ResponseEntity<String> {
         val variables = mapOf(
@@ -29,5 +28,5 @@ class ProcessController(
         val processInstance = runtimeService.startProcessInstanceByKey("examRegistration", variables)
         return ResponseEntity.ok(processInstance.id)
     }
-
+ */
 }

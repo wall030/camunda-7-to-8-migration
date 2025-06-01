@@ -1,14 +1,14 @@
 package com.wall.student_crm
 
-import com.wall.student_crm.camunda.delegates.EnrollCourseDelegate
-import com.wall.student_crm.camunda.delegates.IncreaseCourseSizeDelegate
-import com.wall.student_crm.camunda.delegates.RemoveJustificationDelegate
-import com.wall.student_crm.camunda.delegates.StoreJustificationDelegate
-import com.wall.student_crm.camunda.delegates.validation.CheckCourseExistsDelegate
-import com.wall.student_crm.camunda.delegates.CheckCourseFullDelegate
-import com.wall.student_crm.camunda.delegates.validation.CheckEmailFormatDelegate
-import com.wall.student_crm.camunda.delegates.validation.CheckEnrollmentDelegate
-import com.wall.student_crm.camunda.delegates.validation.CheckStudentExistsDelegate
+import com.wall.student_crm.camunda.worker.EnrollCourseDelegate
+import com.wall.student_crm.camunda.worker.IncreaseCourseSizeDelegate
+import com.wall.student_crm.camunda.worker.RemoveJustificationDelegate
+import com.wall.student_crm.camunda.worker.StoreJustificationDelegate
+import com.wall.student_crm.camunda.worker.validation.CheckCourseExistsDelegate
+import com.wall.student_crm.camunda.worker.CheckCourseFullDelegate
+import com.wall.student_crm.camunda.worker.validation.CheckEmailFormatDelegate
+import com.wall.student_crm.camunda.worker.validation.CheckEnrollmentDelegate
+import com.wall.student_crm.camunda.worker.validation.CheckStudentExistsDelegate
 import com.wall.student_crm.camunda.listeners.InitVariablesListener
 import com.wall.student_crm.camunda.listeners.StatusListener
 import com.wall.student_crm.service.CamundaUserService

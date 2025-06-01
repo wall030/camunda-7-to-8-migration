@@ -1,0 +1,73 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "f35ea64"
+  },
+  "schemaVersion": 18,
+  "id": "form-start-exam-registration",
+  "components": [
+    {
+      "label": "E-Mail",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0chchoo",
+        "columns": null
+      },
+      "id": "Field_0mdt2nr",
+      "key": "studentEmail"
+    },
+    {
+      "label": "Prerequisite A",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_1gda306",
+        "columns": null
+      },
+      "id": "Field_14haz39",
+      "key": "prerequisiteA"
+    },
+    {
+      "label": "Prerequisite B",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_12og68n",
+        "columns": null
+      },
+      "id": "Field_18bnara",
+      "key": "prerequisiteB"
+    },
+    {
+      "label": "Prerequisite C",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_087av6p",
+        "columns": null
+      },
+      "id": "Field_0r4piyw",
+      "key": "prerequisiteC"
+    },
+    {
+      "label": "Prerequisite D",
+      "type": "checkbox",
+      "layout": {
+        "row": "Row_1aa0gn4",
+        "columns": null
+      },
+      "id": "Field_06cv8rq",
+      "key": "prerequisiteD"
+    },
+    {
+      "label": "Course",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1k8p2f0",
+        "columns": null
+      },
+      "id": "Field_0ukuujo",
+      "key": "course"
+    }
+  ],
+  "type": "default"
+}

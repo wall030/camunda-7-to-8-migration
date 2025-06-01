@@ -1,17 +1,15 @@
 package com.wall.student_crm.rest
 
-import org.camunda.bpm.engine.RuntimeService
-import org.camunda.bpm.engine.TaskService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/tasks")
 class UserTaskController(
-    private val taskService: TaskService,
-    private val runtimeService: RuntimeService
+    // private val taskService: TaskService,
+    // private val runtimeService: RuntimeService
 ) {
-
+/*
     @GetMapping
     fun getTasks(
         @RequestParam(required = false) assignee: String?,
@@ -55,4 +53,6 @@ class UserTaskController(
         taskService.complete(taskId, variables)
         return ResponseEntity.ok("Task $taskId completed")
     }
+
+ */
 }

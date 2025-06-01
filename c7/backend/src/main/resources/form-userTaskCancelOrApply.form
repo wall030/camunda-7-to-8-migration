@@ -1,12 +1,4 @@
 {
-  "executionPlatform": "Camunda Cloud",
-  "executionPlatformVersion": "8.6.0",
-  "exporter": {
-    "name": "Camunda Web Modeler",
-    "version": "f35ea64"
-  },
-  "schemaVersion": 18,
-  "id": "form-userTaskCancelOrApply",
   "components": [
     {
       "label": "Cancel",
@@ -54,11 +46,19 @@
       },
       "id": "Field_0apo7xh",
       "key": "justificationType",
-      "properties": { },
+      "properties": {},
       "validate": {
         "required": true
       }
     }
   ],
-  "type": "default"
+  "type": "default",
+  "id": "form-userTaskCancelOrApply",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
 }

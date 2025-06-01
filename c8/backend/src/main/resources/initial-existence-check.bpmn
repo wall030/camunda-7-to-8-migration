@@ -14,7 +14,7 @@
         <zeebe:taskHeaders>
           <zeebe:header key="delegateExpression" value="${checkStudentExistsDelegate}" />
         </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <zeebe:taskDefinition type="check-student-exists" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0hpxhhi</bpmn:incoming>
       <bpmn:outgoing>Flow_01rzr8b</bpmn:outgoing>
@@ -25,7 +25,7 @@
         <zeebe:taskHeaders>
           <zeebe:header key="delegateExpression" value="${checkCourseExistsDelegate}" />
         </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <zeebe:taskDefinition type="check-course-exists" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_18mu7kv</bpmn:incoming>
       <bpmn:outgoing>Flow_17vxpc2</bpmn:outgoing>
@@ -39,7 +39,7 @@
         <zeebe:taskHeaders>
           <zeebe:header key="delegateExpression" value="${checkEnrollmentDelegate}" />
         </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <zeebe:taskDefinition type="check-enrollment" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0v0smfs</bpmn:incoming>
       <bpmn:outgoing>Flow_1cr1ugb</bpmn:outgoing>
@@ -67,7 +67,7 @@
         <zeebe:taskHeaders>
           <zeebe:header key="delegateExpression" value="${checkEmailFormatDelegate}" />
         </zeebe:taskHeaders>
-        <zeebe:taskDefinition type="camunda-7-adapter" />
+        <zeebe:taskDefinition type="check-email-format" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_087mnka</bpmn:incoming>
       <bpmn:outgoing>Flow_0lzxyzb</bpmn:outgoing>

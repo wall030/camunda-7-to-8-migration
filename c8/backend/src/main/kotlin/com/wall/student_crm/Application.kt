@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-@Deployment(resources = ["classpath:exam-registration.bpmn", "classpath:initial-existence-check.bpmn", "classpath:revise-course-size.bpmn", "classpath:checkExamRegistrationDeadline.dmn"])
+//@Deployment(resources = ["classpath:exam-registration.bpmn", "classpath:initial-existence-check.bpmn", "classpath:revise-course-size.bpmn", "classpath:checkExamRegistrationDeadline.dmn"])
 class Application {
 
 }

@@ -1,12 +1,4 @@
 {
-  "executionPlatform": "Camunda Cloud",
-  "executionPlatformVersion": "8.6.0",
-  "exporter": {
-    "name": "Camunda Web Modeler",
-    "version": "f35ea64"
-  },
-  "schemaVersion": 18,
-  "id": "form-technicalCheck",
   "components": [
     {
       "text": "Students Justification:",
@@ -37,5 +29,13 @@
       "key": "acceptJustification"
     }
   ],
-  "type": "default"
+  "type": "default",
+  "id": "form-technicalCheck",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.35.0"
+  },
+  "schemaVersion": 18
 }

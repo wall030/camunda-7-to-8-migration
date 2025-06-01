@@ -16,7 +16,7 @@ class JustificationService(
         private val logger = LoggerFactory.getLogger(JustificationService::class.java)
     }
 
-    @Transactional("businessTransactionManager")
+    @Transactional
     fun storeJustification(studentEmail: String, justificationText: String): UUID {
         logger.info("Entering storeJustification with studentEmail={}", studentEmail)
         val studentId = camundaUserService.getUserIdByEmail(studentEmail)!!
@@ -36,7 +36,7 @@ class JustificationService(
         return savedId
     }
 
-    @Transactional("businessTransactionManager")
+    @Transactional
     fun removeJustification(justificationId: UUID) {
         logger.info("Entering removeJustification with justificationId={}", justificationId)
         justificationRepository.findById(justificationId).ifPresent { justification ->
