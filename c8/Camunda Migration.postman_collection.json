@@ -7,561 +7,1097 @@
 	},
 	"item": [
 		{
-			"name": "Start Registration Course A - All Prerequisites met",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ca",
-							"type": "string"
+			"name": "c7",
+			"item": [
+				{
+					"name": "Start Registration Course A - All Prerequisites met",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ca",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": true,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/process/registerExam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"process",
+								"registerExam"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": true,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Start Registration Course A - Prerequisites not met",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ca",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/process-definition/key/examRegistration/start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"process-definition",
+								"key",
+								"examRegistration",
+								"start"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/api/process/registerExam",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"process",
-						"registerExam"
-					]
+				{
+					"name": "Start Registration Course B - All Prerequisites met (course full)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ca",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": false,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": true,\n    \"prerequisiteD\": true,\n    \"course\": \"Course B\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/process-definition/key/examRegistration/start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"process-definition",
+								"key",
+								"examRegistration",
+								"start"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Student (ca) User Tasks",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ca",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "taskId",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "taskIdIn",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "processInstanceId",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Examoffice (ba) User Tasks",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ba",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Technicalservice (rt) User Tasks",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ba",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Student userTaskCancelOrApply",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ca",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cancelRegistration\": false,\n  \"justification\": \"Website was down\",\n  \"justificationType\": \"personal\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/3e81f537-3901-11f0-9ebc-1e4d44573c63/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"3e81f537-3901-11f0-9ebc-1e4d44573c63",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Examoffice taskOfficeCheck",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ba",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"acceptJustification\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/8193e921-3901-11f0-9ebc-1e4d44573c63/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"8193e921-3901-11f0-9ebc-1e4d44573c63",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Examoffice reviewOverbooking",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ba",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"overbooked\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"8bde37ea-37c0-11f0-9c6d-0242ac120003",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Examoffice checkChangeCourseSize",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "ba",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"courseSizeCanBeIncreased\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"8bde37ea-37c0-11f0-9c6d-0242ac120003",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Technicalservice technicalCheck",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "rt",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "demo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"acceptJustification\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"8bde37ea-37c0-11f0-9c6d-0242ac120003",
+								"complete"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Start Registration Course A - Prerequisites not met",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ca",
-							"type": "string"
+			"name": "c8",
+			"item": [
+				{
+					"name": "Start Registration Course A - All Prerequisites met",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImNhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9TVFVERU5UUyJdLCJzdWIiOiJjYSIsImlhdCI6MTc0ODkzODk1NCwiZXhwIjoxNzQ5MDI1MzU0fQ.eK8xjIkedFaeIAzSXnkCrCq8Gv3II86P1sffv9vknUINHL4JKPDMxsJXyjAixkNSqpVrJPg54zlkEWTpK0m6Sw",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": true,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/process/registerExam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"process",
+								"registerExam"
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Start Registration Course A - Prerequisites not met",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImNhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9TVFVERU5UUyJdLCJzdWIiOiJjYSIsImlhdCI6MTc0ODkzODk1NCwiZXhwIjoxNzQ5MDI1MzU0fQ.eK8xjIkedFaeIAzSXnkCrCq8Gv3II86P1sffv9vknUINHL4JKPDMxsJXyjAixkNSqpVrJPg54zlkEWTpK0m6Sw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": true,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": false,\n    \"prerequisiteD\": false,\n    \"course\": \"Course A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/process/registerExam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"process",
+								"registerExam"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/engine-rest/process-definition/key/examRegistration/start",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"engine-rest",
-						"process-definition",
-						"key",
-						"examRegistration",
-						"start"
-					]
+				{
+					"name": "Start Registration Course B - All Prerequisites met (course full)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImNhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9TVFVERU5UUyJdLCJzdWIiOiJjYSIsImlhdCI6MTc0ODkzODk1NCwiZXhwIjoxNzQ5MDI1MzU0fQ.eK8xjIkedFaeIAzSXnkCrCq8Gv3II86P1sffv9vknUINHL4JKPDMxsJXyjAixkNSqpVrJPg54zlkEWTpK0m6Sw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": false,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": true,\n    \"prerequisiteD\": true,\n    \"course\": \"Course B\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/process/registerExam",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"process",
+								"registerExam"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImNhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9TVFVERU5UUyJdLCJzdWIiOiJjYSIsImlhdCI6MTc0ODkzODk1NCwiZXhwIjoxNzQ5MDI1MzU0fQ.eK8xjIkedFaeIAzSXnkCrCq8Gv3II86P1sffv9vknUINHL4JKPDMxsJXyjAixkNSqpVrJPg54zlkEWTpK0m6Sw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "taskId",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "taskIdIn",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "processInstanceId",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"ba\",\n    \"password\": \"demo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Student userTaskCancelOrApply",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImNhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9TVFVERU5UUyJdLCJzdWIiOiJjYSIsImlhdCI6MTc0ODkzODk1NCwiZXhwIjoxNzQ5MDI1MzU0fQ.eK8xjIkedFaeIAzSXnkCrCq8Gv3II86P1sffv9vknUINHL4JKPDMxsJXyjAixkNSqpVrJPg54zlkEWTpK0m6Sw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"variables\": {\n        \"cancelRegistration\": false,\n        \"justification\": \"Website was down\",\n        \"justificationType\": \"personal\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/2251799909270223/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"2251799909270223",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Examoffice Justification Check",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9FWEFNT0ZGSUNFIl0sInN1YiI6ImJhIiwiaWF0IjoxNzQ4OTM5MDMxLCJleHAiOjE3NDkwMjU0MzF9._KGhboSvWJT2YabMv_KqBpDh0Z1uC-ZRz2s-Nc9VbeF4u_gOLBjDUrF1ze2SSjucUk3eascBFOolRMjat8jkHQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"variables\": {\n        \"acceptJustification\": true\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/2251799909270462/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"2251799909270462",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Examoffice reviewOverbooking",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9FWEFNT0ZGSUNFIl0sInN1YiI6ImJhIiwiaWF0IjoxNzQ4OTM5MDMxLCJleHAiOjE3NDkwMjU0MzF9._KGhboSvWJT2YabMv_KqBpDh0Z1uC-ZRz2s-Nc9VbeF4u_gOLBjDUrF1ze2SSjucUk3eascBFOolRMjat8jkHQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"variables\": {\n        \"overbooked\": true\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/2251799909270619/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"2251799909270619",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Examoffice checkChangeCourseSize",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Nc9VbeF4u_gOLBjDUrF1ze2SSjucUk3eascBFOolRMjat8jkHQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"variables\": {\n        \"courseSizeCanBeIncreased\": true\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/4503599726086143/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"4503599726086143",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete User Task Technicalservice technicalCheck",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "Nc9VbeF4u_gOLBjDUrF1ze2SSjucUk3eascBFOolRMjat8jkHQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"variables\": {\n        \"acceptJustification\": true\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/tasks/4503599726086143/complete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"tasks",
+								"4503599726086143",
+								"complete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImRlbW8iLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sInN1YiI6ImRlbW8iLCJpYXQiOjE3NDg5MTQ2OTQsImV4cCI6MTc0OTAwMTA5NH0.D0R18kURxDXaRkStN3kZhpZ37qAIjIwCLb30qCaXTNsrwhT0c8Ql4Mnc6yfnOEfnNyxe1OV7Ltpkhw7OYF3sZA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"updateduser\",\n    \"email\": \"updated@test.com\",\n    \"firstName\": \"Jango\",\n    \"lastName\": \"Jay\",\n    \"groupIds\": [\n        2,\n        3\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User (admin only)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImRlbW8iLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiLCJST0xFX0FETUlOIl0sInN1YiI6ImRlbW8iLCJpYXQiOjE3NDg5MTQ2OTQsImV4cCI6MTc0OTAwMTA5NH0.D0R18kURxDXaRkStN3kZhpZ37qAIjIwCLb30qCaXTNsrwhT0c8Ql4Mnc6yfnOEfnNyxe1OV7Ltpkhw7OYF3sZA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/users/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImNhIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9TVFVERU5UUyJdLCJzdWIiOiJjYSIsImlhdCI6MTc0ODkxNTQ3NiwiZXhwIjoxNzQ5MDAxODc2fQ.L4co7urAPIime1BGj3P-VRiFgdDsJFQaFsUr0qzu4mcJfv4pelC4hWs226eLK5irZ9o5U77qr-pan5XzSSC6eQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"demo\",\n    \"newPassword\": \"rrrr\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/users/1/change-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"users",
+								"1",
+								"change-password"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Start Registration Course B - All Prerequisites met (course full)",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ca",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"studentEmail\": \"cassian@mail.com\",\n    \"prerequisiteA\": false,\n    \"prerequisiteB\": false,\n    \"prerequisiteC\": true,\n    \"prerequisiteD\": true,\n    \"course\": \"Course B\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/engine-rest/process-definition/key/examRegistration/start",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"engine-rest",
-						"process-definition",
-						"key",
-						"examRegistration",
-						"start"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Student (ca) User Tasks",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ca",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/api/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks"
-					],
-					"query": [
-						{
-							"key": "taskId",
-							"value": "",
-							"disabled": true
-						},
-						{
-							"key": "taskIdIn",
-							"value": null,
-							"disabled": true
-						},
-						{
-							"key": "processInstanceId",
-							"value": "",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Examoffice (ba) User Tasks",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ba",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/api/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Get Technicalservice (rt) User Tasks",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ba",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8080/api/tasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Complete User Task Student userTaskCancelOrApply",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ca",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"cancelRegistration\": false,\n  \"justification\": \"Website was down\",\n  \"justificationType\": \"personal\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/tasks/3e81f537-3901-11f0-9ebc-1e4d44573c63/complete",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks",
-						"3e81f537-3901-11f0-9ebc-1e4d44573c63",
-						"complete"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Complete User Task Examoffice taskOfficeCheck",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ba",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"acceptJustification\": true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/tasks/8193e921-3901-11f0-9ebc-1e4d44573c63/complete",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks",
-						"8193e921-3901-11f0-9ebc-1e4d44573c63",
-						"complete"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Complete User Task Examoffice reviewOverbooking",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ba",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"overbooked\": true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks",
-						"8bde37ea-37c0-11f0-9c6d-0242ac120003",
-						"complete"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Complete User Task Examoffice checkChangeCourseSize",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "ba",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"courseSizeCanBeIncreased\": true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks",
-						"8bde37ea-37c0-11f0-9c6d-0242ac120003",
-						"complete"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Complete User Task Technicalservice technicalCheck",
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "rt",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "demo",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Basic {SHA-512}bo5y0rJVKt+Qr2yXwMjtu9dboRMKM+pb47Qj0VyxfJjSfazjUWs/nnll/saFjOGKtY1XcY+inxRbVcQGY8ltrQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"acceptJustification\": true\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/tasks/8bde37ea-37c0-11f0-9c6d-0242ac120003/complete",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"tasks",
-						"8bde37ea-37c0-11f0-9c6d-0242ac120003",
-						"complete"
-					]
-				}
-			},
-			"response": []
+			]
 		}
 	]
 }

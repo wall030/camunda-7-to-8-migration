@@ -1,4 +1,4 @@
-package com.wall.student_crm.service
+package com.wall.student_crm.service.business
 
 import com.wall.student_crm.shared.enums.Status
 import com.wall.student_crm.shared.enums.Status.*

@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface StudentCourseRepository : JpaRepository<StudentCourseEntity, StudentCourseId> {
 
-    fun existsByStudentIdAndCourseId(studentId: String, courseId: Long): Boolean
+    fun existsByStudentIdAndCourseId(studentId: Long?, courseId: Long): Boolean
 }

@@ -1,4 +1,4 @@
-package com.wall.student_crm.service
+package com.wall.student_crm.service.business
 
 import com.wall.student_crm.persistence.justification.JustificationEntity
 import com.wall.student_crm.persistence.justification.JustificationRepository
@@ -9,7 +9,7 @@ import java.util.UUID
 
 @Service
 class JustificationService(
-    private val camundaUserService: CamundaUserService,
+    private val userService: UserService,
     private val justificationRepository: JustificationRepository
 ) {
     companion object {
@@ -19,7 +19,7 @@ class JustificationService(
     @Transactional
     fun storeJustification(studentEmail: String, justificationText: String): UUID {
         logger.info("Entering storeJustification with studentEmail={}", studentEmail)
-        val studentId = camundaUserService.getUserIdByEmail(studentEmail)!!
+        val studentId = userService.findByEmail(studentEmail)!!.id
 
         // Check for existing justification (idempotence)
         justificationRepository.findByStudentIdAndJustification(studentId, justificationText)?.let {

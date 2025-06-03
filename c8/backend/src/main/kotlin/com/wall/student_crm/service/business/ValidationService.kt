@@ -1,4 +1,4 @@
-package com.wall.student_crm.service
+package com.wall.student_crm.service.business
 
 import com.wall.student_crm.persistence.course.CourseRepository
 import com.wall.student_crm.persistence.course.StudentCourseId
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class ValidationService(
-    private val camundaUserService: CamundaUserService,
+    private val userService: UserService,
     private val courseRepository: CourseRepository,
     private val studentCourseRepository: StudentCourseRepository
 ) {
@@ -44,7 +44,7 @@ class ValidationService(
     @Transactional(readOnly = true)
     fun isEnrolled(studentEmail: String, courseName: String): Boolean {
         logger.info("Entering checkEnrollment with courseName={}", courseName)
-        val studentId = camundaUserService.getUserIdByEmail(studentEmail)!!
+        val studentId = userService.findByEmail(studentEmail)!!.id
         val course = courseRepository.findByName(courseName)!!
 
         val enrollmentId = StudentCourseId(studentId, course.id)
@@ -67,7 +67,7 @@ class ValidationService(
     @Transactional(readOnly = true)
     fun studentExists(studentEmail: String): Boolean {
         logger.info("Entering checkStudentExists")
-        if (!camundaUserService.existsByEmail(studentEmail)) {
+        if (!userService.existsByEmail(studentEmail)) {
             logger.warn("Student not found for email: {}", studentEmail)
             return false
         }

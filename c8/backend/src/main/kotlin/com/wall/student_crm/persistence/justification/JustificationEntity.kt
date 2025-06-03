@@ -15,7 +15,7 @@ class JustificationEntity(
     @Column(name = "id", unique = true)
     val id: UUID = UUID.randomUUID(),
     @Column(name = "student_id", nullable = false)
-    val studentId: String,
+    val studentId: Long?,
     @Column(name = "justification", nullable = false, columnDefinition = "TEXT")
     var justification: String,
     @Column(name = "created_at", nullable = false)

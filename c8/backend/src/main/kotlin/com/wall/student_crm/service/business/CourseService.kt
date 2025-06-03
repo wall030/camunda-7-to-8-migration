@@ -1,4 +1,4 @@
-package com.wall.student_crm.service
+package com.wall.student_crm.service.business
 
 import com.wall.student_crm.persistence.course.CourseRepository
 import com.wall.student_crm.persistence.course.StudentCourseEntity
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CourseService(
-    private val camundaUserService: CamundaUserService,
+    private val userService: UserService,
     private val courseRepository: CourseRepository,
     private val studentCourseRepository: StudentCourseRepository
 ) {
@@ -21,7 +21,7 @@ class CourseService(
     fun enrollStudent(studentEmail: String, courseName: String) {
         logger.info("Entering enrollStudent with studentEmail={}, courseName={}", studentEmail, courseName)
 
-        val studentId = camundaUserService.getUserIdByEmail(studentEmail)!!
+        val studentId = userService.findByEmail(studentEmail)!!.id
 
         // Get course with optimistic locking
         val course = courseRepository.findByName(courseName)!!

@@ -1,4 +1,4 @@
-package com.wall.student_crm.service
+package com.wall.student_crm.service.integration
 
 import com.wall.student_crm.shared.enums.MailMessageTemplate
 import com.wall.student_crm.shared.MailClient

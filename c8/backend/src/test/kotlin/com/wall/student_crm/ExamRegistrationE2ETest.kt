@@ -2,9 +2,9 @@ package com.wall.student_crm
 
 import com.wall.student_crm.persistence.course.StudentCourseId
 import com.wall.student_crm.persistence.course.StudentCourseRepository
-import com.wall.student_crm.rest.dto.RegistrationDto
-import com.wall.student_crm.shared.TimeProvider
-import com.wall.student_crm.service.MailService
+import com.wall.student_crm.rest.dto.process.RegistrationDto
+import com.wall.student_crm.shared.utils.TimeProvider
+import com.wall.student_crm.service.integration.MailService
 import org.assertj.core.api.Assertions.assertThat
 import org.camunda.bpm.engine.IdentityService
 import org.junit.jupiter.api.BeforeEach

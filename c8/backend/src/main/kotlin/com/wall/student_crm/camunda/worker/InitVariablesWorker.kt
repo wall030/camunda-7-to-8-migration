@@ -1,7 +1,7 @@
 package com.wall.student_crm.camunda.worker
 
 import com.wall.student_crm.persistence.course.CourseRepository
-import com.wall.student_crm.shared.TimeProvider
+import com.wall.student_crm.shared.utils.TimeProvider
 import io.camunda.zeebe.client.api.response.ActivatedJob
 import io.camunda.zeebe.spring.client.annotation.JobWorker
 import org.springframework.stereotype.Component

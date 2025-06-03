@@ -6,5 +6,5 @@ import java.util.*
 
 @Repository
 interface JustificationRepository : JpaRepository<JustificationEntity, UUID> {
-    fun findByStudentIdAndJustification(studentId: String, justification: String): JustificationEntity?
+    fun findByStudentIdAndJustification(studentId: Long?, justification: String): JustificationEntity?
 }

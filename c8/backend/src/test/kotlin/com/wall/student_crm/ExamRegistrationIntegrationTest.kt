@@ -6,7 +6,7 @@ import com.wall.student_crm.persistence.course.StudentCourseId
 import com.wall.student_crm.persistence.course.StudentCourseRepository
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteEntity
 import com.wall.student_crm.persistence.prerequisite.PrerequisiteRepository
-import com.wall.student_crm.shared.TimeProvider
+import com.wall.student_crm.shared.utils.TimeProvider
 import jakarta.mail.internet.MimeMessage
 import org.camunda.bpm.engine.IdentityService
 import org.camunda.bpm.engine.identity.User

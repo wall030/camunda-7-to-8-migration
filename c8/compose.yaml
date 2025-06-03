@@ -23,6 +23,8 @@ services:
       ZEEBE_CLIENT_SECRET: "PLACEHOLDER"
       ZEEBE_CLUSTER_ID: "PLACEHOLDER"
       CLUSTER_REGION: "bru-2"
+      CAMUNDA_REST_API_URL: "https://bru-2.zeebe.camunda.io:443/CLUSTERID"
+      CAMUNDA_TASKLIST_REST_API_URL: "https://bru-2.tasklist.camunda.io/CLUSTERID"
     ports:
       - "8080:8080"
     depends_on:
@@ -31,8 +33,8 @@ services:
   external-task-worker:
     build: external
     environment:
-      ZEEBE_ADDRESS: "PLACEHOLDER"
-      ZEEBE_REST_ADDRESS: "PLACEHOLDER"
+      ZEEBE_ADDRESS: "CLUSTERID.bru-2.zeebe.camunda.io:443"
+      ZEEBE_REST_ADDRESS: "https://bru-2.zeebe.camunda.io/CLUSTERID"
       ZEEBE_CLIENT_ID: "PLACEHOLDER"
       ZEEBE_CLIENT_SECRET: "PLACEHOLDER"
       CAMUNDA_OAUTH_STRATEGY: "OAUTH"

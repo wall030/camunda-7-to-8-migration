@@ -1,7 +1,7 @@
 package com.wall.student_crm.camunda.worker
 
 import com.wall.student_crm.shared.enums.MailType
-import com.wall.student_crm.service.MailService
+import com.wall.student_crm.service.integration.MailService
 import io.camunda.zeebe.client.api.response.ActivatedJob
 import io.camunda.zeebe.spring.client.annotation.JobWorker
 import org.springframework.stereotype.Component

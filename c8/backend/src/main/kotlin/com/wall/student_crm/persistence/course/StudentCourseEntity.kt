@@ -8,7 +8,7 @@ import jakarta.persistence.*
 class StudentCourseEntity(
     @Id
     @Column(name = "student_id")
-    var studentId: String = "",   // Camunda-User-ID
+    var studentId: Long? = 0L,
 
     @Id
     @Column(name = "course_id")
@@ -17,6 +17,6 @@ class StudentCourseEntity(
 
 
 data class StudentCourseId(
-    var studentId: String = "",
+    var studentId: Long? = 0L,
     var courseId: Long = 0L
 ) : java.io.Serializable

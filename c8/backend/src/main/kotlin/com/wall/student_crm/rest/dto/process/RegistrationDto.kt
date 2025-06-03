@@ -1,4 +1,4 @@
-package com.wall.student_crm.rest.dto
+package com.wall.student_crm.rest.dto.process
 
 data class RegistrationDto(
     val studentEmail: String,
