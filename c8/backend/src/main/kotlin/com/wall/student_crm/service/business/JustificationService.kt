@@ -39,9 +39,14 @@ class JustificationService(
     @Transactional
     fun removeJustification(justificationId: UUID) {
         logger.info("Entering removeJustification with justificationId={}", justificationId)
-        justificationRepository.findById(justificationId).ifPresent { justification ->
-            justificationRepository.delete(justification)
-            logger.info("Deleted justification with id={}", justificationId)
+        try {
+            justificationRepository.findById(justificationId).ifPresent { justification ->
+                justificationRepository.delete(justification)
+                logger.info("Deleted justification with id={}", justificationId)
+            }
+        } catch (e: Exception) {
+            logger.error("Failed to remove justification {} - manual cleanup required", justificationId, e)
+            // Exception is not thrown, continue enrollment processB (Best Effort)
         }
     }
 }

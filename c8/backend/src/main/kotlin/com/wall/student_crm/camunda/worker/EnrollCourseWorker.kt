@@ -12,9 +12,15 @@ class EnrollCourseWorker(
 
     @JobWorker(type = "enroll-course")
     fun handle(job: ActivatedJob) {
-        val variables = job.variablesAsMap
-        val studentEmail = variables["studentEmail"] as String
-        val courseName = variables["course"] as String
-        courseService.enrollStudent(studentEmail, courseName)
+            val variables = job.variablesAsMap
+            val studentEmail = variables["studentEmail"] as String
+            val courseName = variables["course"] as String
+        try {
+            courseService.enrollStudent(studentEmail, courseName)
+        } catch (e: Exception) {
+            // Compensation: Release the reserved spot
+            courseService.releaseReservedSpot(courseName)
+            throw e
+        }
     }
 }

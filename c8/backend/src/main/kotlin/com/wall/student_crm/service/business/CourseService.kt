@@ -35,19 +35,29 @@ class CourseService(
         val enrollment = StudentCourseEntity(studentId = studentId, courseId = course.id)
         studentCourseRepository.save(enrollment)
         logger.info("Enrolled student {} in course {}", studentId, courseName)
-
-        course.currentSize++
-        courseRepository.save(course)
-        logger.info("Increased course {} currentSize to {}", courseName, course.currentSize)
     }
 
-    @Transactional(readOnly = true)
-    fun isCourseFull(courseName: String): Boolean {
+    @Transactional
+    fun checkCourseFullWithReservation(courseName: String): Boolean {
         logger.info("Entering isCourseFull with courseName={}", courseName)
         val course = courseRepository.findByName(courseName)!!
         val isFull = course.currentSize >= course.maxSize
-        logger.info("Course {} is full: {}", courseName, isFull)
-        return isFull
+        if (isFull) {
+            logger.info("Course {} is full: {}", courseName, isFull)
+            return true
+        }
+
+        val oldSize = course.currentSize
+        course.currentSize++
+        courseRepository.save(course)
+        logger.info("Increased course {} currentSize to {}", courseName, course.currentSize)
+
+        logger.info(
+            "Course {} spot RESERVED: {}/{} -> {}/{}",
+            courseName, oldSize, course.maxSize, course.currentSize, course.maxSize
+        )
+
+        return false
     }
 
     @Transactional
@@ -57,5 +67,29 @@ class CourseService(
         course.maxSize++
         courseRepository.save(course)
         logger.info("Increased course {} maxSize to {}", courseName, course.maxSize)
+    }
+
+    // free up spot when enrollment fails (compensation)
+    @Transactional
+    fun releaseReservedSpot(courseName: String) {
+        logger.info("Releasing reserved spot for course {}", courseName)
+
+        try {
+            val course = courseRepository.findByName(courseName)!!
+
+            if (course.currentSize > 0) {
+                course.currentSize--
+                courseRepository.save(course)
+                logger.info(
+                    "Released spot for course {} - New size: {}/{}",
+                    courseName, course.currentSize, course.maxSize
+                )
+            } else {
+                logger.warn("Cannot release spot for course {} - currentSize is already 0", courseName)
+            }
+
+        } catch (e: Exception) {
+            logger.error("Failed to release spot for course {}", courseName, e)
+        }
     }
 }

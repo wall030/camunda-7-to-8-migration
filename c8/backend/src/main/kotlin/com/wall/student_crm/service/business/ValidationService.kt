@@ -18,7 +18,7 @@ class ValidationService(
         private val logger: Logger = LoggerFactory.getLogger(ValidationService::class.java)
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     fun courseExists(courseName: String): Boolean {
         logger.info("Entering checkCourseExists with courseName={}", courseName)
         if (!courseRepository.existsByName(courseName)) {
@@ -41,7 +41,7 @@ class ValidationService(
         return true
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     fun isEnrolled(studentEmail: String, courseName: String): Boolean {
         logger.info("Entering checkEnrollment with courseName={}", courseName)
         val studentId = userService.findByEmail(studentEmail)!!.id
@@ -64,7 +64,7 @@ class ValidationService(
         return missing
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     fun studentExists(studentEmail: String): Boolean {
         logger.info("Entering checkStudentExists")
         if (!userService.existsByEmail(studentEmail)) {

@@ -15,7 +15,7 @@ class InitVariablesWorker(
 ) {
 
     @JobWorker(type = "init-variables")
-    @Transactional(readOnly = true)
+    @Transactional
     fun handle(job: ActivatedJob): Map<String, Any> {
         val variables = job.variablesAsMap
         val courseName = variables["course"] as String

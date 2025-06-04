@@ -12,19 +12,28 @@ class CheckCourseFullWorker(
     private val zeebeClient: ZeebeClient
 ) {
 
+    // Cache for sent Messages (idempotence)
+    private val sentMessages = mutableSetOf<String>()
+
     @JobWorker(type = "check-course-full")
     fun handle(job: ActivatedJob): Map<String, Any> {
         val variables = job.variablesAsMap
         val courseName = variables["course"] as String
-        val courseIsFull = courseService.isCourseFull(courseName)
+        val courseIsFull = courseService.checkCourseFullWithReservation(courseName)
 
         if (courseIsFull) {
-            zeebeClient.newPublishMessageCommand()
-                .messageName("startReviseCourseSize")
-                .withoutCorrelationKey()
-                .variables(mapOf("course" to courseName))
-                .send()
-                .join()
+            val messageKey = "revise-course-size:$courseName"
+
+            if (!sentMessages.contains(messageKey)) {
+                zeebeClient.newPublishMessageCommand()
+                    .messageName("startReviseCourseSize")
+                    .withoutCorrelationKey()
+                    .variables(mapOf("course" to courseName))
+                    .send()
+                    .join()
+
+                sentMessages.add(messageKey)
+            }
         }
         return mapOf("courseIsFull" to courseIsFull)
     }
