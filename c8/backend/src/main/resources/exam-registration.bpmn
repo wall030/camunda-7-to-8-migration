@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:conversion="http://camunda.org/schema/conversion/1.0" id="Definitions_0ia7fl5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="f35ea64" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0" conversion:converterVersion="0.12.4">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:conversion="http://camunda.org/schema/conversion/1.0" id="Definitions_0ia7fl5" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="b7cb967" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0" conversion:converterVersion="0.12.4">
   <bpmn:process id="examRegistration" name="exam-registration" processType="None" isClosed="false" isExecutable="true">
     <bpmn:extensionElements>
       <conversion:message severity="INFO">Unused attribute 'historyTimeToLive' on 'process' is removed.</conversion:message>
@@ -122,8 +122,7 @@
     <bpmn:userTask id="technicalCheck" name="Check from technical service" implementation="##unspecified">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition assignee="" candidateUsers="" />
+        <zeebe:assignmentDefinition assignee="" candidateGroups="technicalservice" candidateUsers="" />
         <zeebe:formDefinition formId="form-justificationCheck" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0sr2obh</bpmn:incoming>
@@ -141,8 +140,7 @@
     <bpmn:userTask id="taskOfficeCheck" name="Check justification from exam office" implementation="##unspecified">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition assignee="" candidateUsers="" />
+        <zeebe:assignmentDefinition assignee="" candidateGroups="examoffice" candidateUsers="" />
         <zeebe:formDefinition formId="form-justificationCheck" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0nq5d67</bpmn:incoming>
@@ -162,6 +160,9 @@
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
         <zeebe:formDefinition formId="form-start-exam-registration" />
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="end" type="init-variables" />
+        </zeebe:executionListeners>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_13upj83</bpmn:outgoing>
     </bpmn:startEvent>
@@ -194,7 +195,6 @@
     <bpmn:sequenceFlow id="Flow_0kgevfg" sourceRef="Event_16ow9bg" targetRef="EndEvent_AlreadyEnrolled" />
     <bpmn:sequenceFlow id="Flow_0kwi25w" sourceRef="taskOfficeCheck" targetRef="Gateway_0f1q0ss" />
     <bpmn:sequenceFlow id="Flow_0l6iwij" sourceRef="Event_0yf971t" targetRef="EndEvent_CourseNotFound" />
-    <bpmn:sequenceFlow id="Flow_0mfncwz" sourceRef="updateStatusChecking" targetRef="initialExistenceCheck" />
     <bpmn:sequenceFlow id="Flow_0nq5d67" sourceRef="Gateway_0pvk1wz" targetRef="taskOfficeCheck">
       <bpmn:extensionElements>
         <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${(justificationType == "personal") or (justificationType == "other")}' -&gt; '=(justificationType = "personal") or (justificationType = "other")'.</conversion:message>
@@ -208,24 +208,17 @@
       </bpmn:extensionElements>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=(justificationType = "technical") or (justificationType = "other")</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0tsgbcm" sourceRef="TimeBoundaryEvent_AutoCancel" targetRef="updateStatusStoppedByTimer" />
+    <bpmn:sequenceFlow id="Flow_0tsgbcm" sourceRef="TimeBoundaryEvent_AutoCancel" targetRef="EndEvent_Stopped" />
     <bpmn:sequenceFlow id="Flow_0whhznp" sourceRef="reviewOverbooking" targetRef="Gateway_1fouw7x" />
     <bpmn:sequenceFlow id="Flow_0y1y7fq" sourceRef="enrollCours" targetRef="generateQrCodeTask" />
     <bpmn:sequenceFlow id="Flow_115ywsr" sourceRef="Gateway_1ohzfcm" targetRef="checkCourseSizeProcess" />
-    <bpmn:sequenceFlow id="Flow_133tix0" sourceRef="updateStatusStoppedByTimer" targetRef="EndEvent_Stopped" />
-    <bpmn:sequenceFlow id="Flow_13upj83" sourceRef="StartEvent" targetRef="initVariables" />
+    <bpmn:sequenceFlow id="Flow_13upj83" sourceRef="StartEvent" targetRef="Event_StatusChecking" />
     <bpmn:sequenceFlow id="Flow_1bfbte1" sourceRef="Gateway_15uislg" targetRef="enrollCours" />
-    <bpmn:sequenceFlow id="Flow_1dvphgm" sourceRef="initVariables" targetRef="updateStatusChecking" />
-    <bpmn:sequenceFlow id="Flow_1edoeol" sourceRef="updateStatusJustifying" targetRef="userTaskCancelOrApply" />
     <bpmn:sequenceFlow id="Flow_1fnck62" sourceRef="Event_0ekkseq" targetRef="EndEvent_StudentNotFound" />
     <bpmn:sequenceFlow id="Flow_1gwxcj4" sourceRef="Event_1mbk6yi" targetRef="Gateway_1ohzfcm" />
-    <bpmn:sequenceFlow id="Flow_1hc4ia8" sourceRef="updateStatusStoppedByOverbookingRejection" targetRef="EndEvent_NoOverbooking" />
     <bpmn:sequenceFlow id="Flow_1hmth07" sourceRef="userTaskCancelOrApply" targetRef="Gateway_05huf6g" />
     <bpmn:sequenceFlow id="Flow_1i5riaz" sourceRef="checkRegistrationDeadline" targetRef="Gateway_InDeadline" />
-    <bpmn:sequenceFlow id="Flow_1kw8bwm" sourceRef="generateQrCodeTask" targetRef="updateStatusSuccessful" />
-    <bpmn:sequenceFlow id="Flow_1oieq6d" sourceRef="updateStatusStoppedByRejection" targetRef="EndEvent_Rejected" />
-    <bpmn:sequenceFlow id="Flow_1qpx5z3" sourceRef="updateStatusExamOfficeChecking" targetRef="storeJustification" />
-    <bpmn:sequenceFlow id="Flow_1y72yos" sourceRef="updateStatusStoppedByCancel" targetRef="EndEvent_Canceled" />
+    <bpmn:sequenceFlow id="Flow_1kw8bwm" sourceRef="generateQrCodeTask" targetRef="EndEvent_RegistrationSuccessful" />
     <bpmn:inclusiveGateway id="Gateway_0f1q0ss">
       <bpmn:incoming>Flow_0kwi25w</bpmn:incoming>
       <bpmn:incoming>Flow_08exkju</bpmn:incoming>
@@ -261,16 +254,9 @@
         <conversion:message severity="INFO">Element 'camunda:out' with attribute 'variables="all"' is mapped to 'propagateAllChildVariables="true"'.</conversion:message>
         <zeebe:calledElement processId="initialExistenceCheck" propagateAllChildVariables="true" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0mfncwz</bpmn:incoming>
+      <bpmn:incoming>Flow_1wd23j8</bpmn:incoming>
       <bpmn:outgoing>Flow_04dvgsy</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:serviceTask id="initVariables" name="Initialize variables">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="init-variables" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_13upj83</bpmn:incoming>
-      <bpmn:outgoing>Flow_1dvphgm</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_0tp9fim" name="Invalid Email Format" attachedToRef="initialExistenceCheck">
       <bpmn:extensionElements>
         <conversion:reference>Error_1i4qbxu</conversion:reference>
@@ -283,25 +269,25 @@
       <bpmn:outgoing>Flow_16khaca</bpmn:outgoing>
       <bpmn:outgoing>Flow_09a9q6e</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_16khaca" name="no" sourceRef="Gateway_1tu7dt0" targetRef="updateStatusStoppedByRejection">
+    <bpmn:sequenceFlow id="Flow_16khaca" name="no" sourceRef="Gateway_1tu7dt0" targetRef="EndEvent_Rejected">
       <bpmn:extensionElements>
         <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!acceptJustification}' -&gt; '=not(acceptJustification)'.</conversion:message>
       </bpmn:extensionElements>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(acceptJustification)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_06r5348" name="no" sourceRef="Gateway_05huf6g" targetRef="updateStatusExamOfficeChecking">
+    <bpmn:sequenceFlow id="Flow_06r5348" name="no" sourceRef="Gateway_05huf6g" targetRef="Event_StatusExamOfficeChecking">
       <bpmn:extensionElements>
         <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!cancelRegistration}' -&gt; '=not(cancelRegistration)'.</conversion:message>
       </bpmn:extensionElements>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(cancelRegistration)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_035de0m" name="no" sourceRef="Gateway_InDeadline" targetRef="updateStatusJustifying">
+    <bpmn:sequenceFlow id="Flow_035de0m" name="no" sourceRef="Gateway_InDeadline" targetRef="Event_StatusJustifying">
       <bpmn:extensionElements>
         <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!registrationAllowed}' -&gt; '=not(registrationAllowed)'.</conversion:message>
       </bpmn:extensionElements>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=not(registrationAllowed)</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0ko9zg9" name="no" sourceRef="Gateway_1fouw7x" targetRef="updateStatusStoppedByOverbookingRejection">
+    <bpmn:sequenceFlow id="Flow_0ko9zg9" name="no" sourceRef="Gateway_1fouw7x" targetRef="EndEvent_NoOverbooking">
       <bpmn:extensionElements>
         <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${!overbooked}' -&gt; '=not(overbooked)'.</conversion:message>
       </bpmn:extensionElements>
@@ -333,8 +319,11 @@
           <zeebe:input source="=&#34;EXAM_REJECTION&#34;" target="mailType" />
         </zeebe:ioMapping>
         <zeebe:taskDefinition type="send-mail" />
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" type="update-status" />
+        </zeebe:executionListeners>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1oieq6d</bpmn:incoming>
+      <bpmn:incoming>Flow_16khaca</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0v26jo8" />
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_NoOverbooking" name="Registration rejected">
@@ -345,21 +334,30 @@
           <zeebe:input source="=&#34;EXAM_REJECTION&#34;" target="mailType" />
         </zeebe:ioMapping>
         <zeebe:taskDefinition type="send-mail" />
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" type="update-status" />
+        </zeebe:executionListeners>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1hc4ia8</bpmn:incoming>
+      <bpmn:incoming>Flow_0ko9zg9</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0ggc1qx" />
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_Canceled" name="Registration stopped">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" type="update-status" />
+        </zeebe:executionListeners>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1y72yos</bpmn:incoming>
+      <bpmn:incoming>Flow_047b1dt</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_Stopped" name="Registration stopped">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Listener at 'start' with implementation '${statusListener}' can be transformed to a job worker. Please adjust the job type.</conversion:message>
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" type="update-status" />
+        </zeebe:executionListeners>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_133tix0</bpmn:incoming>
+      <bpmn:incoming>Flow_0tsgbcm</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:endEvent id="EndEvent_RegistrationSuccessful" name="Registration successful">
       <bpmn:extensionElements>
@@ -369,8 +367,11 @@
           <zeebe:input source="=&#34;EXAM_CONFIRMATION&#34;" target="mailType" />
         </zeebe:ioMapping>
         <zeebe:taskDefinition type="send-mail" />
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" type="update-status" />
+        </zeebe:executionListeners>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0iecb7x</bpmn:incoming>
+      <bpmn:incoming>Flow_1kw8bwm</bpmn:incoming>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0xirxog" />
     </bpmn:endEvent>
     <bpmn:serviceTask id="removeJustification" name="Remove justification from successful registration" isForCompensation="true" implementation="##WebService">
@@ -390,8 +391,7 @@
     <bpmn:userTask id="reviewOverbooking" name="Review overbooking" implementation="##unspecified">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition assignee="" candidateUsers="" />
+        <zeebe:assignmentDefinition assignee="" candidateGroups="examoffice" candidateUsers="" />
         <zeebe:formDefinition formId="form-reviewOverbooking" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_04jhlnx</bpmn:incoming>
@@ -400,11 +400,10 @@
     <bpmn:userTask id="userTaskCancelOrApply" name="Select application with justification or cancel" implementation="##unspecified">
       <bpmn:extensionElements>
         <conversion:message severity="TASK">Element 'formData' cannot be transformed. Please define a form key instead.</conversion:message>
-        <zeebe:userTask />
-        <zeebe:assignmentDefinition candidateUsers="" />
+        <zeebe:assignmentDefinition assignee="=studentEmail" candidateGroups="students" candidateUsers="" />
         <zeebe:formDefinition formId="form-userTaskCancelOrApply" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1edoeol</bpmn:incoming>
+      <bpmn:incoming>Flow_1l6igb5</bpmn:incoming>
       <bpmn:outgoing>Flow_1hmth07</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="EndEvent_AlreadyEnrolled" name="Send already enrolled">
@@ -462,7 +461,7 @@
         </zeebe:taskHeaders>
         <zeebe:taskDefinition type="store-justification" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1qpx5z3</bpmn:incoming>
+      <bpmn:incoming>Flow_0jhp0hd</bpmn:incoming>
       <bpmn:outgoing>Flow_09hf0p7</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:boundaryEvent id="Event_0ekkseq" name="Student not found" attachedToRef="initialExistenceCheck">
@@ -472,56 +471,7 @@
       <bpmn:outgoing>Flow_1fnck62</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1qliiyi" errorRef="Error_02i2fc5" />
     </bpmn:boundaryEvent>
-    <bpmn:serviceTask id="updateStatusChecking" name="Update Status: Checking">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1dvphgm</bpmn:incoming>
-      <bpmn:outgoing>Flow_0mfncwz</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="updateStatusExamOfficeChecking" name="Update Status: Exam Office Checking">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_06r5348</bpmn:incoming>
-      <bpmn:outgoing>Flow_1qpx5z3</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="updateStatusJustifying" name="Update Status: Justifying">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_035de0m</bpmn:incoming>
-      <bpmn:outgoing>Flow_1edoeol</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="updateStatusStoppedByCancel" name="Update Status: Stopped">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_047b1dt</bpmn:incoming>
-      <bpmn:outgoing>Flow_1y72yos</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="updateStatusStoppedByTimer" name="Update Status: Stopped">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0tsgbcm</bpmn:incoming>
-      <bpmn:outgoing>Flow_133tix0</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="updateStatusStoppedByOverbookingRejection" name="Update Status: Stopped">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0ko9zg9</bpmn:incoming>
-      <bpmn:outgoing>Flow_1hc4ia8</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="updateStatusStoppedByRejection" name="Update Status: Stopped">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_16khaca</bpmn:incoming>
-      <bpmn:outgoing>Flow_1oieq6d</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_047b1dt" name="yes" sourceRef="Gateway_05huf6g" targetRef="updateStatusStoppedByCancel">
+    <bpmn:sequenceFlow id="Flow_047b1dt" name="yes" sourceRef="Gateway_05huf6g" targetRef="EndEvent_Canceled">
       <bpmn:extensionElements>
         <conversion:message link="https://docs.camunda.io/docs/components/modeler/bpmn/exclusive-gateways/#conditions" severity="REVIEW">Condition expression: Please review transformed expression: '${cancelRegistration}' -&gt; '=cancelRegistration'.</conversion:message>
       </bpmn:extensionElements>
@@ -545,14 +495,36 @@
       </bpmn:extensionElements>
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=registrationAllowed</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:serviceTask id="updateStatusSuccessful" name="Update Status: Successful">
+    <bpmn:intermediateThrowEvent id="Event_StatusChecking" name="Status: &#10;Checking">
       <bpmn:extensionElements>
-        <zeebe:taskDefinition type="update-status" />
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" retries="" type="update-status" />
+        </zeebe:executionListeners>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1kw8bwm</bpmn:incoming>
-      <bpmn:outgoing>Flow_0iecb7x</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0iecb7x" sourceRef="updateStatusSuccessful" targetRef="EndEvent_RegistrationSuccessful" />
+      <bpmn:incoming>Flow_13upj83</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wd23j8</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_1wd23j8" sourceRef="Event_StatusChecking" targetRef="initialExistenceCheck" />
+    <bpmn:intermediateThrowEvent id="Event_StatusJustifying" name="Status: Justifying">
+      <bpmn:extensionElements>
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" type="update-status" />
+        </zeebe:executionListeners>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_035de0m</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l6igb5</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_1l6igb5" sourceRef="Event_StatusJustifying" targetRef="userTaskCancelOrApply" />
+    <bpmn:intermediateThrowEvent id="Event_StatusExamOfficeChecking" name="Status: Exam Office Checking">
+      <bpmn:extensionElements>
+        <zeebe:executionListeners>
+          <zeebe:executionListener eventType="start" type="update-status" />
+        </zeebe:executionListeners>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_06r5348</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jhp0hd</bpmn:outgoing>
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_0jhp0hd" sourceRef="Event_StatusExamOfficeChecking" targetRef="storeJustification" />
     <bpmn:textAnnotation id="TextAnnotation_1argorg">
       <bpmn:text>checks if student and course are valid and if the student is already registered to the course</bpmn:text>
     </bpmn:textAnnotation>
@@ -623,18 +595,10 @@
           <dc:Bounds x="1549" y="805" width="61" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_093efik" bpmnElement="updateStatusSuccessful">
-        <dc:Bounds x="3070" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0qfnyzv" bpmnElement="generateQrCodeTask">
-        <dc:Bounds x="2920" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0xho5tf_di" bpmnElement="EndEvent_RegistrationSuccessful" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
-        <dc:Bounds x="3212" y="342" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0ubdnv3_di" bpmnElement="Event_StatusChecking">
+        <dc:Bounds x="382" y="342" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3203" y="385" width="59" height="27" />
+          <dc:Bounds x="377" y="385" width="46" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0kki1q0_di" bpmnElement="checkAllPrerequisites">
@@ -677,12 +641,12 @@
       <bpmndi:BPMNShape id="Gateway_1ohzfcm_di" bpmnElement="Gateway_1ohzfcm" isMarkerVisible="true">
         <dc:Bounds x="2205" y="335" width="50" height="50" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0qfnyzv" bpmnElement="generateQrCodeTask">
+        <dc:Bounds x="2920" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0y9821w_di" bpmnElement="initialExistenceCheck">
         <dc:Bounds x="570" y="320" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nttadf_di" bpmnElement="initVariables">
-        <dc:Bounds x="240" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1tu7dt0_di" bpmnElement="Gateway_1tu7dt0" isMarkerVisible="true">
         <dc:Bounds x="2205" y="525" width="50" height="50" />
@@ -724,6 +688,12 @@
         <dc:Bounds x="3082" y="852" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3071" y="895" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xho5tf_di" bpmnElement="EndEvent_RegistrationSuccessful" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="3082" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3073" y="385" width="59" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ozjhob_di" bpmnElement="removeJustification">
@@ -776,32 +746,17 @@
       <bpmndi:BPMNShape id="Activity_1cyh1ro_di" bpmnElement="storeJustification">
         <dc:Bounds x="1680" y="510" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1bipk9r_di" bpmnElement="updateStatusChecking">
-        <dc:Bounds x="380" y="320" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_0kgsmmj_di" bpmnElement="Event_StatusJustifying">
+        <dc:Bounds x="1262" y="752" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1238" y="795" width="84" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1a218p3" bpmnElement="updateStatusExamOfficeChecking">
-        <dc:Bounds x="1530" y="570" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_097nmy6" bpmnElement="updateStatusJustifying">
-        <dc:Bounds x="1220" y="730" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1oyyz8p" bpmnElement="updateStatusStoppedByCancel">
-        <dc:Bounds x="2950" y="730" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0000fve" bpmnElement="updateStatusStoppedByTimer">
-        <dc:Bounds x="2950" y="830" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_09adrct" bpmnElement="updateStatusStoppedByOverbookingRejection">
-        <dc:Bounds x="2950" y="60" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0td3a3w" bpmnElement="updateStatusStoppedByRejection">
-        <dc:Bounds x="2950" y="510" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="Event_1vifnag_di" bpmnElement="Event_StatusExamOfficeChecking">
+        <dc:Bounds x="1562" y="532" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1468" y="540" width="78" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1argorg_di" bpmnElement="TextAnnotation_1argorg">
         <dc:Bounds x="260" y="135" width="140" height="84" />
@@ -895,10 +850,6 @@
         <di:waypoint x="670" y="418" />
         <di:waypoint x="670" y="532" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0mfncwz_di" bpmnElement="Flow_0mfncwz">
-        <di:waypoint x="480" y="360" />
-        <di:waypoint x="570" y="360" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0nq5d67_di" bpmnElement="Flow_0nq5d67">
         <di:waypoint x="1864" y="525" />
         <di:waypoint x="1864" y="480" />
@@ -916,7 +867,7 @@
       <bpmndi:BPMNEdge id="Flow_0tsgbcm_di" bpmnElement="Flow_0tsgbcm">
         <di:waypoint x="1480" y="828" />
         <di:waypoint x="1480" y="870" />
-        <di:waypoint x="2950" y="870" />
+        <di:waypoint x="3082" y="870" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0whhznp_di" bpmnElement="Flow_0whhznp">
         <di:waypoint x="2500" y="180" />
@@ -930,25 +881,13 @@
         <di:waypoint x="2255" y="360" />
         <di:waypoint x="2370" y="360" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_133tix0_di" bpmnElement="Flow_133tix0">
-        <di:waypoint x="3050" y="870" />
-        <di:waypoint x="3082" y="870" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13upj83_di" bpmnElement="Flow_13upj83" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="198" y="360" />
-        <di:waypoint x="240" y="360" />
+        <di:waypoint x="382" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1bfbte1_di" bpmnElement="Flow_1bfbte1" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="2695" y="360" />
         <di:waypoint x="2770" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1dvphgm_di" bpmnElement="Flow_1dvphgm">
-        <di:waypoint x="340" y="360" />
-        <di:waypoint x="380" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1edoeol_di" bpmnElement="Flow_1edoeol">
-        <di:waypoint x="1320" y="770" />
-        <di:waypoint x="1380" y="770" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1fnck62_di" bpmnElement="Flow_1fnck62" bioc:stroke="#831311" color:border-color="#831311">
         <di:waypoint x="570" y="418" />
@@ -957,10 +896,6 @@
       <bpmndi:BPMNEdge id="Flow_1gwxcj4_di" bpmnElement="Flow_1gwxcj4">
         <di:waypoint x="2230" y="412" />
         <di:waypoint x="2230" y="385" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1hc4ia8_di" bpmnElement="Flow_1hc4ia8">
-        <di:waypoint x="3050" y="100" />
-        <di:waypoint x="3082" y="100" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1hmth07_di" bpmnElement="Flow_1hmth07">
         <di:waypoint x="1480" y="770" />
@@ -972,56 +907,43 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1kw8bwm_di" bpmnElement="Flow_1kw8bwm" bioc:stroke="#205022" color:border-color="#205022">
         <di:waypoint x="3020" y="360" />
-        <di:waypoint x="3070" y="360" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1oieq6d_di" bpmnElement="Flow_1oieq6d">
-        <di:waypoint x="3050" y="550" />
-        <di:waypoint x="3082" y="550" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1qpx5z3_di" bpmnElement="Flow_1qpx5z3">
-        <di:waypoint x="1580" y="570" />
-        <di:waypoint x="1580" y="550" />
-        <di:waypoint x="1680" y="550" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1y72yos_di" bpmnElement="Flow_1y72yos">
-        <di:waypoint x="3050" y="770" />
-        <di:waypoint x="3082" y="770" />
+        <di:waypoint x="3082" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16khaca_di" bpmnElement="Flow_16khaca">
         <di:waypoint x="2255" y="550" />
-        <di:waypoint x="2950" y="550" />
+        <di:waypoint x="3082" y="550" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2331" y="533" width="13" height="14" />
+          <dc:Bounds x="2351" y="533" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06r5348_di" bpmnElement="Flow_06r5348">
         <di:waypoint x="1580" y="745" />
-        <di:waypoint x="1580" y="650" />
+        <di:waypoint x="1580" y="568" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1543" y="685" width="13" height="14" />
+          <dc:Bounds x="1543" y="653.0000000000005" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_035de0m_di" bpmnElement="Flow_035de0m">
         <di:waypoint x="1180" y="385" />
         <di:waypoint x="1180" y="770" />
-        <di:waypoint x="1220" y="770" />
+        <di:waypoint x="1262" y="770" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1142.9999999999998" y="633" width="13" height="14" />
+          <dc:Bounds x="1143" y="633" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ko9zg9_di" bpmnElement="Flow_0ko9zg9">
         <di:waypoint x="2580" y="155" />
         <di:waypoint x="2580" y="100" />
-        <di:waypoint x="2950" y="100" />
+        <di:waypoint x="3082" y="100" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2589" y="125" width="13" height="14" />
+          <dc:Bounds x="2595" y="48" width="13" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_047b1dt_di" bpmnElement="Flow_047b1dt">
         <di:waypoint x="1605" y="770" />
-        <di:waypoint x="2950" y="770" />
+        <di:waypoint x="3082" y="770" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1966" y="752" width="18" height="14" />
+          <dc:Bounds x="1980" y="752" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_09a9q6e_di" bpmnElement="Flow_09a9q6e">
@@ -1046,6 +968,18 @@
           <dc:Bounds x="1608" y="343" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wd23j8_di" bpmnElement="Flow_1wd23j8">
+        <di:waypoint x="418" y="360" />
+        <di:waypoint x="570" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l6igb5_di" bpmnElement="Flow_1l6igb5">
+        <di:waypoint x="1298" y="770" />
+        <di:waypoint x="1380" y="770" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jhp0hd_di" bpmnElement="Flow_0jhp0hd">
+        <di:waypoint x="1598" y="550" />
+        <di:waypoint x="1680" y="550" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_09mglk5_di" bpmnElement="Association_09mglk5">
         <di:waypoint x="570" y="350" />
         <di:waypoint x="365" y="219" />
@@ -1053,10 +987,6 @@
       <bpmndi:BPMNEdge id="Association_1777kox_di" bpmnElement="Association_1777kox">
         <di:waypoint x="1780" y="608" />
         <di:waypoint x="1780" y="640" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0iecb7x_di" bpmnElement="Flow_0iecb7x" bioc:stroke="#205022" color:border-color="#205022">
-        <di:waypoint x="3170" y="360" />
-        <di:waypoint x="3212" y="360" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
